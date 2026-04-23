@@ -18,18 +18,19 @@ new class extends Component {
 
     public function getCategories()
     {
-        $this->categories = Category::all();
-        ;
+        $this->categories = Category::query()->active()->with('templates')->whereHas('templates', function ($query) {
+            return $query->active();
+        })->get();
     }
 
     public function getTemplates()
     {
-        $this->templates = Template::all();
+        $this->templates = Template::query()->active()->get();
     }
 
     public function getTemplatesByCategory($categoryId)
     {
-        $this->templates = Template::where('category_id', $categoryId)->get();
+        $this->templates = Template::query()->active()->where('category_id', $categoryId)->get();
     }
 };
 ?>
@@ -38,47 +39,28 @@ new class extends Component {
     <section id="modelos" class="pt-24 pb-0 bg-white">
         <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-extrabold text-dark-900 tracking-tight">Nossos Templates Premium</h2>
+                <h2 class="text-4xl font-extrabold text-dark-900 tracking-tight">Nossos Modelos Premium</h2>
                 <p class="mt-4 text-lg text-gray-600 max-w-xl mx-auto">Designs modernos, responsivos e otimizados para
                     conversão em qualquer dispositivo.</p>
             </div>
 
             <div class="mt-10 flex flex-wrap items-center justify-center gap-3" x-data="{ activeCategory: 'all' }">
-                <button
-                    class="px-6 py-2 rounded-full text-sm font-semibold bg-brand text-white shadow-md shadow-brand/20 transition-all hover:bg-brand-dark"
-                    wire:click="getTemplates()" x-on:click="activeCategory = 'all'">
+
+                <button type="button" wire:click="getTemplates()" x-on:click="activeCategory = 'all'"
+                    x-bind:class="activeCategory === 'all' ? 'bg-brand text-white shadow-md shadow-brand/20 hover:bg-brand-dark' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
+                    class="px-6 py-2 rounded-full text-sm font-semibold transition-all cursor-pointer">
                     Todos
                 </button>
 
                 @foreach($categories as $category)
-                    <button
-                        class="px-6 py-2 rounded-full text-sm font-semibold text-gray-600 hover:bg-gray-200 transition-all"
-                        wire:click="getTemplatesByCategory({{ $category->id }})"
+                    <button type="button" wire:click="getTemplatesByCategory({{ $category->id }})"
                         x-on:click="activeCategory = '{{ $category->id }}'"
-                        x-bind:class="activeCategory === '{{ $category->id }}' ? 'bg-brand text-white shadow-md shadow-brand/20 hover:bg-brand-dark' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'">
+                        x-bind:class="activeCategory === '{{ $category->id }}' ? 'bg-brand text-white shadow-md shadow-brand/20 hover:bg-brand-dark' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
+                        class="px-6 py-2 rounded-full text-sm font-semibold transition-all cursor-pointer">
                         {{ $category->name }}
                     </button>
                 @endforeach
 
-                {{-- <button
-                    class="px-6 py-2 rounded-full text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all">
-                    Saúde
-                </button>
-
-                <button
-                    class="px-6 py-2 rounded-full text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all">
-                    Imobiliária
-                </button>
-
-                <button
-                    class="px-6 py-2 rounded-full text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all">
-                    Landing Pages
-                </button>
-
-                <button
-                    class="px-6 py-2 rounded-full text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all">
-                    Institucional
-                </button> --}}
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">

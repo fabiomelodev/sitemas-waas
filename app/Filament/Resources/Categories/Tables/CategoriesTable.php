@@ -1,17 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\Templates\Tables;
+namespace App\Filament\Resources\Categories\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
-class TemplatesTable
+class CategoriesTable
 {
     public static function configure(Table $table): Table
     {
@@ -20,22 +18,18 @@ class TemplatesTable
                 TextColumn::make('name')
                     ->label('Nome')
                     ->searchable(),
-                TextColumn::make('category.name')
-                    ->label('Categoria')
-                    ->searchable(),
-                TextColumn::make('url')
-                    ->searchable(),
                 TextColumn::make('status')
                     ->badge()
                     ->formatStateUsing(fn(string $state): string => match ($state) {
                         'active' => 'Ativo',
                         'inactive' => 'Inativo',
-                        default => $state,
+                        default => null,
                     })
-                    ->colors([
+                    ->color(fn(string $state): string => match ($state) {
                         'active' => 'success',
                         'inactive' => 'danger',
-                    ]),
+                        default => null,
+                    }),
                 TextColumn::make('created_at')
                     ->label('Criado Em')
                     ->dateTime()
@@ -43,12 +37,7 @@ class TemplatesTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('status')
-                    ->label('Status')
-                    ->options([
-                        'active' => 'Ativo',
-                        'inactive' => 'Inativo',
-                    ]),
+                //
             ])
             ->recordActions([
                 EditAction::make()

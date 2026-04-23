@@ -10,7 +10,7 @@
                 Seu site profissional no ar, <span class="text-brand">sem dor de cabeça técnica.</span>
             </h1>
             <p class="mt-8 text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                Escolha um template premium, assine um plano e nós cuidamos de tudo: hospedagem, manutenção e suporte.
+                Escolha um modelo premium, assine um plano e nós cuidamos de tudo: hospedagem, manutenção e suporte.
                 Simples, rápido e previsível.
             </p>
             <div class="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6">
@@ -196,7 +196,7 @@
                         class="w-16 h-16 bg-brand text-white rounded-2xl flex items-center justify-center text-2xl font-bold mx-auto mb-6 shadow-lg shadow-brand/20">
                         1</div>
                     <h3 class="text-xl font-bold text-dark-900 mb-3">Escolha o Modelo</h3>
-                    <p class="text-gray-600 text-sm leading-relaxed">Navegue por nossa vitrine e selecione o template
+                    <p class="text-gray-600 text-sm leading-relaxed">Navegue por nossa vitrine e selecione o modelo
                         que
                         melhor se adapta ao seu nicho de atuação.</p>
                 </div>
@@ -231,7 +231,7 @@
                 <div class="max-w-xl">
                     <h3 class="text-2xl font-bold text-dark-900">Precisa de urgência?</h3>
                     <p class="mt-2 text-gray-600">Assinando hoje até às 14h, nossa equipe entra em contato no mesmo dia
-                        para iniciar a configuração do seu template.</p>
+                        para iniciar a configuração do seu modelo.</p>
                 </div>
                 <div class="flex -space-x-2 overflow-hidden">
                     <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white"
@@ -292,137 +292,6 @@
                         <p class="text-xs text-gray-500 mt-1">Seu site no ar em até 24h úteis.</p>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="faq" class="py-24 bg-white">
-        <div class="max-w-4xl mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-extrabold text-dark-900 tracking-tight text-center">Perguntas Frequentes</h2>
-                <p class="mt-4 text-lg text-gray-600">Tire suas dúvidas sobre como funciona nossa assinatura de sites.
-                </p>
-            </div>
-
-            <div class="space-y-4">
-                <details
-                    class="group border border-gray-100 rounded-2xl bg-gray-50 p-6 [&_summary::-webkit-details-marker]:hidden">
-                    <summary class="flex items-center justify-between cursor-pointer">
-                        <h3 class="text-lg font-bold text-dark-900">O que está incluso na minha assinatura?</h3>
-                        <span class="ml-1.5 flex-shrink-0 transition duration-300 group-open:-rotate-180">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </span>
-                    </summary>
-                    <p class="mt-4 leading-relaxed text-gray-600 text-sm">
-                        Sua assinatura é completa: inclui a hospedagem do site em servidores de alta performance,
-                        manutenção técnica constante, atualizações de segurança, certificado SSL e suporte humano para
-                        ajustes e dúvidas.
-                    </p>
-                </details>
-
-                <details
-                    class="group border border-gray-100 rounded-2xl bg-gray-50 p-6 [&_summary::-webkit-details-marker]:hidden">
-                    <summary class="flex items-center justify-between cursor-pointer">
-                        <h3 class="text-lg font-bold text-dark-900">O site será meu ou da Single Temas?</h3>
-                        <span class="ml-1.5 flex-shrink-0 transition duration-300 group-open:-rotate-180">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </span>
-                    </summary>
-                    <p class="mt-4 leading-relaxed text-gray-600 text-sm">
-                        O modelo de assinatura funciona como um aluguel de software (WaaS). Enquanto a assinatura
-                        estiver ativa, você tem o direito total de uso. Isso garante que você nunca precise se preocupar
-                        com renovação de servidor ou erros técnicos por conta própria.
-                    </p>
-                </details>
-
-                <details
-                    class="group border border-gray-100 rounded-2xl bg-gray-50 p-6 [&_summary::-webkit-details-marker]:hidden">
-                    <summary class="flex items-center justify-between cursor-pointer">
-                        <h3 class="text-lg font-bold text-dark-900">Posso usar meu próprio domínio (.com.br)?</h3>
-                        <span class="ml-1.5 flex-shrink-0 transition duration-300 group-open:-rotate-180">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </span>
-                    </summary>
-                    <p class="mt-4 leading-relaxed text-gray-600 text-sm">
-                        Sim! No plano Pro, configuramos o seu domínio personalizado. Se você ainda não tem um domínio,
-                        nós te orientamos no processo de registro ou cuidamos de tudo para você.
-                    </p>
-                </details>
-
-                <details
-                    class="group border border-gray-100 rounded-2xl bg-gray-50 p-6 [&_summary::-webkit-details-marker]:hidden">
-                    <summary class="flex items-center justify-between cursor-pointer">
-                        <h3 class="text-lg font-bold text-dark-900">Como funciona a manutenção do site?</h3>
-                        <span class="ml-1.5 flex-shrink-0 transition duration-300 group-open:-rotate-180">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </span>
-                    </summary>
-                    <p class="mt-4 leading-relaxed text-gray-600 text-sm">
-                        Nós cuidamos da "cozinha" técnica: atualizamos o WordPress e plugins, monitoramos a velocidade e
-                        realizamos backups diários para que seu negócio nunca pare.
-                    </p>
-                </details>
-
-                <details
-                    class="group border border-gray-100 rounded-2xl bg-gray-50 p-6 [&_summary::-webkit-details-marker]:hidden">
-                    <summary class="flex items-center justify-between cursor-pointer">
-                        <h3 class="text-lg font-bold text-dark-900">Existe fidelidade ou multa de cancelamento?</h3>
-                        <span class="ml-1.5 flex-shrink-0 transition duration-300 group-open:-rotate-180">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </span>
-                    </summary>
-                    <p class="mt-4 leading-relaxed text-gray-600 text-sm">
-                        Não. Você pode cancelar sua assinatura a qualquer momento através do painel de controle do Asaas
-                        ou entrando em contato com nosso suporte, sem qualquer multa oculta.
-                    </p>
-                </details>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-24 bg-white border-t border-gray-100">
-        <div class="max-w-4xl mx-auto px-6 text-center">
-            <h2 class="text-4xl md:text-5xl font-extrabold text-dark-900 tracking-tighterleading-tight">
-                Pronto para profissionalizar sua presença digital?
-            </h2>
-            <p class="mt-6 text-lg text-gray-600">
-                Escolha seu modelo e deixe toda a complexidade técnica com a gente. Simples, rápido e sem contratos de
-                fidelidade.
-            </p>
-            <div class="mt-12 flex items-center justify-center gap-6">
-                <a href="#modelos"
-                    class="bg-dark-900 text-white px-8 py-4 rounded-xl font-bold hover:bg-gray-800 transition shadow-md">
-                    Escolher Meu Modelo
-                </a>
-                <a href="https://wa.me/SEU_NUMERO" target="_blank"
-                    class="text-brand px-8 py-4 rounded-xl font-semibold hover:bg-brand/5 transition flex items-center gap-2.5">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                        <path
-                            d="M12.004 2c-5.525 0-10 4.478-10 10 0 1.777.463 3.445 1.263 4.9L2 22l5.222-1.263C8.61 21.51 10.217 22 12.004 22c5.525 0 10-4.478 10-10s-4.475-10-10-10zm0 18.294c-1.724 0-3.37-.487-4.794-1.407l-.343-.22-3.325.803.818-3.18-.24-.373c-.998-1.545-1.522-3.328-1.522-5.166 0-5.11 4.157-9.267 9.267-9.267 5.108 0 9.264 4.157 9.264 9.267s-4.156 9.267-9.264 9.267zm5.335-6.708c-.292-.146-1.73-.854-1.997-.953-.267-.098-.462-.146-.657.146-.195.293-.755.953-.926 1.148-.17.195-.341.219-.633.073-.292-.147-1.23-.453-2.344-1.447-.866-.77-1.452-1.723-1.622-2.015-.17-.292-.018-.45.127-.595.13-.13.292-.341.438-.512.147-.171.195-.293.292-.488.097-.195.048-.366-.024-.512-.072-.147-.657-1.586-.901-2.172-.236-.57-.478-.492-.657-.502-.167-.008-.36-.01-.555-.01-.195 0-.512.073-.78.366-.268.293-1.023 1.002-1.023 2.443 0 1.44 1.047 2.833 1.194 3.028.147.195 2.06 3.14 4.99 4.413.697.303 1.24.484 1.66.617.7.223 1.338.19 1.843.115.56-.083 1.73-.707 1.974-1.39.244-.683.244-1.268.17-1.39-.073-.122-.269-.195-.561-.341z">
-                        </path>
-                    </svg>
-                    Tirar Dúvidas
-                </a>
             </div>
         </div>
     </section>

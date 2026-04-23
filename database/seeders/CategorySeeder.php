@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -14,10 +13,34 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         DB::table('categories')->insert([
-            ['name' => 'Business', 'slug' => 'business', 'status' => 'active'],
-            ['name' => 'Technology', 'slug' => 'technology', 'status' => 'active'],
-            ['name' => 'Health', 'slug' => 'health', 'status' => 'active'],
-            ['name' => 'Education', 'slug' => 'education', 'status' => 'active'],
+            [
+                'name' => 'Business',
+                'slug' => 'business',
+                'status' => 'active',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Technology',
+                'slug' => 'technology',
+                'status' => 'active',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Health',
+                'slug' => 'health',
+                'status' => 'active',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Education',
+                'slug' => 'education',
+                'status' => 'active',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }

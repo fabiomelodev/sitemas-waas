@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class TemplateResource extends Resource
 {
@@ -25,6 +26,10 @@ class TemplateResource extends Resource
     protected static ?string $label = 'Modelo';
 
     protected static ?string $pluralLabel = 'Modelos';
+
+    protected static string|UnitEnum|null $navigationGroup = 'Modelos';
+
+    protected static ?int $navigationSort = 2;
 
     public static function form(Schema $schema): Schema
     {

@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\Templates\Schemas;
+namespace App\Filament\Resources\Faqs\Schemas;
 
-use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
-class TemplateForm
+class FaqForm
 {
     public static function configure(Schema $schema): Schema
     {
@@ -22,32 +22,23 @@ class TemplateForm
                         TextInput::make('name')
                             ->label('Nome')
                             ->required(),
-                        Textarea::make('excerpt')
-                            ->label('Resumo')
+                        RichEditor::make('description')
+                            ->label('Descrição')
                             ->required()
                             ->columnSpanFull(),
-                        TextInput::make('url')
-                            ->url()
-                            ->required(),
-                        TextInput::make('subscription_link')
-                            ->label('Link de Assinatura')
-                            ->required(),
                     ]),
                 Section::make()
                     ->columnSpan(3)
                     ->schema([
-                        FileUpload::make('thumbnail')
-                            ->image()
-                            ->visibility('public'),
-                        Select::make('category_id')
-                            ->label('Categoria')
-                            ->relationship('category', 'name')
-                            ->required(),
                         Select::make('status')
                             ->options(['active' => 'Ativo', 'inactive' => 'Inativo'])
                             ->default('active')
                             ->required(),
-                    ]),
+                        DatePicker::make('created_at')
+                            ->label('Criado Em')
+                            ->disabled()
+                            ->visibleOn('edit'),
+                    ])
             ]);
     }
 }
