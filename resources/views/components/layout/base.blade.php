@@ -42,6 +42,7 @@
             scroll-behavior: smooth;
         }
     </style>
+    @livewireStyles
 </head>
 
 <body class="bg-white text-dark-900 antialiased">
@@ -53,6 +54,8 @@
     </main>
 
     <x-layout.footer />
+
+    @livewireScripts
 </body>
 
 </html>
