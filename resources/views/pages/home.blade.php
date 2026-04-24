@@ -41,7 +41,7 @@
         </div>
     </section>
 
-    <livewire:list-template />
+    <livewire:list-templates />
 
     <section class="py-10 bg-white">
         <div class="max-w-7xl mx-auto px-6">
@@ -91,94 +91,115 @@
 
             <div class="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto items-start mt-16">
 
-                <div class="bg-white p-8 md:p-10 rounded-3xl border border-gray-100 shadow-sm relative">
-                    <h3 class="text-2xl font-bold text-dark-900 tracking-tight">Plano Start</h3>
-                    <p class="mt-2 text-gray-600 text-sm">Ideal para validação e presença rápida.</p>
-                    <div class="mt-6 flex items-baseline gap-1">
-                        <span class="text-5xl font-extrabold text-dark-900 tracking-tighter">R$ 99</span>
-                        <span class="text-gray-500 text-sm font-medium">/mês</span>
+                @if(isset($planStart))
+                    <div class="bg-white p-8 md:p-10 rounded-3xl border border-gray-100 shadow-sm relative">
+                        <h3 class="text-2xl font-bold text-dark-900 tracking-tight">
+                            {{  $planStart->name }}
+                        </h3>
+
+                        <p class="mt-2 text-gray-600 text-sm">
+                            {{  $planStart->description }}
+                        </p>
+
+                        <div class="mt-6 flex items-baseline gap-1">
+                            <span class="text-5xl font-extrabold text-dark-900 tracking-tighter">R$
+                                {{  $planStart->price }}
+                            </span>
+
+                            <span class="text-gray-500 text-sm font-medium">/mês</span>
+                        </div>
+
+                        <ul class="mt-10 space-y-4 text-sm text-gray-700">
+                            @foreach($planStart->features as $feature)
+                                <li class=" flex items-center gap-3 {{  $feature['status'] == 0 ? 'text-gray-400' : '' }}">
+                                    @if($feature['status'])
+                                        <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                                d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                    @else
+                                        <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                                d="M6 18L18 6M6 6l12 12"></path>
+                                        </svg>
+                                    @endif
+
+                                    {{  $feature['name'] }}
+                                </li>
+                            @endforeach
+                        </ul>
+
+                        {{-- @if($planStart->url)
+                        <a href="{{  $planStart->url }}" target="_blank"
+                            class="mt-12 block w-full bg-gray-100 text-dark-900 text-center px-6 py-4 rounded-xl font-bold hover:bg-gray-200 transition">
+                            Assinar Plano Start
+                        </a>
+                        @endif --}}
+
+                        <button x-data
+                            @click="$dispatch('trigger-plan-filter', { id: 1 }); document.getElementById('modelos').scrollIntoView({ behavior: 'smooth' })"
+                            class="w-full py-3 bg-blue-600 text-white rounded-xl font-bold mt-12">
+                            Ver Modelos Start
+                        </button>
                     </div>
+                @endif
 
-                    <ul class="mt-10 space-y-4 text-sm text-gray-700">
-                        <li class="flex items-center gap-3"><svg class="w-5 h-5 text-brand" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg> 1 Website Institucional (até 3 páginas)</li>
-                        <li class="flex items-center gap-3"><svg class="w-5 h-5 text-brand" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg> Hospedagem de Alta Performance Inclusa</li>
-                        <li class="flex items-center gap-3"><svg class="w-5 h-5 text-brand" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg> Manutenção Técnica & Atualizações</li>
-                        <li class="flex items-center gap-3"><svg class="w-5 h-5 text-brand" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg> Certificado SSL (Segurança)</li>
-                        <li class="flex items-center gap-3 text-gray-400"><svg class="w-5 h-5 text-gray-300" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                    d="M6 18L18 6M6 6l12 12"></path>
-                            </svg> Domínio Próprio (usar subdomínio SingleTemas)</li>
-                    </ul>
+                @if($planPro)
+                    <div
+                        class="bg-dark-900 p-8 md:p-10 rounded-3xl border border-dark-700 shadow-xl relative transform lg:scale-105">
+                        <span
+                            class="absolute -top-4 right-8 bg-brand text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider">
+                            Mais Popular
+                        </span>
 
-                    <a href="LINK_ASAAS_PLANO_START" target="_blank"
-                        class="mt-12 block w-full bg-gray-100 text-dark-900 text-center px-6 py-4 rounded-xl font-bold hover:bg-gray-200 transition">
-                        Assinar Plano Start
-                    </a>
-                </div>
+                        <h3 class="text-2xl font-bold text-white tracking-tight">
+                            {{  $planPro->name }}
+                        </h3>
 
-                <div
-                    class="bg-dark-900 p-8 md:p-10 rounded-3xl border border-dark-700 shadow-xl relative transform lg:scale-105">
-                    <span
-                        class="absolute -top-4 right-8 bg-brand text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider">Mais
-                        Popular</span>
-                    <h3 class="text-2xl font-bold text-white tracking-tight">Plano Pro</h3>
-                    <p class="mt-2 text-gray-300 text-sm">Para empresas que buscam autoridade total.</p>
-                    <div class="mt-6 flex items-baseline gap-1">
-                        <span class="text-5xl font-extrabold text-white tracking-tighter">R$ 149</span>
-                        <span class="text-gray-400 text-sm font-medium">/mês</span>
+                        <p class="mt-2 text-gray-300 text-sm">
+                            {{ $planPro->description }}
+                        </p>
+
+                        <div class="mt-6 flex items-baseline gap-1">
+                            <span class="text-5xl font-extrabold text-white tracking-tighter">R$
+                                {{ $planPro->price }}</span>
+                            <span class="text-gray-400 text-sm font-medium">/mês</span>
+                        </div>
+
+                        <ul class="mt-10 space-y-4 text-sm text-gray-200">
+                            @foreach($planPro->features as $feature)
+                                <li class=" flex items-center gap-3 {{  $feature['status'] == 0 ? 'text-gray-400' : '' }}">
+                                    @if($feature['status'])
+                                        <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                                d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                    @else
+                                        <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                                d="M6 18L18 6M6 6l12 12"></path>
+                                        </svg>
+                                    @endif
+
+                                    {{  $feature['name'] }}
+                                </li>
+                            @endforeach
+                        </ul>
+
+                        {{-- @if($planPro->url)
+                        <a href="{{ $planPro->url }}" target="_blank"
+                            class="mt-12 block w-full bg-brand text-white text-center px-6 py-4 rounded-xl font-bold hover:bg-brand-dark transition shadow-lg shadow-brand/30 transform hover:-translate-y-0.5">
+                            Assinar Plano Pro
+                        </a>
+                        @endif --}}
+
+                        <button x-data
+                            @click="$dispatch('trigger-plan-filter', { id: 2 }); document.getElementById('modelos').scrollIntoView({ behavior: 'smooth' })"
+                            class="w-full py-3 bg-blue-600 text-white rounded-xl font-bold mt-12">
+                            Ver Modelos Pro
+                        </button>
                     </div>
-
-                    <ul class="mt-10 space-y-4 text-sm text-gray-200">
-                        <li class="flex items-center gap-3"><svg class="w-5 h-5 text-brand" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg> 1 Website Profissional (até 6 páginas)</li>
-                        <li class="flex items-center gap-3"><svg class="w-5 h-5 text-brand" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg> Hospedagem VIP</li>
-                        <li class="flex items-center gap-3"><svg class="w-5 h-5 text-brand" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg> Suporte Prioritário via WhatsApp</li>
-                        <li class="flex items-center gap-3"><svg class="w-5 h-5 text-brand" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg> Configuração de Domínio Próprio (.com.br)</li>
-                        <li class="flex items-center gap-3"><svg class="w-5 h-5 text-brand" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg> Pequenas Alterações Mensais Inclusas</li>
-                    </ul>
-
-                    <a href="LINK_ASAAS_PLANO_PRO" target="_blank"
-                        class="mt-12 block w-full bg-brand text-white text-center px-6 py-4 rounded-xl font-bold hover:bg-brand-dark transition shadow-lg shadow-brand/30 transform hover:-translate-y-0.5">
-                        Assinar Plano Pro
-                    </a>
-                </div>
-
+                @endif
             </div>
         </div>
     </section>

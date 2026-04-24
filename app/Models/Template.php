@@ -11,6 +11,10 @@ class Template extends Model
 {
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'features' => 'array',
+    ];
+
     protected static function boot()
     {
         parent::boot();
@@ -32,5 +36,10 @@ class Template extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function plan(): BelongsTo
+    {
+        return $this->belongsTo(Plan::class);
     }
 }

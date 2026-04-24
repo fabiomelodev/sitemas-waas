@@ -38,7 +38,8 @@ class TemplateForm
                     ->schema([
                         FileUpload::make('thumbnail')
                             ->image()
-                            ->visibility('public'),
+                            ->visibility('public')
+                            ->disk('public'),
                         Select::make('category_id')
                             ->label('Categoria')
                             ->relationship('category', 'name')
