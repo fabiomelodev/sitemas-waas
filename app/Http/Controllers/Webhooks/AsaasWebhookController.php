@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Webhooks;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
+use App\Models\{Order, Plan, Subscription, User};
+use Illuminate\Support\Facades\{Hash, Http, Log};
 use Illuminate\Support\Str;
 
 class AsaasWebhookController extends Controller
@@ -107,7 +105,35 @@ class AsaasWebhookController extends Controller
             ]
         );
 
-        Log::info($user);
+        // O Asaas costuma enviar o ID do link de pagamento no payload
+        $paymentLinkId = $payment['paymentLink'] ?? null;
+
+        $plan = Plan::query()->where('asaas_link_id', $paymentLinkId)->first();
+
+        // Se não encontrar, define um plano padrão para não quebrar o código
+        $planId = $plan ? $plan->id : 1;
+
+        // 1. Criar ou atualizar a assinatura
+        $subscription = Subscription::updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'asaas_subscription_id' => $payment['subscription'] ?? null,
+                'status' => 'active',
+                'plan_id' => $planId, // O ID do plano que você cadastrou no banco
+                'expires_at' => now()->addMonth(), // Ou baseado na data do Asaas
+            ]
+        );
+
+        // 2. Registrar o pagamento no histórico (Orders)
+        Order::create([
+            'user_id' => $user->id,
+            'subscription_id' => $subscription->id,
+            'asaas_payment_id' => $payment['id'],
+            'amount' => $payment['value'],
+            'status' => 'completed',
+            'payment_method' => $payment['billingType'],
+            'paid_at' => now(),
+        ]);
 
         // 3. Vincula a assinatura e cria a ordem
         // ... restante da sua lógica
