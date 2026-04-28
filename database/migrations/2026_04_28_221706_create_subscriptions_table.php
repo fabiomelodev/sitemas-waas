@@ -11,7 +11,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('subcriptions', function (Blueprint $table) {
+        Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
             $table->string('asaas_subscription_id');
             $table->enum('status', ['active', 'inactive'])->default('active');
