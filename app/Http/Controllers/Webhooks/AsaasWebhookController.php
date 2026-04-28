@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Webhooks;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -102,6 +103,8 @@ class AsaasWebhookController extends Controller
                 'asaas_customer_id' => $customerId,
             ]
         );
+
+        Log::info($user);
 
         // 3. Vincula a assinatura e cria a ordem
         // ... restante da sua lógica
