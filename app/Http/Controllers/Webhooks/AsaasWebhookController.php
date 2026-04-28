@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Webhooks;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class AsaasWebhookController extends Controller
 {
@@ -99,8 +101,9 @@ class AsaasWebhookController extends Controller
             ['email' => $asaasCustomer['email']],
             [
                 'name' => $asaasCustomer['name'],
-                'phone' => $asaasCustomer['phone'] ?? null,
                 'asaas_customer_id' => $customerId,
+                // Gera uma senha aleatória de 32 caracteres
+                'password' => Hash::make(Str::random(32)),
             ]
         );
 
