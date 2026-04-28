@@ -1,0 +1,11 @@
+{
+  "resources/js/app.js": {
+    "file": "assets/app-BKB20wvB.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "css": [
+      "assets/app-CmdoGmL8.css"
+    ]
+  }
+}

@@ -21,7 +21,7 @@ class SubscriptionController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.success');
     }
 
     /**
@@ -29,7 +29,7 @@ class SubscriptionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request);
     }
 
     /**
