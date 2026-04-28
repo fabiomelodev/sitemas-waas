@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Webhooks;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class AsaasWebhookController extends Controller
@@ -78,8 +79,32 @@ class AsaasWebhookController extends Controller
     // Métodos auxiliares para manter o código limpo
     private function handlePaymentConfirmed($payment)
     {
-        Log::info('handlePaymentConfirmed');
-        // Lógica que já criamos: User::firstOrCreate, Order::create, Notify...
+        $customerId = $payment['customer'];
+
+        // 1. Busca os detalhes do cliente no Asaas via API
+        $response = Http::withHeaders([
+            'access_token' => config('services.asaas.api_key'),
+        ])->get("https://sandbox.asaas.com/api/v3/customers/{$customerId}");
+
+        if ($response->failed()) {
+            Log::error("Falha ao buscar cliente {$customerId} no Asaas");
+            return;
+        }
+
+        $asaasCustomer = $response->json();
+
+        // 2. Agora você tem o e-mail e o nome reais!
+        $user = User::firstOrCreate(
+            ['email' => $asaasCustomer['email']],
+            [
+                'name' => $asaasCustomer['name'],
+                'phone' => $asaasCustomer['phone'] ?? null,
+                'asaas_customer_id' => $customerId,
+            ]
+        );
+
+        // 3. Vincula a assinatura e cria a ordem
+        // ... restante da sua lógica
     }
 
     private function handlePaymentOverdue($payment)
