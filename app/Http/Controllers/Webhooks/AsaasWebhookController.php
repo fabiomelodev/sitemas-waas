@@ -10,6 +10,9 @@ class AsaasWebhookController extends Controller
 {
     public function handle(Request $request)
     {
+        Log::info('Token recebido do Asaas: ' . $request->header('asaas-access-token'));
+        Log::info('Token configurado no meu sistema: ' . config('services.asaas.webhook_token'));
+
         // 1. Log de entrada (Vital para debugar no Sandbox)
         Log::info('Asaas Webhook Recebido', [
             'event' => $request->input('event'),
