@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Webhooks;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\{Order, Plan, Subscription, User};
+use App\Models\{Lead, Order, Plan, Subscription, User};
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Hash, Http, Log};
 use Illuminate\Support\Str;
 
@@ -33,12 +33,12 @@ class AsaasWebhookController extends Controller
 
             // 2. Proteção contra processamento duplicado (Idempotência)
             // Se for um evento de pagamento, verifica se já processamos esse ID de transação antes
-            // if (in_array($event, ['PAYMENT_RECEIVED', 'PAYMENT_CONFIRMED'])) {
-            //     $alreadyProcessed = \App\Models\Order::where('asaas_payment_id', $payment['id'])->exists();
-            //     if ($alreadyProcessed) {
-            //         return response()->json(['status' => 'already_processed'], 200);
-            //     }
-            // }
+            if (in_array($event, ['PAYMENT_RECEIVED', 'PAYMENT_CONFIRMED'])) {
+                $alreadyProcessed = Order::query()->where('asaas_payment_id', $payment['id'])->exists();
+                if ($alreadyProcessed) {
+                    return response()->json(['status' => 'already_processed'], 200);
+                }
+            }
 
             switch ($event) {
                 case 'PAYMENT_RECEIVED':
@@ -113,6 +113,10 @@ class AsaasWebhookController extends Controller
         // Se não encontrar, define um plano padrão para não quebrar o código
         $planId = $plan ? $plan->id : 1;
 
+        $lead = Lead::query()->where('email', $asaasCustomer['email'])->first();
+
+        $templateId = $lead ? $lead->template_id : null;
+
         // 1. Criar ou atualizar a assinatura
         $subscription = Subscription::updateOrCreate(
             ['user_id' => $user->id],
@@ -120,6 +124,7 @@ class AsaasWebhookController extends Controller
                 'asaas_subscription_id' => $payment['subscription'] ?? null,
                 'status' => 'active',
                 'plan_id' => $planId, // O ID do plano que você cadastrou no banco
+                'template_id' => $templateId,
                 'expires_at' => now()->addMonth(), // Ou baseado na data do Asaas
             ]
         );

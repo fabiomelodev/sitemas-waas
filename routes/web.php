@@ -7,6 +7,8 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('assinar/{template:slug}', [SubscriptionController::class, 'show'])->name('subscription.show');
 
+Route::post('assinar/checkout/{plan:slug}/{template:slug}', [SubscriptionController::class, 'checkout'])->name('subscription.checkout');
+
 Route::get('sucesso', [SubscriptionController::class, 'create'])->name('subscription.create');
 
 Route::post('sucesso', [SubscriptionController::class, 'store'])->name('subscription.store');

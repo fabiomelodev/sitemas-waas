@@ -1,5 +1,5 @@
 <x-layout.base-subscription>
-    <section class="max-w-5xl mx-auto px-6 py-12 md:py-20">
+    <section class="max-w-5xl mx-auto px-6 py-12 md:py-20" x-data="{ open: false, templateId: null, email: '' }">
         <div class="grid md:grid-cols-12 gap-12 items-start">
 
             <div class="md:col-span-7">
@@ -69,8 +69,8 @@
                     <div class="space-y-4 mb-10">
                         @foreach($plan->features as $feature)
                             <div class="flex items
-                                                                                            <div class=" flex items-start
-                                gap-3">
+                                                                                                                                                                                    <div class="
+                                flex items-start gap-3">
                                 <svg class="w-5 h-5 text-blue-500 mt-0.5" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
@@ -84,10 +84,10 @@
                     </div>
 
                     @if($plan->url)
-                        <a href="{{  $plan->url }}"
-                            class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-4 rounded-xl font-bold transition shadow-lg shadow-blue-900/20 mb-4">
+                        <button @click="open = true; templateId = 123"
+                            class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-4 rounded-xl font-bold transition shadow-lg shadow-blue-900/20 cursor-pointer mb-4">
                             Assinar agora e começar
-                        </a>
+                        </button>
                     @endif
 
                     <p class="text-[11px] text-slate-500 text-center flex items-center justify-center gap-1">
@@ -122,7 +122,50 @@
                     @endif
                 </div>
             </div>
+        </div>
 
+        <div x-show="open" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" x-cloak>
+
+            <div @click.away="open = false" class="bg-white rounded-xl shadow-2xl max-w-md w-full p-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">Quase lá! 🚀</h3>
+                <p class="text-gray-600 mb-6">
+                    Informe seu e-mail para vincularmos ao modelo escolhido e prosseguir para o
+                    pagamento seguro.
+                </p>
+
+                <form action="{{  route('subscription.checkout', ['plan' => $plan, 'template' => $template]) }}"
+                    method="POST">
+                    @method('POST')
+                    @csrf
+
+                    <input type="hidden" name="template_id" :value="templateId">
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1" for="email">
+                            Seu melhor e-mail
+                        </label>
+
+                        <input type="email" name="email" id="email" required placeholder="exemplo@email.com"
+                            x-model="email"
+                            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 py-2 px-4">
+                    </div>
+
+                    <div class="flex flex-col gap-3">
+                        <button type="submit" :disabled="!email"
+                            class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
+                            Ir para Pagamento Seguro
+                        </button>
+
+                        <button @click="open = false" type="button" class="text-gray-500 text-sm hover:underline">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </section>
+
+
 </x-layout.base-subscription>

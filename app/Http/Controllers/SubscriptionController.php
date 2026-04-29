@@ -2,34 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Template;
+use App\Models\{Lead, Plan, Template};
 use App\Settings\GeneralSettings;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 class SubscriptionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
         return view('pages.success');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        dd($request);
     }
 
     /**
@@ -46,27 +31,15 @@ class SubscriptionController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function checkout(Plan $plan, Template $template, Request $request)
     {
-        //
-    }
+        $email = $request->input('email');
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+        Lead::updateOrCreate(
+            ['email' => $email],
+            ['template_id' => $template->id]
+        );
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->to($plan->url);
     }
 }
