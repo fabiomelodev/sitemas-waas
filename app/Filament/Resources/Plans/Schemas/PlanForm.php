@@ -48,8 +48,10 @@ class PlanForm
                             ->required()
                             ->numeric()
                             ->prefix('R$'),
+                        TextInput::make('asaas_link_id')
+                            ->label('Asaas Link ID'),
                         Select::make('status')
-                            ->options(['active' => 'Active', 'inactive' => 'Inactive'])
+                            ->options(['active' => 'Ativo', 'inactive' => 'Inativo'])
                             ->default('active')
                             ->required(),
                     ]),
