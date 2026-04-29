@@ -25,6 +25,6 @@ Route::post('/reset-password', [NewPasswordController::class, 'store'])
 
 Route::get('/test-mail', function () {
     Mail::raw('Funcionou!', function ($message) {
-        $message->to('seu-email@gmail.com')->subject('Teste Resend');
+        $message->to('leandrowoa@gmail.com')->subject('Teste Resend');
     });
 });

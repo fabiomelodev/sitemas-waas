@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Webhooks;
 
 use App\Http\Controllers\Controller;
 use App\Models\{Lead, Order, Plan, Subscription, User};
+use App\Notifications\WelcomeAndSetPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Hash, Http, Log};
 use Illuminate\Support\Str;
@@ -139,6 +140,8 @@ class AsaasWebhookController extends Controller
             'payment_method' => $payment['billingType'],
             'paid_at' => now(),
         ]);
+
+        $user->notify(new WelcomeAndSetPassword());
 
         // 3. Vincula a assinatura e cria a ordem
         // ... restante da sua lógica
