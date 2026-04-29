@@ -17,14 +17,19 @@ class SubscriptionForm
             ->components([
                 Section::make()
                     ->columnSpan(9)
+                    ->columns(2)
                     ->schema([
                         Select::make('user_id')
                             ->label('Cliente')
                             ->relationship('user', 'name')
-                            ->disabled(),
+                            ->disabled()
+                            ->columnSpanFull(),
                         Select::make('plan_id')
                             ->label('Plano')
                             ->relationship('plan', 'name'),
+                        Select::make('template_id')
+                            ->label('Modelo')
+                            ->relationship('template', 'name'),
                     ]),
                 Section::make()
                     ->columnSpan(3)

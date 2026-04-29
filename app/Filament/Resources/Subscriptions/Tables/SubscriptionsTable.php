@@ -20,6 +20,9 @@ class SubscriptionsTable
                 TextColumn::make('plan.name')
                     ->label('Plano')
                     ->searchable(),
+                TextColumn::make('template.name')
+                    ->label('Modelo')
+                    ->searchable(),
                 TextColumn::make('user.name')
                     ->label('Nome')
                     ->searchable(),
