@@ -40,7 +40,7 @@ class NewPasswordController extends Controller
                 $loginToken = Str::random(40);
                 $user->update(['login_token' => $loginToken]); // Adicione essa coluna na migration de users
     
-                dd($user);
+                dd(true, $loginToken, $user);
             }
         );
 
