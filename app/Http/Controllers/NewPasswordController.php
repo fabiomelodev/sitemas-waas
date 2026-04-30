@@ -28,7 +28,6 @@ class NewPasswordController extends Controller
             'password' => 'required|min:8|confirmed',
         ]);
 
-        // O broker do Laravel valida se o token é real e pertence ao e-mail
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function (User $user, string $password) {
@@ -37,16 +36,16 @@ class NewPasswordController extends Controller
                     'remember_token' => Str::random(60),
                 ])->save();
 
-                event(new PasswordReset($user));
+                // 1. Gera um token aleatório e salva no usuário (ou numa tabela temporária)
+                $loginToken = Str::random(40);
+                $user->update(['login_token' => $loginToken]); // Adicione essa coluna na migration de users
             }
         );
 
-        // return $status === Password::PASSWORD_RESET
-        //     ? redirect()->route('login')->with('status', 'Senha definida com sucesso!')
-        //     : back()->withErrors(['email' => [__($status)]]);
-
-        return $status === Password::PASSWORD_RESET
-            ? redirect()->away('https://app.sitemas.com.br/admin')->with('status', 'Conta ativada com sucesso!')
-            : back()->withErrors(['email' => [__($status)]]);
+        if ($status === Password::PASSWORD_RESET) {
+            $user = User::query()->where('email', $request->email)->first();
+            // 2. Redireciona passando o token na URL
+            return redirect()->away("https://app.sitemas.com.br/autologin/{$user->login_token}");
+        }
     }
 }
