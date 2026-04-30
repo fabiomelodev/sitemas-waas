@@ -39,6 +39,8 @@ class NewPasswordController extends Controller
                 // 1. Gera um token aleatório e salva no usuário (ou numa tabela temporária)
                 $loginToken = Str::random(40);
                 $user->update(['login_token' => $loginToken]); // Adicione essa coluna na migration de users
+    
+                dd($user);
             }
         );
 
