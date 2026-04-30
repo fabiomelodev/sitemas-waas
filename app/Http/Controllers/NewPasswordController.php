@@ -41,10 +41,12 @@ class NewPasswordController extends Controller
             }
         );
 
-        dd(true);
+        // return $status === Password::PASSWORD_RESET
+        //     ? redirect()->route('login')->with('status', 'Senha definida com sucesso!')
+        //     : back()->withErrors(['email' => [__($status)]]);
 
         return $status === Password::PASSWORD_RESET
-            ? redirect()->route('login')->with('status', 'Senha definida com sucesso!')
+            ? redirect()->away('https://app.sitemas.com.br/admin')->with('status', 'Conta ativada com sucesso!')
             : back()->withErrors(['email' => [__($status)]]);
     }
 }
