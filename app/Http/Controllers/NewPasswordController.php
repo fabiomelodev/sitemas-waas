@@ -44,8 +44,11 @@ class NewPasswordController extends Controller
 
         if ($status === Password::PASSWORD_RESET) {
             $user = User::query()->where('email', $request->email)->first();
-            // 2. Redireciona passando o token na URL
-            return redirect()->away("https://app.sitemas.com.br/autologin/{$user->login_token}");
+
+            // Use str_replace ou apenas monte a string garantindo que não haja /public
+            $url = "https://app.sitemas.com.br/autologin/{$user->login_token}";
+
+            return redirect()->away($url);
         }
     }
 }
