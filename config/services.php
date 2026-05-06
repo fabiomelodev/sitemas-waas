@@ -40,4 +40,8 @@ return [
         'webhook_token' => env('ASAAS_WEBHOOK_TOKEN'),
     ],
 
+    'url' => [
+        'auto_login' => env('APP_AUTOLOGIN_URL')
+    ]
+
 ];

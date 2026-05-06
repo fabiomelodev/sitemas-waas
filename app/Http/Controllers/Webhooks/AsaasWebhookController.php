@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Webhooks;
 
 use App\Http\Controllers\Controller;
-use App\Models\{Lead, Order, Plan, Subscription, User};
+use App\Models\{Lead, Order, Plan, SiteConfig, Subscription, User};
 use App\Notifications\WelcomeAndSetPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Hash, Http, Log};
@@ -139,6 +139,13 @@ class AsaasWebhookController extends Controller
             'status' => 'completed',
             'payment_method' => $payment['billingType'],
             'paid_at' => now(),
+        ]);
+
+        SiteConfig::create([
+            'company_name' => $asaasCustomer['name'],
+            'status' => 0,
+            'subscription_id' => $subscription->id,
+            'user_id' => $user->id
         ]);
 
         $user->notify(new WelcomeAndSetPassword());

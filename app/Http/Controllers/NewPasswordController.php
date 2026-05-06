@@ -46,7 +46,9 @@ class NewPasswordController extends Controller
             $user = User::query()->where('email', $request->email)->first();
 
             // Use str_replace ou apenas monte a string garantindo que não haja /public
-            $url = "https://app.sitemas.com.br/autologin/{$user->login_token}";
+            // $url = "https://app.sitemas.com.br/autologin/{$user->login_token}";
+
+            $url = config('services.url.auto_login') . "{$user->login_token}";
 
             return redirect()->away($url);
         }
