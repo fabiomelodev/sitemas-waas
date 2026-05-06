@@ -31,7 +31,7 @@ class OrderResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Clientes e Assinaturas';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 3;
 
     public static function form(Schema $schema): Schema
     {
