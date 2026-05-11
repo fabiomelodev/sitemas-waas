@@ -152,6 +152,8 @@ class AsaasWebhookController extends Controller
 
         // 3. Vincula a assinatura e cria a ordem
         // ... restante da sua lógica
+
+        return redirect()->route('subscription.create');
     }
 
     private function handlePaymentOverdue($payment)
