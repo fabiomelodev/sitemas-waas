@@ -98,7 +98,7 @@
                         </h3>
 
                         <p class="mt-2 text-gray-600 text-sm">
-                            {{  $planStart->description }}
+                            {!! $planStart->description !!}
                         </p>
 
                         <div class="mt-6 flex items-baseline gap-1">
