@@ -54,12 +54,12 @@ class SubscriptionController extends Controller
             // "pendente" no banco antes de redirecionar para vincular depois no webhook.
             session(['checkout_email' => $request->email]);
 
-            dd('IF');
+            dd($paymentLink);
 
             return redirect()->away($paymentLink['url']);
         }
 
-        dd('Depois do IF');
+        dd($paymentLink);
 
         return back()->withErrors([
             'message' => 'Unable to generate payment link. Please try again later.'
