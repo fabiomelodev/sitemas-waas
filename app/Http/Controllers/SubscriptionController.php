@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Plan, Template};
+use App\Models\{Lead, Plan, Template};
 use App\Services\AsaasService;
 use App\Settings\GeneralSettings;
 use Illuminate\Http\Request;
@@ -29,6 +29,13 @@ class SubscriptionController extends Controller
         $request->validate([
             'email' => 'required|email',
         ]);
+
+        $email = $request->input('email');
+
+        Lead::updateOrCreate(
+            ['email' => $email],
+            ['template_id' => $template->id]
+        );
 
         // 2. Preparamos o nome do item que aparecerá no checkout do Asaas
         // Ex: "Premium Plan - Template: Barber Shop"
