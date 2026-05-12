@@ -24,6 +24,7 @@ class AsaasService
                     'value' => $value,
                     'billingType' => 'UNDEFINED', // Permite todas as formas de pagamento
                     'chargeType' => 'RECURRENT',  // Define como assinatura/recorrente
+                    'dueDateLimitDays' => 5,
                     'callback' => [
                         'successUrl' => route('payment.success'), // Rota definida no Laravel
                         'autoRedirect' => true // Força o redirecionamento automático
