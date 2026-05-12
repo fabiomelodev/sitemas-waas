@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Filament\Resources\Users\Tables;
+
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\{DeleteBulkAction, EditAction};
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
+
+class UsersTable
+{
+    public static function configure(Table $table): Table
+    {
+        return $table
+            ->columns([
+                TextColumn::make('name')
+                    ->label('Nome')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('email')
+                    ->label('E-mail')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('asaas_customer_id')
+                    ->label('ID do Cliente no Asaas')
+                    ->searchable(),
+            ])
+            ->filters([
+                //
+            ])
+            ->recordActions([
+                EditAction::make()
+                    ->iconButton(),
+            ])
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                ]),
+            ]);
+    }
+}
