@@ -34,8 +34,6 @@ class SubscriptionController extends Controller
 
     public function checkout(Request $request, Plan $plan, Template $template, AsaasService $asaasService)
     {
-        dd($plan, $template);
-
         // 1. Validamos o e-mail que veio do seu formulário modal
         $request->validate([
             'email' => 'required|email',
@@ -55,6 +53,8 @@ class SubscriptionController extends Controller
             // DICA: Você pode salvar o e-mail na sessão ou criar um registro 
             // "pendente" no banco antes de redirecionar para vincular depois no webhook.
             session(['checkout_email' => $request->email]);
+
+            dd('IF');
 
             return redirect()->away($paymentLink['url']);
         }
