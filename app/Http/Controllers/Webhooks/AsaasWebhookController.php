@@ -95,6 +95,8 @@ class AsaasWebhookController extends Controller
 
         $asaasCustomer = $response->json();
 
+        dd($asaasCustomer);
+
         // 2. Agora você tem o e-mail e o nome reais!
         $user = User::firstOrCreate(
             ['email' => $asaasCustomer['email']],
@@ -152,8 +154,6 @@ class AsaasWebhookController extends Controller
 
         // 3. Vincula a assinatura e cria a ordem
         // ... restante da sua lógica
-
-        return redirect()->route('subscription.create');
     }
 
     private function handlePaymentOverdue($payment)

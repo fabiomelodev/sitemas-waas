@@ -65,8 +65,8 @@ class SubscriptionController extends Controller
     /**
      * Display the success message after payment confirmation.
      */
-    public function success()
+    public function success(GeneralSettings $settings)
     {
-        return view('payments.success');
+        return view('payments.success', ['settings' => $settings]);
     }
 }
