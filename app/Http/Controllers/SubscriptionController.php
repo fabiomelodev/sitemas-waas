@@ -34,6 +34,8 @@ class SubscriptionController extends Controller
 
     public function checkout(Request $request, Plan $plan, Template $template, AsaasService $asaasService)
     {
+        dd($plan, $template);
+
         // 1. Validamos o e-mail que veio do seu formulário modal
         $request->validate([
             'email' => 'required|email',
