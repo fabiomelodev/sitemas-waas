@@ -10,9 +10,9 @@ Route::get('assinar/{template:slug}', [SubscriptionController::class, 'show'])->
 
 Route::post('assinar/checkout/{plan:slug}/{template:slug}', [SubscriptionController::class, 'checkout'])->name('subscription.checkout');
 
-Route::get('sucesso', [SubscriptionController::class, 'create'])->name('subscription.create');
+Route::get('assinar/sucesso', [SubscriptionController::class, 'create'])->name('subscription.success');
 
-Route::post('sucesso', [SubscriptionController::class, 'store'])->name('subscription.store');
+Route::post('assinar/sucesso', [SubscriptionController::class, 'store'])->name('subscription.store');
 
 Route::get('sucesso-3', fn() => view('pages.success'));
 
@@ -28,3 +28,12 @@ Route::get('/test-mail', function () {
         $message->to('leandrowoa@gmail.com')->subject('Teste Resend');
     });
 });
+
+
+
+
+// Rota que o cliente clica para comprar
+Route::post('/subscribe', [SubscriptionController::class, 'checkout'])->name('subscription.checkout');
+
+// Rota de retorno configurada no callback do Asaas
+Route::get('/payment-success', [SubscriptionController::class, 'success'])->name('payment.success');
