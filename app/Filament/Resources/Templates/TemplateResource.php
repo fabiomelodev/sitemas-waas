@@ -19,7 +19,7 @@ class TemplateResource extends Resource
 {
     protected static ?string $model = Template::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    // protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedNewspaper;
 
     protected static ?string $recordTitleAttribute = 'Template';
 
@@ -27,9 +27,9 @@ class TemplateResource extends Resource
 
     protected static ?string $pluralLabel = 'Modelos';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Modelos';
+    protected static string|UnitEnum|null $navigationGroup = 'Planos e Modelos';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 3;
 
     public static function form(Schema $schema): Schema
     {

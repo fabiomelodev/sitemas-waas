@@ -19,7 +19,7 @@ class PlanResource extends Resource
 {
     protected static ?string $model = Plan::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    // protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedNewspaper;
 
     protected static ?string $recordTitleAttribute = 'Plan';
 
@@ -27,7 +27,9 @@ class PlanResource extends Resource
 
     protected static ?string $pluralLabel = 'Planos';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Planos';
+    protected static string|UnitEnum|null $navigationGroup = 'Planos e Modelos';
+
+    protected static ?int $navigationSort = 2;
 
     public static function form(Schema $schema): Schema
     {
