@@ -6,7 +6,7 @@ use App\Http\Controllers\{HomeController, NewPasswordController, SubscriptionCon
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::prefix('assinar')->name('subscription.')->group(function () {
-    Route::get('/{template:slug}', [SubscriptionController::class, 'show'])->name('show');
+    Route::get('/modelo/{template:slug}', [SubscriptionController::class, 'show'])->name('show');
 
     Route::post('/checkout/{plan:slug}/{template:slug}', [SubscriptionController::class, 'checkout'])->name('checkout');
 

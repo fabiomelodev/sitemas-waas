@@ -65,6 +65,8 @@ class SubscriptionController extends Controller
      */
     public function success(GeneralSettings $settings)
     {
+        dd($settings);
+
         return view('payments.success', ['settings' => $settings]);
     }
 }
