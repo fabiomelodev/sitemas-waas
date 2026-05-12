@@ -26,7 +26,7 @@ class AsaasService
                     'chargeType' => 'RECURRENT',  // Define como assinatura/recorrente
                     'dueDateLimitDays' => 5,
                     'callback' => [
-                        'successUrl' => route('payment.success'), // Rota definida no Laravel
+                        'successUrl' => route('subscription.success'), // Rota definida no Laravel
                         'autoRedirect' => true // Força o redirecionamento automático
                     ]
                 ]);
