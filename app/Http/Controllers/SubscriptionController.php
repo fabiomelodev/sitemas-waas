@@ -59,6 +59,8 @@ class SubscriptionController extends Controller
             return redirect()->away($paymentLink['url']);
         }
 
+        dd('Depois do IF');
+
         return back()->withErrors([
             'message' => 'Unable to generate payment link. Please try again later.'
         ]);
