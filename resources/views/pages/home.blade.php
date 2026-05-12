@@ -138,7 +138,7 @@
 
                         <button x-data
                             @click="$dispatch('trigger-plan-filter', { id: 1 }); document.getElementById('modelos').scrollIntoView({ behavior: 'smooth' })"
-                            class="w-full py-3 bg-blue-600 text-white rounded-xl font-bold mt-12">
+                            class="w-full py-3 bg-blue-600 text-white rounded-xl font-bold cursor-pointer mt-12">
                             Ver Modelos Start
                         </button>
                     </div>
