@@ -97,7 +97,7 @@ new class extends Component {
                     Nossos Modelos Premium
                 </h2>
 
-                <p class="mt-4 text-lg text-gray-600 max-w-xl mx-auto">
+                <p class="max-w-xl lg:text-lg text-gray-600 mt-4 mx-auto">
                     Designs modernos, responsivos e otimizados para
                     conversão em qualquer dispositivo.
                 </p>
@@ -123,7 +123,8 @@ new class extends Component {
 
             @if(isset($plans))
                 <div x-data="{ activePlan: 'all'}" x-on:trigger-plan-filter.window="activePlan = String($event.detail.id)">
-                    <div class="overflow-hidden rounded-full border border-gray-100 inline-flex">
+                    <div
+                        class="overflow-hidden rounded-full border border-gray-100 flex lg:inline-flex justify-center mt-6">
                         <button class="shadow-md shadow-brand/20 text-xs font-bold cursor-pointer py-2 px-6" type="button"
                             x-on:click="activePlan = 'all'" wire:click="filterAllPlans()"
                             x-bind:class="activePlan === 'all' ? 'text-white bg-brand' : 'text-gray-600 hover:bg-gray-100'">

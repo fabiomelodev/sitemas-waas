@@ -1,26 +1,33 @@
 <x-layout.base>
+    <!-- hero -->
     <section class="relative bg-gray-50 py-24 md:py-32 overflow-hidden">
+
         <div class="max-w-7xl mx-auto px-6 relative z-10 text-center">
             <span
                 class="inline-flex items-center rounded-full bg-brand/10 px-4 py-1.5 text-xs font-semibold text-brand ring-1 ring-inset ring-brand/20 mb-6">
                 Website as a Service (WaaS)
             </span>
+
             <h1
-                class="text-5xl md:text-7xl font-extrabold text-dark-900 tracking-tighter leading-none max-w-4xl mx-auto">
+                class="text-3xl sm:text-5xl md:text-7xl font-extrabold text-dark-900 tracking-tighter leading-none max-w-4xl mx-auto">
                 Seu site profissional no ar, <span class="text-brand">sem dor de cabeça técnica.</span>
             </h1>
-            <p class="mt-8 text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+
+            <p class="max-w-2xl leading-relaxed lg:text-xl text-gray-600 mt-8 mx-auto">
                 Escolha um modelo premium, assine um plano e nós cuidamos de tudo: hospedagem, manutenção e suporte.
                 Simples, rápido e previsível.
             </p>
+
             <div class="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6">
                 <a href="#modelos"
                     class="w-full sm:w-auto bg-brand text-white px-8 py-4 rounded-xl font-bold hover:bg-brand-dark transition shadow-lg shadow-brand/20 transform hover:-translate-y-0.5">
                     Explorar Modelos
                 </a>
+
                 <a href="#planos"
-                    class="w-full sm:w-auto text-dark-900 px-8 py-4 rounded-xl font-semibold hover:bg-gray-100 transition flex items-center gap-2 group">
+                    class="w-full sm:w-auto text-dark-900 px-8 py-4 rounded-xl font-semibold hover:bg-gray-100 transition flex justify-center items-center gap-2 group">
                     Ver Planos
+
                     <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none"
                         stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -29,6 +36,7 @@
                 </a>
             </div>
         </div>
+
         <div class="absolute inset-0 z-0 opacity-30">
             <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
                 <defs>
@@ -40,6 +48,7 @@
             </svg>
         </div>
     </section>
+    <!-- end hero -->
 
     <livewire:list-templates />
 
@@ -59,7 +68,7 @@
                         novos projetos esta semana.
                     </p>
                 </div>
-                <a href="#planos"
+                <a href="#modelos"
                     class="text-amber-900 text-sm font-bold underline decoration-amber-300 hover:decoration-amber-500 transition-all">
                     Garantir minha vaga agora &rarr;
                 </a>
@@ -68,11 +77,19 @@
     </section>
 
     <section id="planos" class="py-24 bg-gray-50">
+
         <div class="max-w-7xl mx-auto px-6">
+
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-extrabold text-dark-900 tracking-tight">Planos Simples e Transparentes</h2>
-                <p class="mt-4 text-lg text-gray-600 max-w-xl mx-auto">Tudo o que você precisa para manter sua presença
-                    online ativa, sem custos surpresas.</p>
+
+                <h2 class="text-4xl font-extrabold text-dark-900 tracking-tight">
+                    Planos Simples e Transparentes
+                </h2>
+
+                <p class="max-w-xl lg:text-lg text-gray-600 mt-4 mx-auto">
+                    Tudo o que você precisa para manter sua presença
+                    online ativa, sem custos surpresas.
+                </p>
             </div>
 
             <div class="flex justify-center mb-8">
@@ -83,9 +100,10 @@
                             d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                             clip-rule="evenodd"></path>
                     </svg>
-                    <span class="text-green-800 text-xs font-bold uppercase tracking-wider">Aproveite: R$ 0,00 de taxa
-                        de
-                        ativação</span>
+
+                    <span class="text-green-800 text-xs font-bold uppercase tracking-wider">
+                        Aproveite: R$ 0,00 de taxa de ativação
+                    </span>
                 </div>
             </div>
 
@@ -129,16 +147,9 @@
                             @endforeach
                         </ul>
 
-                        {{-- @if($planStart->url)
-                        <a href="{{  $planStart->url }}" target="_blank"
-                            class="mt-12 block w-full bg-gray-100 text-dark-900 text-center px-6 py-4 rounded-xl font-bold hover:bg-gray-200 transition">
-                            Assinar Plano Start
-                        </a>
-                        @endif --}}
-
                         <button x-data
                             @click="$dispatch('trigger-plan-filter', { id: 1 }); document.getElementById('modelos').scrollIntoView({ behavior: 'smooth' })"
-                            class="w-full py-3 bg-blue-600 text-white rounded-xl font-bold cursor-pointer mt-12">
+                            class="w-full transition py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold cursor-pointer mt-12">
                             Ver Modelos Start
                         </button>
                     </div>
@@ -195,7 +206,7 @@
 
                         <button x-data
                             @click="$dispatch('trigger-plan-filter', { id: 2 }); document.getElementById('modelos').scrollIntoView({ behavior: 'smooth' })"
-                            class="w-full py-3 bg-blue-600 text-white rounded-xl font-bold mt-12">
+                            class="w-full transition py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold cursor-pointer mt-12">
                             Ver Modelos Pro
                         </button>
                     </div>
@@ -303,7 +314,7 @@
                             class="w-12 h-12 bg-white border-2 border-brand text-brand rounded-full flex items-center justify-center font-bold mx-auto mb-4 shadow-sm">
                             03</div>
                         <h4 class="font-bold text-dark-900 text-sm">Ajustes</h4>
-                        <p class="text-xs text-gray-500 mt-1">Personalizamos o template com sua marca.</p>
+                        <p class="text-xs text-gray-500 mt-1">Personalizamos o modelo com sua marca.</p>
                     </div>
                     <div class="bg-white p-4 text-center">
                         <div
