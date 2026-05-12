@@ -2,22 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Lead, Plan, Template};
+use App\Models\{Plan, Template};
 use App\Services\AsaasService;
 use App\Settings\GeneralSettings;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 class SubscriptionController extends Controller
 {
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('pages.success');
-    }
-
     /**
      * Display the specified resource.
      */
