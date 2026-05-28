@@ -19,28 +19,32 @@ Route::controller(NewPasswordController::class)->group(function () {
     Route::post('/reset-password', 'store')->name('password.update');
 });
 
-if (app()->environment('local') || config('services.asaas.url') !== 'https://www.asaas.com/api/v3') {
+if (app()->environment('local') || str_contains(config('services.asaas.url'), 'sandbox')) {
 
     Route::get('/debug/pay/{paymentId}', function (string $paymentId) {
         $baseUrl = config('services.asaas.url');
         $token = config('services.asaas.token');
 
-        // Dispara o comando para o Asaas simular que o cliente pagou a cobrança
+        // De acordo com a documentação do Simulador de Vendas:
+        // Enviamos o ID da cobrança e o status que queremos simular (CONFIRMED para Cartão/Pix ou RECEIVED para Boleto compensado)
         $response = Illuminate\Support\Facades\Http::withHeaders([
             'access_token' => $token,
-        ])->post("{$baseUrl}/payments/{$paymentId}/simulatePayment");
+        ])->post("{$baseUrl}/sandbox/salesSimulation", [
+                    'paymentId' => $paymentId,
+                    'status' => 'CONFIRMED'
+                ]);
 
         if ($response->successful()) {
             return response()->json([
                 'status' => 'Success',
-                'message' => "The payment {$paymentId} was successfully simulated as PAID.",
+                'message' => "The sales simulation for payment {$paymentId} was successfully processed.",
                 'asaas_response' => $response->json()
             ]);
         }
 
         return response()->json([
             'status' => 'Error',
-            'message' => 'Failed to simulate payment.',
+            'message' => 'Failed to simulate sales process.',
             'asaas_error' => $response->json()
         ], $response->status());
     })->name('debug.simulate-payment');
