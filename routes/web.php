@@ -19,34 +19,34 @@ Route::controller(NewPasswordController::class)->group(function () {
     Route::post('/reset-password', 'store')->name('password.update');
 });
 
-if (app()->environment('local')) {
+// if (app()->environment('local')) {
 
-    Route::get('/debug/simulate-webhook/{method}', function (string $method) {
-        // 1. Criamos o JSON exatamente no formato que o Asaas envia no Webhook
-        $mockPayload = [
-            'event' => 'PAYMENT_RECEIVED', // Evento de pagamento recebido
-            'payment' => [
-                'id' => 'pay_mocked_123456',
-                'value' => 150.00,
-                'billingType' => strtoupper($method), // PIX, BOLETO ou CREDIT_CARD
-                'status' => 'RECEIVED',
-                'customer' => [
-                    'name' => 'Cliente Teste Mogi',
-                    'email' => 'cliente_teste_mogi@email.com',
-                    'phone' => '(11) 99999-9999', // O telefone que você quer testar salvando no User
-                ]
+Route::get('/debug/simulate-webhook/{method}', function (string $method) {
+    // 1. Criamos o JSON exatamente no formato que o Asaas envia no Webhook
+    $mockPayload = [
+        'event' => 'PAYMENT_RECEIVED', // Evento de pagamento recebido
+        'payment' => [
+            'id' => 'pay_mocked_123456',
+            'value' => 150.00,
+            'billingType' => strtoupper($method), // PIX, BOLETO ou CREDIT_CARD
+            'status' => 'RECEIVED',
+            'customer' => [
+                'name' => 'Cliente Teste Mogi',
+                'email' => 'cliente_teste_mogi@email.com',
+                'phone' => '(11) 99999-9999', // O telefone que você quer testar salvando no User
             ]
-        ];
+        ]
+    ];
 
-        // 2. Fazemos uma requisição interna simulando o disparo do Asaas para o seu Controller
-        // Certifique-se de ajustar o nome da rota do seu webhook se for diferente de 'asaas.webhook'
-        $response = Illuminate\Support\Facades\Http::post(route('asaas.webhook'), $mockPayload);
+    // 2. Fazemos uma requisição interna simulando o disparo do Asaas para o seu Controller
+    // Certifique-se de ajustar o nome da rota do seu webhook se for diferente de 'asaas.webhook'
+    $response = Illuminate\Support\Facades\Http::post(route('asaas.webhook'), $mockPayload);
 
-        return response()->json([
-            'message' => "Simulação de Webhook para [{$method}] disparada com sucesso!",
-            'webhook_response_status' => $response->status(),
-            'webhook_response_body' => $response->json()
-        ]);
-    });
+    return response()->json([
+        'message' => "Simulação de Webhook para [{$method}] disparada com sucesso!",
+        'webhook_response_status' => $response->status(),
+        'webhook_response_body' => $response->json()
+    ]);
+});
 
-}
+// }
