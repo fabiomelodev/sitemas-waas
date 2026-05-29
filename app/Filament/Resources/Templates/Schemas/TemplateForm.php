@@ -44,6 +44,10 @@ class TemplateForm
                             ->label('Categoria')
                             ->relationship('category', 'name')
                             ->required(),
+                        Select::make('plan_id')
+                            ->label('Plano')
+                            ->relationship('plan', 'name')
+                            ->required(),
                         Select::make('status')
                             ->options(['active' => 'Ativo', 'inactive' => 'Inativo'])
                             ->default('active')
