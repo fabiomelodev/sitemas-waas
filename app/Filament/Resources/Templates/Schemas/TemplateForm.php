@@ -29,9 +29,6 @@ class TemplateForm
                         TextInput::make('url')
                             ->url()
                             ->required(),
-                        TextInput::make('subscription_link')
-                            ->label('Link de Assinatura')
-                            ->required(),
                     ]),
                 Section::make()
                     ->columnSpan(3)
