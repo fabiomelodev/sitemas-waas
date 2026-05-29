@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Templates\Schemas;
 
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
@@ -50,6 +51,16 @@ class TemplateForm
                             ->default('active')
                             ->required(),
                     ]),
+                Section::make()
+                    ->columnSpan(9)
+                    ->schema([
+                        Repeater::make('features')
+                            ->label('Características')
+                            ->schema([
+                                TextInput::make('name')
+                                    ->label('Nome')
+                            ])
+                    ])
             ]);
     }
 }
