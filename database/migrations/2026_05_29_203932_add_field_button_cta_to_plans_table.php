@@ -10,8 +10,8 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('site_configs', function (Blueprint $table) {
-            $table->boolean('is_finished')->default(false)->after('status');
+        Schema::table('plans', function (Blueprint $table) {
+            $table->string('button_cta')->nullable();
         });
     }
 
@@ -20,8 +20,8 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('site_configs', function (Blueprint $table) {
-            $table->dropColumn('is_finished');
+        Schema::table('plans', function (Blueprint $table) {
+            //
         });
     }
 };

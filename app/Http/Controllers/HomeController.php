@@ -13,9 +13,12 @@ class HomeController extends Controller
 
         $planPro = Plan::where('slug', 'plano-pro')->active()->first();
 
+        $plans = Plan::query()->orderBy('order', 'asc')->active()->get();
+
         return view('pages.home', [
             'planStart' => $planStart,
             'planPro' => $planPro,
+            'plans' => $plans
         ]);
     }
 }

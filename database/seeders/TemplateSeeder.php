@@ -20,7 +20,7 @@ class TemplateSeeder extends Seeder
                 'slug' => 'template-1',
                 'excerpt' => 'This is a short description of Template 3.',
                 'url' => 'https://example.com/template3',
-                'subscription_link' => 'https://example.com/subscribe/template3',
+                // 'subscription_link' => 'https://example.com/subscribe/template3',
                 'thumbnail' => null,
                 'features' => json_encode(
                     [
@@ -52,7 +52,7 @@ class TemplateSeeder extends Seeder
                 'slug' => 'template-2',
                 'excerpt' => 'This is a short description of Template 4.',
                 'url' => 'https://example.com/template4',
-                'subscription_link' => 'https://example.com/subscribe/template4',
+                // 'subscription_link' => 'https://example.com/subscribe/template4',
                 'thumbnail' => null,
                 'features' => json_encode(
                     [
@@ -84,7 +84,7 @@ class TemplateSeeder extends Seeder
                 'slug' => 'template-3',
                 'excerpt' => 'This is a short description of Template 4.',
                 'url' => 'https://example.com/template4',
-                'subscription_link' => 'https://example.com/subscribe/template4',
+                // 'subscription_link' => 'https://example.com/subscribe/template4',
                 'thumbnail' => null,
                 'features' => json_encode(
                     [

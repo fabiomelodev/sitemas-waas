@@ -107,110 +107,113 @@
                 </div>
             </div>
 
-            <div class="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto items-start mt-16">
+            <div class="grid lg:grid-cols-3 gap-8 mx-auto items-start mt-16">
 
-                @if(isset($planStart))
-                    <div class="bg-white p-8 md:p-10 rounded-3xl border border-gray-100 shadow-sm relative">
-                        <h3 class="text-2xl font-bold text-dark-900 tracking-tight">
-                            {{  $planStart->name }}
-                        </h3>
+                {{-- @if(isset($planStart))
+                <div class="bg-white p-8 md:p-10 rounded-3xl border border-gray-100 shadow-sm relative">
+                    <h3 class="text-2xl font-bold text-dark-900 tracking-tight">
+                        {{ $planStart->name }}
+                    </h3>
 
-                        <p class="mt-2 text-gray-600 text-sm">
-                            {!! $planStart->description !!}
-                        </p>
+                    <p class="mt-2 text-gray-600 text-sm">
+                        {!! $planStart->description !!}
+                    </p>
 
-                        <div class="mt-6 flex items-baseline gap-1">
-                            <span class="text-5xl font-extrabold text-dark-900 tracking-tighter">R$
-                                {{  $planStart->price }}
-                            </span>
+                    <div class="mt-6 flex items-baseline gap-1">
+                        <span class="text-5xl font-extrabold text-dark-900 tracking-tighter">R$
+                            {{ $planStart->price }}
+                        </span>
 
-                            <span class="text-gray-500 text-sm font-medium">/mês</span>
-                        </div>
-
-                        <ul class="mt-10 space-y-4 text-sm text-gray-700">
-                            @foreach($planStart->features as $feature)
-                                <li class=" flex items-center gap-3 {{  $feature['status'] == 0 ? 'text-gray-400' : '' }}">
-                                    @if($feature['status'])
-                                        <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                                d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                    @else
-                                        <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                                d="M6 18L18 6M6 6l12 12"></path>
-                                        </svg>
-                                    @endif
-
-                                    {{  $feature['name'] }}
-                                </li>
-                            @endforeach
-                        </ul>
-
-                        <button x-data
-                            @click="$dispatch('trigger-plan-filter', { id: 1 }); document.getElementById('modelos').scrollIntoView({ behavior: 'smooth' })"
-                            class="w-full transition py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold cursor-pointer mt-12">
-                            Ver Modelos Start
-                        </button>
+                        <span class="text-gray-500 text-sm font-medium">/mês</span>
                     </div>
+
+                    <ul class="mt-10 space-y-4 text-sm text-gray-700">
+                        @foreach($planStart->features as $feature)
+                        <li class=" flex items-center gap-3 {{  $feature['status'] == 0 ? 'text-gray-400' : '' }}">
+                            @if($feature['status'])
+                            <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                    d="M5 13l4 4L19 7">
+                                </path>
+                            </svg>
+                            @else
+                            <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                    d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                            @endif
+
+                            {{ $feature['name'] }}
+                        </li>
+                        @endforeach
+                    </ul>
+
+                    <button x-data
+                        @click="$dispatch('trigger-plan-filter', { id: 1 }); document.getElementById('modelos').scrollIntoView({ behavior: 'smooth' })"
+                        class="w-full transition py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold cursor-pointer mt-12">
+                        Ver Modelos Start
+                    </button>
+                </div>
                 @endif
 
                 @if($planPro)
-                    <div
-                        class="bg-dark-900 p-8 md:p-10 rounded-3xl border border-dark-700 shadow-xl relative transform lg:scale-105">
-                        <span
-                            class="absolute -top-4 right-8 bg-brand text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider">
-                            Mais Popular
-                        </span>
+                <div
+                    class="bg-dark-900 p-8 md:p-10 rounded-3xl border border-dark-700 shadow-xl relative transform lg:scale-105">
+                    <span
+                        class="absolute -top-4 right-8 bg-brand text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider">
+                        Mais Popular
+                    </span>
 
-                        <h3 class="text-2xl font-bold text-white tracking-tight">
-                            {{  $planPro->name }}
-                        </h3>
+                    <h3 class="text-2xl font-bold text-white tracking-tight">
+                        {{ $planPro->name }}
+                    </h3>
 
-                        <p class="mt-2 text-gray-300 text-sm">
-                            {{ $planPro->description }}
-                        </p>
+                    <p class="mt-2 text-gray-300 text-sm">
+                        {{ $planPro->description }}
+                    </p>
 
-                        <div class="mt-6 flex items-baseline gap-1">
-                            <span class="text-5xl font-extrabold text-white tracking-tighter">R$
-                                {{ $planPro->price }}</span>
-                            <span class="text-gray-400 text-sm font-medium">/mês</span>
-                        </div>
-
-                        <ul class="mt-10 space-y-4 text-sm text-gray-200">
-                            @foreach($planPro->features as $feature)
-                                <li class=" flex items-center gap-3 {{  $feature['status'] == 0 ? 'text-gray-400' : '' }}">
-                                    @if($feature['status'])
-                                        <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                                d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                    @else
-                                        <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                                d="M6 18L18 6M6 6l12 12"></path>
-                                        </svg>
-                                    @endif
-
-                                    {{  $feature['name'] }}
-                                </li>
-                            @endforeach
-                        </ul>
-
-                        {{-- @if($planPro->url)
-                        <a href="{{ $planPro->url }}" target="_blank"
-                            class="mt-12 block w-full bg-brand text-white text-center px-6 py-4 rounded-xl font-bold hover:bg-brand-dark transition shadow-lg shadow-brand/30 transform hover:-translate-y-0.5">
-                            Assinar Plano Pro
-                        </a>
-                        @endif --}}
-
-                        <button x-data
-                            @click="$dispatch('trigger-plan-filter', { id: 2 }); document.getElementById('modelos').scrollIntoView({ behavior: 'smooth' })"
-                            class="w-full transition py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold cursor-pointer mt-12">
-                            Ver Modelos Pro
-                        </button>
+                    <div class="mt-6 flex items-baseline gap-1">
+                        <span class="text-5xl font-extrabold text-white tracking-tighter">R$
+                            {{ $planPro->price }}</span>
+                        <span class="text-gray-400 text-sm font-medium">/mês</span>
                     </div>
-                @endif
+
+                    <ul class="mt-10 space-y-4 text-sm text-gray-200">
+                        @foreach($planPro->features as $feature)
+                        <li class=" flex items-center gap-3 {{  $feature['status'] == 0 ? 'text-gray-400' : '' }}">
+                            @if($feature['status'])
+                            <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                    d="M5 13l4 4L19 7">
+                                </path>
+                            </svg>
+                            @else
+                            <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                    d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                            @endif
+
+                            {{ $feature['name'] }}
+                        </li>
+                        @endforeach
+                    </ul>
+
+                    <button x-data
+                        @click="$dispatch('trigger-plan-filter', { id: 2 }); document.getElementById('modelos').scrollIntoView({ behavior: 'smooth' })"
+                        class="w-full transition py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold cursor-pointer mt-12">
+                        Ver Modelos Pro
+                    </button>
+                </div>
+                @endif --}}
+
+                @foreach($plans as $plan)
+                    @if($plan->is_recommended)
+                        <x-plan-item-recommended :plan="$plan" />
+                    @else
+                        <x-plan-item :plan="$plan" />
+                    @endif
+                @endforeach
             </div>
         </div>
     </section>

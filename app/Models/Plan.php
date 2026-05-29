@@ -13,6 +13,7 @@ class Plan extends Model
 
     protected $casts = [
         'features' => 'array',
+        'is_recommended' => 'boolean'
     ];
 
     protected static function boot()

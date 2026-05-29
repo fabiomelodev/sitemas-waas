@@ -7,6 +7,7 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
@@ -25,6 +26,9 @@ class PlanForm
                             ->required(),
                         RichEditor::make('description')
                             ->label('Descrição'),
+                        TextInput::make('button_cta')
+                            ->label('Texto do Botão de Ação')
+                            ->required(),
                         TextInput::make('url')
                             ->url(),
                         Repeater::make('features')
@@ -54,6 +58,8 @@ class PlanForm
                             ->options(['active' => 'Ativo', 'inactive' => 'Inativo'])
                             ->default('active')
                             ->required(),
+                        Toggle::make('is_recommended')
+                            ->label('Recomendado')
                     ]),
             ]);
     }

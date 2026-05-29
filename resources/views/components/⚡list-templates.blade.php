@@ -35,7 +35,7 @@ new class extends Component {
 
     public function getPlans()
     {
-        $this->plans = Plan::query()->active()->with('templates')->whereHas('templates', function ($query) {
+        $this->plans = Plan::query()->orderBy('order', 'asc')->active()->with('templates')->whereHas('templates', function ($query) {
             return $query->active();
         })->get();
     }
