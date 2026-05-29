@@ -10,7 +10,7 @@
                 <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
                     <div class="aspect-video bg-slate-100 relative group">
                         @if($template->thumbnail)
-                            <img src="{{  $template->thumbail }}" alt="Modelo Selecionado"
+                            <img src="{{  Storage::url($template->thumbail) }}" alt="Modelo Selecionado"
                                 class="w-full h-full object-cover">
                         @endif
 
@@ -69,7 +69,7 @@
                     <div class="space-y-4 mb-10">
                         @foreach($plan->features as $feature)
                             <div class="flex items
-                                                                                                                                                                                    <div class="
+                                                                                                                                                                                        <div class="
                                 flex items-start gap-3">
                                 <svg class="w-5 h-5 text-blue-500 mt-0.5" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
