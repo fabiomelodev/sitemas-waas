@@ -22,7 +22,13 @@
                     </div>
 
                     <div class="p-8">
-                        <h3 class="font-bold text-slate-900 mb-4 italic">O que está incluso neste design:</h3>
+                        <p class="text-sm text-gray-600 line-clamp-2 mb-4">
+                            {{  $template->excerpt }}
+                        </p>
+
+                        <h3 class="font-bold text-slate-900 mb-4 italic">
+                            O que está incluso neste design:
+                        </h3>
 
                         @if($template->features)
                             <ul class="grid grid-cols-2 gap-4">
@@ -69,7 +75,7 @@
                     <div class="space-y-4 mb-10">
                         @foreach($plan->features as $feature)
                             <div class="flex items
-                                                                                                                                                                                            <div class="
+                                                                                                                                                                                                        <div class="
                                 flex items-start gap-3">
                                 <svg class="w-5 h-5 text-blue-500 mt-0.5" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
