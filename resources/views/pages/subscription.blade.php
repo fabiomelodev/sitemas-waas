@@ -68,14 +68,15 @@
                     </p>
 
                     <div class="flex items-baseline gap-1 mb-8">
-                        <span class="text-4xl font-extrabold tracking-tighter">R$ {{  $plan->price }}</span>
+                        <span class="text-4xl font-extrabold tracking-tighter">
+                            {{ \App\Helpers\FormatCurrency::getFormatCurrency($plan->price) }}</span>
                         <span class="text-slate-400 text-sm">/mês</span>
                     </div>
 
                     <div class="space-y-4 mb-10">
                         @foreach($plan->features as $feature)
                             <div class="flex items
-                                                                                                                                                                                                                    <div class="
+                                                                                                                                                                                                                            <div class="
                                 flex items-start gap-3">
                                 <svg class="w-5 h-5 text-blue-500 mt-0.5" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">

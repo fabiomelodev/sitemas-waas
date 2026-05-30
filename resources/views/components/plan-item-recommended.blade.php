@@ -13,8 +13,8 @@
     </span>
 
     <div class="mt-6 flex items-baseline gap-1">
-        <span class="text-5xl font-extrabold text-white tracking-tighter">R$
-            {{ $plan->price }}</span>
+        <span class="text-5xl font-extrabold text-white tracking-tighter">
+            {{ \App\Helpers\FormatCurrency::getFormatCurrency($plan->price) }}</span>
         <span class="text-gray-400 text-sm font-medium">/mês</span>
     </div>
 
