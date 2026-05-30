@@ -52,7 +52,7 @@
             <div class="md:col-span-5 sticky top-28">
                 <div
                     class="bg-slate-900 rounded-3xl p-8 shadow-xl shadow-blue-900/10 border border-slate-800 text-white">
-                    @if($plan->slug == 'plano-pro')
+                    @if($plan->is_recommended)
                         <span
                             class="bg-blue-600 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-4 inline-block">
                             Plano Recomendado
@@ -75,7 +75,7 @@
                     <div class="space-y-4 mb-10">
                         @foreach($plan->features as $feature)
                             <div class="flex items
-                                                                                                                                                                                                            <div class="
+                                                                                                                                                                                                                <div class="
                                 flex items-start gap-3">
                                 <svg class="w-5 h-5 text-blue-500 mt-0.5" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
