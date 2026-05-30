@@ -29,8 +29,6 @@ class PlanForm
                         TextInput::make('button_cta')
                             ->label('Texto do Botão de Ação')
                             ->required(),
-                        TextInput::make('url')
-                            ->url(),
                         Repeater::make('features')
                             ->label('Recursos')
                             ->schema([

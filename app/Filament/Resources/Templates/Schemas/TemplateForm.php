@@ -30,6 +30,12 @@ class TemplateForm
                         TextInput::make('url')
                             ->url()
                             ->required(),
+                        Repeater::make('features')
+                            ->label('Características')
+                            ->schema([
+                                TextInput::make('name')
+                                    ->label('Nome')
+                            ])
                     ]),
                 Section::make()
                     ->columnSpan(3)
@@ -51,16 +57,6 @@ class TemplateForm
                             ->default('active')
                             ->required(),
                     ]),
-                Section::make()
-                    ->columnSpan(9)
-                    ->schema([
-                        Repeater::make('features')
-                            ->label('Características')
-                            ->schema([
-                                TextInput::make('name')
-                                    ->label('Nome')
-                            ])
-                    ])
             ]);
     }
 }

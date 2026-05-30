@@ -75,7 +75,7 @@
                     <div class="space-y-4 mb-10">
                         @foreach($plan->features as $feature)
                             <div class="flex items
-                                                                                                                                                                                                                <div class="
+                                                                                                                                                                                                                    <div class="
                                 flex items-start gap-3">
                                 <svg class="w-5 h-5 text-blue-500 mt-0.5" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
@@ -91,7 +91,7 @@
 
                     <button @click="open = true; templateId = 123"
                         class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-4 rounded-xl font-bold transition shadow-lg shadow-blue-900/20 cursor-pointer mb-4">
-                        Assinar agora e começar
+                        Assinar Agora e Começar
                     </button>
 
                     <p class="text-[11px] text-slate-500 text-center flex items-center justify-center gap-1">
