@@ -22,8 +22,8 @@
                     </div>
 
                     <div class="p-8">
-                        <p class="text-sm text-gray-600 line-clamp-2 mb-4">
-                            {{  $template->excerpt }}
+                        <p class="text-sm text-gray-600 mb-4">
+                            {{ $template->excerpt }}
                         </p>
 
                         <h3 class="font-bold text-slate-900 mb-4 italic">
@@ -76,7 +76,7 @@
                     <div class="space-y-4 mb-10">
                         @foreach($plan->features as $feature)
                             <div class="flex items
-                                                                                                                                                                                                                            <div class="
+                                                                                                                                                                                                                                    <div class="
                                 flex items-start gap-3">
                                 <svg class="w-5 h-5 text-blue-500 mt-0.5" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
