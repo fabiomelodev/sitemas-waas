@@ -99,9 +99,9 @@ class AsaasWebhookController extends Controller
 
         $asaasCustomer = $response->json();
 
-        // Log::info('Dados do cliente Asaas', ['customer' => $asaasCustomer]);
+        Log::info('Dados do cliente Asaas', ['customer' => $asaasCustomer]);
 
-        Log::info('Assas Customer Id', ['customer' => $asaasCustomer['id']['customer']]);
+        // Log::info('Assas Customer Id', ['customer' => $asaasCustomer['id']['customer']]);
 
         // 2. Agora você tem o e-mail e o nome reais!
         $user = User::firstOrCreate(
@@ -114,7 +114,7 @@ class AsaasWebhookController extends Controller
             ]
         );
 
-        Log::info('Novo cliente', ['user' => $user]);
+        // Log::info('Novo cliente', ['user' => $user]);
 
         // O Asaas costuma enviar o ID do link de pagamento no payload
         $paymentLinkId = $payment['paymentLink'] ?? null;
