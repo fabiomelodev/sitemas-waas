@@ -13,8 +13,10 @@ class AsaasWebhookController extends Controller
 {
     public function handle(Request $request)
     {
+        $webhookToken = config('services.asaas.env') == 'sandbox' ? config('services.asaas.sandbox_webhook_token') : config('services.asaas.webhook_token');
+
         Log::info('Token recebido do Asaas: ' . $request->header('asaas-access-token'));
-        Log::info('Token configurado no meu sistema: ' . config('services.asaas.webhook_token'));
+        Log::info('Token configurado no meu sistema: ' . $webhookToken);
 
         // 1. Log de entrada (Vital para debugar no Sandbox)
         Log::info('Asaas Webhook Recebido', [
@@ -23,7 +25,7 @@ class AsaasWebhookController extends Controller
         ]);
 
         // Validação do Token
-        if ($request->header('asaas-access-token') !== config('services.asaas.webhook_token')) {
+        if ($request->header('asaas-access-token') !== $webhookToken) {
             Log::warning('Tentativa de acesso não autorizado ao Webhook');
             return response()->json(['error' => 'Unauthorized'], 401);
         }
