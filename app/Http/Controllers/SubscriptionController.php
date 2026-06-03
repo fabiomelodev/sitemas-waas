@@ -28,13 +28,15 @@ class SubscriptionController extends Controller
         // 1. Validamos o e-mail que veio do seu formulário modal
         $request->validate([
             'email' => 'required|email',
+            'phone' => 'required|string'
         ]);
 
         $email = $request->input('email');
+        $phone = $request->input('phone');
 
         Lead::updateOrCreate(
             ['email' => $email],
-            ['template_id' => $template->id]
+            ['template_id' => $template->id, 'phone' => $phone]
         );
 
         // 2. Preparamos o nome do item que aparecerá no checkout do Asaas
@@ -50,7 +52,7 @@ class SubscriptionController extends Controller
         if (isset($paymentLink['url'])) {
             // DICA: Você pode salvar o e-mail na sessão ou criar um registro 
             // "pendente" no banco antes de redirecionar para vincular depois no webhook.
-            session(['checkout_email' => $request->email]);
+            session(['checkout_email' => $request->email, 'checkout_phone' => $request->phone]);
 
             return redirect()->away($paymentLink['url']);
         }

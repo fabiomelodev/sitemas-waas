@@ -1,5 +1,6 @@
 <x-layout.base-subscription>
-    <section class="max-w-5xl mx-auto px-6 py-12 md:py-20" x-data="{ open: false, templateId: null, email: '' }">
+    <section class="max-w-5xl mx-auto px-6 py-12 md:py-20"
+        x-data="{ open: false, templateId: null, email: '', phone: '' }">
         <div class="grid md:grid-cols-12 gap-12 items-start">
 
             <div class="md:col-span-7">
@@ -76,7 +77,7 @@
                     <div class="space-y-4 mb-10">
                         @foreach($plan->features as $feature)
                             <div class="flex items
-                                                                                                                                                                                                                                    <div class="
+                                                                                                                                                                                                                                                                        <div class="
                                 flex items-start gap-3">
                                 <svg class="w-5 h-5 text-blue-500 mt-0.5" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
@@ -136,7 +137,7 @@
             <div @click.away="open = false" class="bg-white rounded-xl shadow-2xl max-w-md w-full p-8">
                 <h3 class="text-2xl font-bold text-gray-800 mb-2">Quase lá! 🚀</h3>
                 <p class="text-gray-600 mb-6">
-                    Informe seu e-mail para vincularmos ao modelo escolhido e prosseguir para o
+                    Informe seu e-mail e Whatsapp para vincularmos ao modelo escolhido e prosseguir para o
                     pagamento seguro.
                 </p>
 
@@ -154,6 +155,15 @@
 
                         <input type="email" name="email" id="email" required placeholder="exemplo@email.com"
                             x-model="email"
+                            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 py-2 px-4">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1" for="phone">
+                            Seu Whatsapp
+                        </label>
+
+                        <input type="text" name="phone" id="phone" required placeholder="1191234-5678" x-model="phone"
                             class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 py-2 px-4">
                     </div>
 
