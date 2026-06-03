@@ -99,7 +99,7 @@ class AsaasWebhookController extends Controller
 
         $asaasCustomer = $response->json();
 
-        Log::info('Dados do cliente Asaas', ['customer' => $asaasCustomer]);
+        Log::info('Dados do cliente Asaas', ['customer' => $asaasCustomer['email']]);
 
         // Log::info('Assas Customer Id', ['customer' => $asaasCustomer['id']['customer']]);
 
