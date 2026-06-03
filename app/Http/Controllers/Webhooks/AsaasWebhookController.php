@@ -101,7 +101,7 @@ class AsaasWebhookController extends Controller
 
         // Log::info('Dados do cliente Asaas', ['customer' => $asaasCustomer]);
 
-        Log::info('Assas Customer Id', ['customer' => $asaasCustomer['id']]);
+        Log::info('Assas Customer Id', ['customer' => $asaasCustomer['id']['customer']]);
 
         // 2. Agora você tem o e-mail e o nome reais!
         $user = User::firstOrCreate(
