@@ -85,9 +85,11 @@ class AsaasWebhookController extends Controller
     {
         $customerId = $payment['customer'];
 
+        $token = config('services.asaas.env') == 'sandbox' ? config('services.asaas.sandbox_token') : config('services.asaas.token');
+
         // 1. Busca os detalhes do cliente no Asaas via API
         $response = Http::withHeaders([
-            'access_token' => config('services.asaas.api_key'),
+            'access_token' => $token,
         ])->get("https://sandbox.asaas.com/api/v3/customers/{$customerId}");
 
         if ($response->failed()) {
