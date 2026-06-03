@@ -112,6 +112,8 @@ class AsaasWebhookController extends Controller
             ]
         );
 
+        Log::info('Novo cliente', ['user' => $user]);
+
         // O Asaas costuma enviar o ID do link de pagamento no payload
         $paymentLinkId = $payment['paymentLink'] ?? null;
 
