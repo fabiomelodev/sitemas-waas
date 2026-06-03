@@ -99,8 +99,6 @@ class AsaasWebhookController extends Controller
 
         $asaasCustomer = $response->json();
 
-        dd('Customer', $asaasCustomer);
-
         Log::info('Dados do cliente Asaas', ['customer' => $asaasCustomer]);
 
         // 2. Agora você tem o e-mail e o nome reais!
@@ -108,7 +106,7 @@ class AsaasWebhookController extends Controller
             ['email' => $asaasCustomer['email']],
             [
                 'name' => $asaasCustomer['name'],
-                'asaas_customer_id' => $customerId,
+                'asaas_customer_id' => $asaasCustomer['id'],
                 // Gera uma senha aleatória de 32 caracteres
                 'password' => Hash::make(Str::random(32)),
             ]
