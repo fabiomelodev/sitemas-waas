@@ -10,8 +10,8 @@ class AsaasService
 
     public function __construct()
     {
-        $this->token = config('services.asaas.token');
-        $this->baseUrl = config('services.asaas.url');
+        $this->token = config('services.asaas.env') == 'sandbox' ? config('services.asaas.sandbox_token') : config('services.asaas.token');
+        $this->baseUrl = config('services.asaas.env') == 'sandbox' ? config('services.asaas.sandbox_url') : config('services.asaas.url');
     }
 
     public function createPaymentLink(string $name, float $value)
