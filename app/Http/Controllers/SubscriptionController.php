@@ -52,7 +52,7 @@ class SubscriptionController extends Controller
         if (isset($paymentLink['url'])) {
             // DICA: Você pode salvar o e-mail na sessão ou criar um registro 
             // "pendente" no banco antes de redirecionar para vincular depois no webhook.
-            session(['checkout_email' => $request->email, 'checkout_phone' => $request->phone]);
+            session(['checkout_email' => $request->email]);
 
             return redirect()->away($paymentLink['url']);
         }
