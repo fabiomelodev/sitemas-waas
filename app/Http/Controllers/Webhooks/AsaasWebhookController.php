@@ -103,16 +103,21 @@ class AsaasWebhookController extends Controller
 
         // Log::info('Assas Customer Id', ['customer' => $asaasCustomer['id']['customer']]);
 
-        // 2. Agora você tem o e-mail e o nome reais!
-        $user = User::updateOrCreate(
-            ['email' => $asaasCustomer['email']],
-            [
-                'name' => $asaasCustomer['name'],
-                'asaas_customer_id' => $asaasCustomer['id'],
-                // Gera uma senha aleatória de 32 caracteres
-                'password' => Hash::make(Str::random(32)),
-            ]
-        );
+        if (User::where('email', $asaasCustomer['email'])->exists()) {
+            $user = User::where('email', $asaasCustomer['email'])->first();
+        } else {
+            $user = User::updateOrCreate(
+                ['email' => $asaasCustomer['email']],
+                [
+                    'name' => $asaasCustomer['name'],
+                    'asaas_customer_id' => $asaasCustomer['id'],
+                    // Gera uma senha aleatória de 32 caracteres
+                    'password' => Hash::make(Str::random(32)),
+                ]
+            );
+
+            $user->notify(new WelcomeAndSetPassword());
+        }
 
         // Log::info('Novo cliente', ['user' => $user]);
 
@@ -157,8 +162,6 @@ class AsaasWebhookController extends Controller
             'subscription_id' => $subscription->id,
             'user_id' => $user->id
         ]);
-
-        $user->notify(new WelcomeAndSetPassword());
 
         // 3. Vincula a assinatura e cria a ordem
         // ... restante da sua lógica
