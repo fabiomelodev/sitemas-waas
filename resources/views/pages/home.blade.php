@@ -1,4 +1,7 @@
-<x-layout.base>
+<x-layout.base
+    title="Sitemas — Sites profissionais por assinatura | Hospedagem, manutenção e suporte"
+    description="Escolha um modelo premium, assine um plano e nós cuidamos de tudo: hospedagem, manutenção e suporte. Sem fidelidade, com ativação gratuita e pagamento seguro.">
+
     <!-- hero -->
     <section class="relative bg-gray-50 py-24 md:py-32 overflow-hidden">
 

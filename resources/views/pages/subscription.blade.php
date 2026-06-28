@@ -1,4 +1,8 @@
-<x-layout.base-subscription>
+<x-layout.base-subscription
+    :title="'Assinar ' . $template->name . ' — Sitemas'"
+    :description="$template->excerpt"
+    :image="$template->thumbnail ? \Illuminate\Support\Facades\Storage::url($template->thumbnail) : null">
+
     <section class="max-w-5xl mx-auto px-6 py-12 md:py-20"
         x-data="{ open: false, name: '', email: '', phone: '', cpf_cnpj: '' }">
         <div class="grid md:grid-cols-12 gap-12 items-start">
