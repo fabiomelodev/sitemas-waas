@@ -12,7 +12,7 @@ use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 
-#[Fillable(['name', 'email', 'password', 'asaas_customer_id', 'login_token', 'phone'])]
+#[Fillable(['name', 'email', 'is_admin', 'password', 'asaas_customer_id', 'login_token', 'phone'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements FilamentUser
 {
@@ -29,12 +29,17 @@ class User extends Authenticatable implements FilamentUser
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_admin' => 'boolean',
         ];
     }
 
+    /**
+     * Apenas administradores podem acessar o painel do Filament.
+     * Clientes criados via webhook do Asaas NÃO recebem este acesso.
+     */
     public function canAccessPanel(Panel $panel): bool
     {
-        return true;
+        return $this->is_admin === true;
     }
 
     public function subscriptions(): HasMany
