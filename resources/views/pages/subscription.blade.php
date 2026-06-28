@@ -4,7 +4,7 @@
     :image="$template->thumbnail ? \Illuminate\Support\Facades\Storage::url($template->thumbnail) : null">
 
     <section class="max-w-5xl mx-auto px-6 py-12 md:py-20"
-        x-data="{ open: false, name: '', email: '', phone: '', cpf_cnpj: '' }">
+        x-data="{ open: false, name: '', email: '', phone: '' }">
         <div class="grid md:grid-cols-12 gap-12 items-start">
 
             <div class="md:col-span-7">
@@ -185,20 +185,8 @@
                             class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 py-2 px-4">
                     </div>
 
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-1" for="cpf_cnpj">
-                            CPF ou CNPJ
-                        </label>
-
-                        <input type="text" name="cpf_cnpj" id="cpf_cnpj" required placeholder="000.000.000-00"
-                            x-model="cpf_cnpj" value="{{ old('cpf_cnpj') }}"
-                            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 py-2 px-4">
-
-                        <p class="mt-1 text-[11px] text-gray-400">Necessário para emissão da cobrança.</p>
-                    </div>
-
                     <div class="flex flex-col gap-3">
-                        <button type="submit" :disabled="!name || !email || !phone || !cpf_cnpj"
+                        <button type="submit" :disabled="!name || !email || !phone"
                             class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
                             Ir para Pagamento Seguro
                         </button>

@@ -86,7 +86,6 @@ class SubscriptionService
         $user->fill([
             'name' => $data['name'],
             'phone' => $data['phone'],
-            'cpf_cnpj' => $data['cpf_cnpj'],
         ]);
 
         // Define uma senha aleatória apenas para usuários novos; nunca
@@ -107,11 +106,12 @@ class SubscriptionService
             return $user->asaas_customer_id;
         }
 
+        // O CPF/CNPJ não é coletado aqui: o checkout hospedado do Asaas o
+        // solicita ao cliente no momento do pagamento.
         $customer = $this->asaas->createCustomer([
             'name' => $data['name'],
             'email' => $user->email,
             'phone' => $data['phone'],
-            'cpf_cnpj' => $data['cpf_cnpj'],
         ]);
 
         if (! isset($customer['id'])) {

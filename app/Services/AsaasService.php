@@ -35,12 +35,16 @@ class AsaasService
      */
     public function createCustomer(array $data): ?array
     {
-        $response = $this->client()->post('/customers', [
+        // Só enviamos os campos informados; o CPF/CNPJ é opcional e, quando
+        // ausente, o Asaas o solicita ao cliente na página de pagamento.
+        $payload = array_filter([
             'name' => $data['name'],
             'email' => $data['email'] ?? null,
             'mobilePhone' => $this->onlyDigits($data['phone'] ?? null),
             'cpfCnpj' => $this->onlyDigits($data['cpf_cnpj'] ?? null),
-        ]);
+        ], fn ($value) => $value !== null && $value !== '');
+
+        $response = $this->client()->post('/customers', $payload);
 
         if ($response->failed()) {
             Log::error('Asaas: falha ao criar cliente', ['body' => $response->json()]);

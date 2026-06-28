@@ -31,7 +31,6 @@ class SubscriptionController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email',
             'phone' => 'required|string|max:20',
-            'cpf_cnpj' => 'required|string|max:20',
         ]);
 
         // Mantém o lead para marketing/recuperação de carrinho.

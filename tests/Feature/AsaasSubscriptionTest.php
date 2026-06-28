@@ -70,10 +70,13 @@ class AsaasSubscriptionTest extends TestCase
             'name' => 'Maria da Silva',
             'email' => 'maria@test.com',
             'phone' => '(11) 91234-5678',
-            'cpf_cnpj' => '123.456.789-00',
         ]);
 
         $response->assertRedirect('https://asaas.test/c/abc');
+
+        // O cliente é criado sem CPF/CNPJ (coletado depois pelo Asaas no checkout).
+        Http::assertSent(fn ($request) => str_ends_with($request->url(), '/customers')
+            && ! array_key_exists('cpfCnpj', $request->data()));
 
         // Garante que o redirecionamento pós-pagamento foi configurado no Asaas.
         Http::assertSent(function ($request) {
