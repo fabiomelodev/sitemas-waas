@@ -133,13 +133,15 @@
         </div>
 
         <div x-show="open" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
-            x-transition:enter-end="opacity-100"
+            x-transition:enter-end="opacity-100" x-on:keydown.escape.window="open = false"
+            role="dialog" aria-modal="true" aria-labelledby="checkout-modal-title"
             class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" x-cloak>
 
-            <div @click.away="open = false" class="bg-white rounded-xl shadow-2xl max-w-md w-full p-8">
-                <h3 class="text-2xl font-bold text-gray-800 mb-2">Quase lá! 🚀</h3>
+            <div @click.away="open = false" x-init="$watch('open', value => value && $nextTick(() => $refs.firstField?.focus()))"
+                class="bg-white rounded-xl shadow-2xl max-w-md w-full p-8">
+                <h3 id="checkout-modal-title" class="text-2xl font-bold text-gray-800 mb-2">Quase lá! 🚀</h3>
                 <p class="text-gray-600 mb-6">
-                    Informe seu e-mail e Whatsapp para vincularmos ao modelo escolhido e prosseguir para o
+                    Informe seus dados para vincularmos ao modelo escolhido e prosseguir para o
                     pagamento seguro.
                 </p>
 
@@ -159,7 +161,7 @@
                         </label>
 
                         <input type="text" name="name" id="name" required placeholder="Maria da Silva"
-                            x-model="name" value="{{ old('name') }}"
+                            x-model="name" x-ref="firstField" value="{{ old('name') }}"
                             class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 py-2 px-4">
                     </div>
 
