@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Lead, Plan, Template};
-use App\Services\AsaasService;
+use App\Models\Lead;
+use App\Models\Plan;
+use App\Models\Template;
+use App\Services\SubscriptionService;
 use App\Settings\GeneralSettings;
 use Illuminate\Http\Request;
 
@@ -19,47 +21,37 @@ class SubscriptionController extends Controller
         return view('pages.subscription', [
             'template' => $template,
             'plan' => $plan,
-            'settings' => $settings
+            'settings' => $settings,
         ]);
     }
 
-    public function checkout(Request $request, Plan $plan, Template $template, AsaasService $asaasService)
+    public function checkout(Request $request, Plan $plan, Template $template, SubscriptionService $subscriptions)
     {
-        // 1. Validamos o e-mail que veio do seu formulário modal
-        $request->validate([
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
             'email' => 'required|email',
-            'phone' => 'required|string'
+            'phone' => 'required|string|max:20',
+            'cpf_cnpj' => 'required|string|max:20',
         ]);
 
-        $email = $request->input('email');
-        $phone = $request->input('phone');
-
+        // Mantém o lead para marketing/recuperação de carrinho.
         Lead::updateOrCreate(
-            ['email' => $email],
-            ['template_id' => $template->id, 'plan_id' => $plan->id, 'phone' => $phone]
+            ['email' => $data['email']],
+            ['template_id' => $template->id, 'plan_id' => $plan->id, 'phone' => $data['phone']]
         );
 
-        // 2. Preparamos o nome do item que aparecerá no checkout do Asaas
-        // Ex: "Premium Plan - Template: Barber Shop"
-        $description = "Plan: {$plan->name} - Design: {$template->name}";
+        try {
+            // Cria cliente + assinatura no Asaas e devolve a URL de pagamento.
+            $checkoutUrl = $subscriptions->startSubscription($data, $plan, $template);
+        } catch (\Throwable $e) {
+            report($e);
 
-        // 3. Pegamos o valor do plano dinamicamente do banco de dados
-        $amount = (float) $plan->price;
-
-        // 4. Chamamos o serviço para gerar o link na API do Asaas
-        $paymentLink = $asaasService->createPaymentLink($description, $amount);
-
-        if (isset($paymentLink['url'])) {
-            // DICA: Você pode salvar o e-mail na sessão ou criar um registro 
-            // "pendente" no banco antes de redirecionar para vincular depois no webhook.
-            session(['checkout_email' => $request->email]);
-
-            return redirect()->away($paymentLink['url']);
+            return back()
+                ->withErrors(['message' => 'Não foi possível iniciar sua assinatura. Tente novamente em instantes.'])
+                ->withInput();
         }
 
-        return back()->withErrors([
-            'message' => 'Unable to generate payment link. Please try again later.'
-        ]);
+        return redirect()->away($checkoutUrl);
     }
 
     /**

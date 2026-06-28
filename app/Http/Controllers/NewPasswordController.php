@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Support\Facades\{Hash, Password};
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 
 class NewPasswordController extends Controller
@@ -15,7 +15,7 @@ class NewPasswordController extends Controller
     {
         return view('auth.reset-password', [
             'token' => $token,
-            'email' => $request->email
+            'email' => $request->email,
         ]);
     }
 
@@ -48,7 +48,7 @@ class NewPasswordController extends Controller
             // Use str_replace ou apenas monte a string garantindo que não haja /public
             // $url = "https://app.sitemas.com.br/autologin/{$user->login_token}";
 
-            $url = config('services.url.auto_login') . "{$user->login_token}";
+            $url = config('services.url.auto_login')."{$user->login_token}";
 
             return redirect()->away($url);
         }

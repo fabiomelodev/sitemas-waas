@@ -1,6 +1,6 @@
 <x-layout.base-subscription>
     <section class="max-w-5xl mx-auto px-6 py-12 md:py-20"
-        x-data="{ open: false, templateId: null, email: '', phone: '' }">
+        x-data="{ open: false, name: '', email: '', phone: '', cpf_cnpj: '' }">
         <div class="grid md:grid-cols-12 gap-12 items-start">
 
             <div class="md:col-span-7">
@@ -76,9 +76,7 @@
 
                     <div class="space-y-4 mb-10">
                         @foreach($plan->features as $feature)
-                            <div class="flex items
-                                                                                                                                                                                                                                                                                <div class="
-                                flex items-start gap-3">
+                            <div class="flex items-start gap-3">
                                 <svg class="w-5 h-5 text-blue-500 mt-0.5" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
@@ -91,7 +89,7 @@
                         @endforeach
                     </div>
 
-                    <button @click="open = true; templateId = 123"
+                    <button @click="open = true"
                         class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-4 rounded-xl font-bold transition shadow-lg shadow-blue-900/20 cursor-pointer mb-4">
                         Assinar Agora e Começar
                     </button>
@@ -143,10 +141,23 @@
 
                 <form action="{{  route('subscription.checkout', ['plan' => $plan, 'template' => $template]) }}"
                     method="POST">
-                    @method('POST')
                     @csrf
 
-                    <input type="hidden" name="template_id" :value="templateId">
+                    @error('message')
+                        <p class="mb-4 text-sm text-red-600 bg-red-50 border border-red-100 rounded-lg p-3">
+                            {{ $message }}
+                        </p>
+                    @enderror
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1" for="name">
+                            Seu nome completo
+                        </label>
+
+                        <input type="text" name="name" id="name" required placeholder="Maria da Silva"
+                            x-model="name" value="{{ old('name') }}"
+                            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 py-2 px-4">
+                    </div>
 
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700 mb-1" for="email">
@@ -154,7 +165,7 @@
                         </label>
 
                         <input type="email" name="email" id="email" required placeholder="exemplo@email.com"
-                            x-model="email"
+                            x-model="email" value="{{ old('email') }}"
                             class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 py-2 px-4">
                     </div>
 
@@ -163,12 +174,25 @@
                             Seu Whatsapp
                         </label>
 
-                        <input type="text" name="phone" id="phone" required placeholder="1191234-5678" x-model="phone"
+                        <input type="text" name="phone" id="phone" required placeholder="(11) 91234-5678"
+                            x-model="phone" value="{{ old('phone') }}"
                             class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 py-2 px-4">
                     </div>
 
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1" for="cpf_cnpj">
+                            CPF ou CNPJ
+                        </label>
+
+                        <input type="text" name="cpf_cnpj" id="cpf_cnpj" required placeholder="000.000.000-00"
+                            x-model="cpf_cnpj" value="{{ old('cpf_cnpj') }}"
+                            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 py-2 px-4">
+
+                        <p class="mt-1 text-[11px] text-gray-400">Necessário para emissão da cobrança.</p>
+                    </div>
+
                     <div class="flex flex-col gap-3">
-                        <button type="submit" :disabled="!email"
+                        <button type="submit" :disabled="!name || !email || !phone || !cpf_cnpj"
                             class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
                             Ir para Pagamento Seguro
                         </button>
