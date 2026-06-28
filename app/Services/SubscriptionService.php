@@ -37,6 +37,10 @@ class SubscriptionService
             'cycle' => 'MONTHLY',
             'description' => "Plano {$plan->name} - Modelo {$template->name}",
             'externalReference' => "plan:{$plan->id}|template:{$template->id}",
+            'callback' => [
+                'successUrl' => route('subscription.success'),
+                'autoRedirect' => true,
+            ],
         ]);
 
         if (! isset($asaasSubscription['id'])) {

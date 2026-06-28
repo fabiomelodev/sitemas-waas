@@ -75,6 +75,13 @@ class AsaasSubscriptionTest extends TestCase
 
         $response->assertRedirect('https://asaas.test/c/abc');
 
+        // Garante que o redirecionamento pós-pagamento foi configurado no Asaas.
+        Http::assertSent(function ($request) {
+            return str_ends_with($request->url(), '/subscriptions')
+                && data_get($request->data(), 'callback.autoRedirect') === true
+                && str_contains((string) data_get($request->data(), 'callback.successUrl'), 'sucesso-no-pagamento');
+        });
+
         $user = User::where('email', 'maria@test.com')->first();
         $this->assertNotNull($user);
         $this->assertSame('cus_123', $user->asaas_customer_id);

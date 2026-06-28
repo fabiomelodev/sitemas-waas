@@ -72,7 +72,7 @@ class AsaasService
      */
     public function createSubscription(array $data): ?array
     {
-        $response = $this->client()->post('/subscriptions', [
+        $payload = [
             'customer' => $data['customer'],
             'billingType' => $data['billingType'] ?? 'UNDEFINED',
             'value' => $data['value'],
@@ -80,7 +80,15 @@ class AsaasService
             'cycle' => $data['cycle'] ?? 'MONTHLY',
             'description' => $data['description'] ?? null,
             'externalReference' => $data['externalReference'] ?? null,
-        ]);
+        ];
+
+        // Redireciona o cliente de volta após o pagamento. O callback definido
+        // na assinatura é herdado pela página de cobrança gerada.
+        if (! empty($data['callback'])) {
+            $payload['callback'] = $data['callback'];
+        }
+
+        $response = $this->client()->post('/subscriptions', $payload);
 
         if ($response->failed()) {
             Log::error('Asaas: falha ao criar assinatura', ['body' => $response->json()]);
