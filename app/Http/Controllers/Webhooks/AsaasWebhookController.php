@@ -5,27 +5,28 @@ namespace App\Http\Controllers\Webhooks;
 use App\Http\Controllers\Controller;
 use App\Models\{Lead, Order, Plan, SiteConfig, Subscription, User};
 use App\Notifications\WelcomeAndSetPassword;
+use App\Services\AsaasService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\{Hash, Http, Log};
+use Illuminate\Support\Facades\{Hash, Log};
 use Illuminate\Support\Str;
 
 class AsaasWebhookController extends Controller
 {
+    public function __construct(private readonly AsaasService $asaas) {}
+
     public function handle(Request $request)
     {
         $webhookToken = config('services.asaas.env') == 'sandbox' ? config('services.asaas.sandbox_webhook_token') : config('services.asaas.webhook_token');
 
-        Log::info('Token recebido do Asaas: ' . $request->header('asaas-access-token'));
-        Log::info('Token configurado no meu sistema: ' . $webhookToken);
-
-        // 1. Log de entrada (Vital para debugar no Sandbox)
+        // 1. Log de entrada (Vital para debugar no Sandbox).
+        // ATENÇÃO: nunca logar os tokens em texto puro.
         Log::info('Asaas Webhook Recebido', [
             'event' => $request->input('event'),
             'id' => $request->input('payment.id')
         ]);
 
         // Validação do Token
-        if ($request->header('asaas-access-token') !== $webhookToken) {
+        if (! hash_equals((string) $webhookToken, (string) $request->header('asaas-access-token'))) {
             Log::warning('Tentativa de acesso não autorizado ao Webhook');
             return response()->json(['error' => 'Unauthorized'], 401);
         }
@@ -85,23 +86,15 @@ class AsaasWebhookController extends Controller
     {
         $customerId = $payment['customer'];
 
-        $token = config('services.asaas.env') == 'sandbox' ? config('services.asaas.sandbox_token') : config('services.asaas.token');
+        // 1. Busca os detalhes do cliente no Asaas via API (URL configurada por ambiente).
+        $asaasCustomer = $this->asaas->getCustomer($customerId);
 
-        // 1. Busca os detalhes do cliente no Asaas via API
-        $response = Http::withHeaders([
-            'access_token' => $token,
-        ])->get("https://sandbox.asaas.com/api/v3/customers/{$customerId}");
-
-        if ($response->failed()) {
+        if (! $asaasCustomer) {
             Log::error("Falha ao buscar cliente {$customerId} no Asaas");
             return;
         }
 
-        $asaasCustomer = $response->json();
-
-        Log::info($asaasCustomer['id']);
-
-        // Log::info('Assas Customer Id', ['customer' => $asaasCustomer['id']['customer']]);
+        $lead = Lead::query()->where('email', $asaasCustomer['email'])->first();
 
         if (User::where('email', $asaasCustomer['email'])->exists()) {
             $user = User::where('email', $asaasCustomer['email'])->first();
@@ -110,6 +103,7 @@ class AsaasWebhookController extends Controller
                 ['email' => $asaasCustomer['email']],
                 [
                     'name' => $asaasCustomer['name'],
+                    'phone' => $lead?->phone,
                     'asaas_customer_id' => $asaasCustomer['id'],
                     // Gera uma senha aleatória de 32 caracteres
                     'password' => Hash::make(Str::random(32)),
@@ -119,33 +113,34 @@ class AsaasWebhookController extends Controller
             $user->notify(new WelcomeAndSetPassword());
         }
 
-        // Log::info('Novo cliente', ['user' => $user]);
+        // 2. Resolve o plano contratado.
+        // Fonte primária: o plano que o lead escolheu no checkout.
+        // Fallback: match pelo ID do link de pagamento do Asaas.
+        $planId = $lead?->plan_id
+            ?? Plan::query()->where('asaas_link_id', $payment['paymentLink'] ?? null)->value('id');
 
-        // O Asaas costuma enviar o ID do link de pagamento no payload
-        $paymentLinkId = $payment['paymentLink'] ?? null;
+        if (! $planId) {
+            Log::warning('Pagamento confirmado sem plano identificável', [
+                'payment_id' => $payment['id'],
+                'email' => $asaasCustomer['email'],
+            ]);
+        }
 
-        $plan = Plan::query()->where('asaas_link_id', $paymentLinkId)->first();
+        $templateId = $lead?->template_id;
 
-        // Se não encontrar, define um plano padrão para não quebrar o código
-        $planId = $plan ? $plan->id : 1;
-
-        $lead = Lead::query()->where('email', $asaasCustomer['email'])->first();
-
-        $templateId = $lead ? $lead->template_id : null;
-
-        // 1. Criar ou atualizar a assinatura
+        // 3. Criar ou atualizar a assinatura
         $subscription = Subscription::updateOrCreate(
             ['user_id' => $user->id],
             [
                 'asaas_subscription_id' => $payment['subscription'] ?? null,
                 'status' => 'active',
-                'plan_id' => $planId, // O ID do plano que você cadastrou no banco
+                'plan_id' => $planId,
                 'template_id' => $templateId,
                 'expires_at' => now()->addMonth(), // Ou baseado na data do Asaas
             ]
         );
 
-        // 2. Registrar o pagamento no histórico (Orders)
+        // 4. Registrar o pagamento no histórico (Orders)
         Order::create([
             'user_id' => $user->id,
             'subscription_id' => $subscription->id,
@@ -156,15 +151,16 @@ class AsaasWebhookController extends Controller
             'paid_at' => now(),
         ]);
 
-        SiteConfig::create([
-            'company_name' => $asaasCustomer['name'],
-            'status' => 0,
-            'subscription_id' => $subscription->id,
-            'user_id' => $user->id
-        ]);
-
-        // 3. Vincula a assinatura e cria a ordem
-        // ... restante da sua lógica
+        // 5. Garante um único SiteConfig por assinatura (evita duplicar a cada
+        // pagamento mensal recorrente).
+        SiteConfig::updateOrCreate(
+            ['subscription_id' => $subscription->id],
+            [
+                'company_name' => $asaasCustomer['name'],
+                'status' => 0,
+                'user_id' => $user->id,
+            ]
+        );
     }
 
     private function handlePaymentOverdue($payment)
