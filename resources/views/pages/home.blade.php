@@ -87,6 +87,80 @@
         </div>
     </section>
 
+    <!-- problema -> solução -->
+    <section class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 max-w-2xl mx-auto">
+                <span class="text-sm font-bold text-brand uppercase tracking-widest">O dilema de quem empreende</span>
+                <h2 class="text-4xl font-extrabold text-dark-900 tracking-tight mt-3">
+                    Ter um site profissional não devia ser tão complicado
+                </h2>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8 items-stretch">
+                <!-- o jeito antigo -->
+                <div class="rounded-3xl border border-gray-100 bg-gray-50 p-8 md:p-10">
+                    <h3 class="text-lg font-bold text-gray-500 mb-8 flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-gray-300"></span>
+                        Do jeito antigo
+                    </h3>
+
+                    @php
+                        $painPoints = [
+                            'Orçamentos de agência caros e imprevisíveis',
+                            'Meses de espera para o site sair do papel',
+                            'Quando algo quebra, ninguém dá manutenção',
+                            'Ferramentas "faça você mesmo" que tomam o tempo que você não tem',
+                        ];
+                    @endphp
+
+                    <ul class="space-y-5">
+                        @foreach($painPoints as $pain)
+                            <li class="flex items-start gap-3 text-gray-500">
+                                <svg class="w-5 h-5 mt-0.5 shrink-0 text-gray-300" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                                {{ $pain }}
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+
+                <!-- com a sitemas -->
+                <div class="rounded-3xl bg-dark-900 p-8 md:p-10 shadow-xl">
+                    <h3 class="text-lg font-bold text-white mb-8 flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-brand"></span>
+                        Com a Sitemas
+                    </h3>
+
+                    @php
+                        $solutions = [
+                            'Uma mensalidade fixa e previsível, sem surpresas',
+                            'Seu site no ar em dias, não em meses',
+                            'Hospedagem, manutenção e suporte sempre inclusos',
+                            'A nossa equipe faz tudo por você, do início ao fim',
+                        ];
+                    @endphp
+
+                    <ul class="space-y-5">
+                        @foreach($solutions as $solution)
+                            <li class="flex items-start gap-3 text-gray-100">
+                                <svg class="w-5 h-5 mt-0.5 shrink-0 text-brand" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                                {{ $solution }}
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="planos" class="py-24 bg-gray-50">
 
         <div class="max-w-7xl mx-auto px-6">
@@ -168,6 +242,62 @@
                         configura
                         tudo e entrega seu site pronto para vender.</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- comparativo -->
+    <section class="py-24 bg-white">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="text-center mb-16 max-w-2xl mx-auto">
+                <span class="text-sm font-bold text-brand uppercase tracking-widest">Compare e decida</span>
+                <h2 class="text-4xl font-extrabold text-dark-900 tracking-tight mt-3">
+                    Por que a assinatura compensa
+                </h2>
+                <p class="lg:text-lg text-gray-600 mt-4">
+                    O mesmo resultado profissional, sem o custo alto e a dor de cabeça das outras opções.
+                </p>
+            </div>
+
+            <div class="overflow-x-auto rounded-3xl border border-gray-100 shadow-sm">
+                <table class="w-full min-w-[640px] text-sm">
+                    <thead>
+                        <tr class="border-b border-gray-100 bg-gray-50">
+                            <th class="text-left font-semibold text-gray-500 p-5 w-1/3">Critério</th>
+                            <th class="text-center font-semibold text-gray-500 p-5">Fazer sozinho</th>
+                            <th class="text-center font-semibold text-gray-500 p-5">Agência tradicional</th>
+                            <th class="text-center font-bold text-brand p-5 bg-brand/5">Sitemas</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        @php
+                            $comparison = [
+                                ['Custo para começar', 'Seu tempo', 'R$ 3.000+', 'R$ 0'],
+                                ['Mensalidade previsível', '—', 'Raramente', 'Incluída'],
+                                ['Hospedagem inclusa', 'Você gerencia', 'Custo à parte', 'Sim'],
+                                ['Manutenção e suporte', 'Por sua conta', 'Cobrada por hora', 'Sempre inclusos'],
+                                ['Tempo até publicar', 'Semanas', '1 a 2 meses', 'Poucos dias'],
+                                ['Precisa saber de tecnologia', 'Sim', 'Não', 'Não'],
+                            ];
+                        @endphp
+
+                        @foreach($comparison as $row)
+                            <tr>
+                                <td class="p-5 font-semibold text-dark-900">{{ $row[0] }}</td>
+                                <td class="p-5 text-center text-gray-500">{{ $row[1] }}</td>
+                                <td class="p-5 text-center text-gray-500">{{ $row[2] }}</td>
+                                <td class="p-5 text-center font-bold text-dark-900 bg-brand/5">{{ $row[3] }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="text-center mt-12">
+                <a href="#planos"
+                    class="inline-flex bg-brand text-white px-8 py-4 rounded-xl font-bold hover:bg-brand-dark transition shadow-lg shadow-brand/20">
+                    Ver planos e começar
+                </a>
             </div>
         </div>
     </section>
