@@ -45,7 +45,7 @@
 
         <div class="max-w-4xl mx-auto px-6 text-center">
 
-            <h2 class="text-4xl md:text-5xl font-extrabold text-dark-900 tracking-tighterleading-tight">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-dark-900 tracking-tighter leading-tight">
                 Pronto Para Profissionalizar Sua Presença Digital?
             </h2>
 
@@ -97,7 +97,7 @@
 
                 <div class="flex flex-col gap-4">
                     <h5 class="text-sm font-bold text-dark-900 uppercase tracking-widest mb-2">
-                        Siga a Single Temas
+                        Siga a Sitemas
                     </h5>
 
                     <p class="text-sm text-gray-500 italic">

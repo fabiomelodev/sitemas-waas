@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagamento Confirmado! - Single Temas</title>
+    <title>Pagamento Confirmado! - Sitemas</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -26,7 +26,7 @@
                 </svg>
             </div>
             <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-4">Pagamento Confirmado!</h1>
-            <p class="text-slate-600 text-lg">Seja bem-vindo à Single Temas. Agora, vamos colocar seu site no ar.</p>
+            <p class="text-slate-600 text-lg">Seja bem-vindo à Sitemas. Agora, vamos colocar seu site no ar.</p>
         </div>
 
         <div class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
@@ -97,7 +97,7 @@
     </main>
 
     <footer class="py-10 text-center">
-        <p class="text-xs text-slate-400">&copy; 2026 Single Temas - Tecnologia para pequenos negócios.</p>
+        <p class="text-xs text-slate-400">&copy; 2026 Sitemas - Tecnologia para pequenos negócios.</p>
     </footer>
 
 </body>

@@ -193,7 +193,7 @@ new class extends Component {
                                     </a>
                                 @endif
 
-                                <a href="{{ route('subscription.show', $template->slug) }}" target="_blank"
+                                <a href="{{ route('subscription.show', $template->slug) }}"
                                     class="bg-gray-100 text-dark-900 px-4 py-2 rounded-lg text-xs font-bold hover:bg-gray-200 transition">
                                     Assinar este Modelo
                                 </a>

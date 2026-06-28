@@ -20,7 +20,7 @@
                 Pagamento confirmado! 🚀
             </h1>
             <p class="text-lg text-slate-600 mb-10">
-                Obrigado por escolher a <strong>Single Temas</strong>. Seu ambiente de desenvolvimento já está sendo
+                Obrigado por escolher a <strong>Sitemas</strong>. Seu ambiente de desenvolvimento já está sendo
                 preparado.
             </p>
 

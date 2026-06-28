@@ -55,23 +55,31 @@
     <section class="py-10 bg-white">
         <div class="max-w-7xl mx-auto px-6">
             <div
-                class="bg-amber-50 border border-amber-100 rounded-2xl p-4 flex flex-col md:flex-row items-center justify-center gap-4 shadow-sm">
-                <div class="flex items-center gap-2">
-                    <span class="relative flex h-3 w-3">
-                        <span
-                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
-                    </span>
-                    <p class="text-amber-900 text-sm font-medium text-center md:text-left">
-                        <span class="font-bold">Atenção:</span> Devido à alta demanda de manutenção, restam apenas <span
-                            class="bg-amber-200 px-2 py-0.5 rounded text-amber-900 font-extrabold">3 vagas</span> para
-                        novos projetos esta semana.
-                    </p>
-                </div>
-                <a href="#modelos"
-                    class="text-amber-900 text-sm font-bold underline decoration-amber-300 hover:decoration-amber-500 transition-all">
-                    Garantir minha vaga agora &rarr;
-                </a>
+                class="border border-gray-100 rounded-2xl p-6 grid grid-cols-2 lg:grid-cols-4 gap-6 shadow-sm bg-gray-50/50">
+                @php
+                    $trustItems = [
+                        ['title' => 'Sem fidelidade', 'subtitle' => 'Cancele quando quiser'],
+                        ['title' => 'Ativação gratuita', 'subtitle' => 'R$ 0,00 para começar'],
+                        ['title' => 'Suporte humano', 'subtitle' => 'Atendimento via WhatsApp'],
+                        ['title' => 'Pagamento seguro', 'subtitle' => 'Processado pela Asaas'],
+                    ];
+                @endphp
+
+                @foreach($trustItems as $item)
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="shrink-0 w-9 h-9 rounded-full bg-brand/10 text-brand flex items-center justify-center">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-dark-900 leading-tight">{{ $item['title'] }}</p>
+                            <p class="text-xs text-gray-500">{{ $item['subtitle'] }}</p>
+                        </div>
+                    </div>
+                @endforeach
             </div>
         </div>
     </section>
@@ -108,104 +116,6 @@
             </div>
 
             <div class="grid lg:grid-cols-3 gap-8 mx-auto items-start mt-16">
-
-                {{-- @if(isset($planStart))
-                <div class="bg-white p-8 md:p-10 rounded-3xl border border-gray-100 shadow-sm relative">
-                    <h3 class="text-2xl font-bold text-dark-900 tracking-tight">
-                        {{ $planStart->name }}
-                    </h3>
-
-                    <p class="mt-2 text-gray-600 text-sm">
-                        {!! $planStart->description !!}
-                    </p>
-
-                    <div class="mt-6 flex items-baseline gap-1">
-                        <span class="text-5xl font-extrabold text-dark-900 tracking-tighter">R$
-                            {{ $planStart->price }}
-                        </span>
-
-                        <span class="text-gray-500 text-sm font-medium">/mês</span>
-                    </div>
-
-                    <ul class="mt-10 space-y-4 text-sm text-gray-700">
-                        @foreach($planStart->features as $feature)
-                        <li class=" flex items-center gap-3 {{  $feature['status'] == 0 ? 'text-gray-400' : '' }}">
-                            @if($feature['status'])
-                            <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                    d="M5 13l4 4L19 7">
-                                </path>
-                            </svg>
-                            @else
-                            <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                    d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                            @endif
-
-                            {{ $feature['name'] }}
-                        </li>
-                        @endforeach
-                    </ul>
-
-                    <button x-data
-                        @click="$dispatch('trigger-plan-filter', { id: 1 }); document.getElementById('modelos').scrollIntoView({ behavior: 'smooth' })"
-                        class="w-full transition py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold cursor-pointer mt-12">
-                        Ver Modelos Start
-                    </button>
-                </div>
-                @endif
-
-                @if($planPro)
-                <div
-                    class="bg-dark-900 p-8 md:p-10 rounded-3xl border border-dark-700 shadow-xl relative transform lg:scale-105">
-                    <span
-                        class="absolute -top-4 right-8 bg-brand text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider">
-                        Mais Popular
-                    </span>
-
-                    <h3 class="text-2xl font-bold text-white tracking-tight">
-                        {{ $planPro->name }}
-                    </h3>
-
-                    <p class="mt-2 text-gray-300 text-sm">
-                        {{ $planPro->description }}
-                    </p>
-
-                    <div class="mt-6 flex items-baseline gap-1">
-                        <span class="text-5xl font-extrabold text-white tracking-tighter">R$
-                            {{ $planPro->price }}</span>
-                        <span class="text-gray-400 text-sm font-medium">/mês</span>
-                    </div>
-
-                    <ul class="mt-10 space-y-4 text-sm text-gray-200">
-                        @foreach($planPro->features as $feature)
-                        <li class=" flex items-center gap-3 {{  $feature['status'] == 0 ? 'text-gray-400' : '' }}">
-                            @if($feature['status'])
-                            <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                    d="M5 13l4 4L19 7">
-                                </path>
-                            </svg>
-                            @else
-                            <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                    d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                            @endif
-
-                            {{ $feature['name'] }}
-                        </li>
-                        @endforeach
-                    </ul>
-
-                    <button x-data
-                        @click="$dispatch('trigger-plan-filter', { id: 2 }); document.getElementById('modelos').scrollIntoView({ behavior: 'smooth' })"
-                        class="w-full transition py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold cursor-pointer mt-12">
-                        Ver Modelos Pro
-                    </button>
-                </div>
-                @endif --}}
 
                 @foreach($plans as $plan)
                     @if($plan->is_recommended)
@@ -268,20 +178,22 @@
                     <p class="mt-2 text-gray-600">Assinando hoje até às 14h, nossa equipe entra em contato no mesmo dia
                         para iniciar a configuração do seu modelo.</p>
                 </div>
-                <div class="flex -space-x-2 overflow-hidden">
-                    <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt="">
-                    <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white"
-                        src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt="">
-                    <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white"
-                        src="https://images.unsplash.com/photo-1550525811-e5869dd03032?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt="">
-                    <div
-                        class="flex items-center justify-center h-12 px-4 rounded-full bg-white border border-gray-100 text-xs font-bold text-gray-600">
-                        +12 sites esta semana</div>
-                </div>
+
+                @if($settings->whatsapp)
+                    <a href="{{ $settings->whatsapp }}" target="_blank" rel="noopener"
+                        class="shrink-0 inline-flex items-center gap-2.5 bg-green-600 hover:bg-green-700 text-white px-6 py-3.5 rounded-xl font-bold transition shadow-lg shadow-green-900/10">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12.004 2c-5.525 0-10 4.478-10 10 0 1.777.463 3.445 1.263 4.9L2 22l5.222-1.263C8.61 21.51 10.217 22 12.004 22c5.525 0 10-4.478 10-10s-4.475-10-10-10zm0 18.294c-1.724 0-3.37-.487-4.794-1.407l-.343-.22-3.325.803.818-3.18-.24-.373c-.998-1.545-1.522-3.328-1.522-5.166 0-5.11 4.157-9.267 9.267-9.267 5.108 0 9.264 4.157 9.264 9.267s-4.156 9.267-9.264 9.267z" />
+                        </svg>
+                        Falar com um especialista
+                    </a>
+                @else
+                    <a href="#planos"
+                        class="shrink-0 inline-flex items-center gap-2.5 bg-brand hover:bg-brand-dark text-white px-6 py-3.5 rounded-xl font-bold transition shadow-lg shadow-brand/20">
+                        Ver Planos
+                    </a>
+                @endif
             </div>
         </div>
     </section>
