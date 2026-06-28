@@ -36,7 +36,7 @@ class SubscriptionController extends Controller
 
         Lead::updateOrCreate(
             ['email' => $email],
-            ['template_id' => $template->id, 'phone' => $phone]
+            ['template_id' => $template->id, 'plan_id' => $plan->id, 'phone' => $phone]
         );
 
         // 2. Preparamos o nome do item que aparecerá no checkout do Asaas

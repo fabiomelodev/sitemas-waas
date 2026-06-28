@@ -13,4 +13,9 @@ class Lead extends Model
     {
         return $this->belongsTo(Template::class);
     }
+
+    public function plan(): BelongsTo
+    {
+        return $this->belongsTo(Plan::class);
+    }
 }
