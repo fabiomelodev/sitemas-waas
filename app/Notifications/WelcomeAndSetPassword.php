@@ -8,7 +8,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Password;
 
-class WelcomeAndSetPassword extends Notification
+class WelcomeAndSetPassword extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -46,7 +46,7 @@ class WelcomeAndSetPassword extends Notification
 
         return (new MailMessage)
             ->subject('🚀 Bem-vindo à Sitemas! Seu site está quase pronto')
-            ->greeting('Olá, ' . $notifiable->name . '!')
+            ->greeting('Olá, '.$notifiable->name.'!')
             ->line('Seu pagamento foi confirmado com sucesso e já reservamos o modelo que você escolheu.')
             ->line('Para começar a configurar as informações do seu novo site, você precisa definir sua senha de acesso ao nosso painel.')
             ->action('Definir Senha e Acessar Painel', $url)
