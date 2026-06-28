@@ -4,7 +4,28 @@
     :image="$template->thumbnail ? \Illuminate\Support\Facades\Storage::url($template->thumbnail) : null">
 
     <section class="max-w-5xl mx-auto px-6 py-12 md:py-20"
-        x-data="{ open: false, name: '', email: '', phone: '' }">
+        x-data="{
+            open: false,
+            name: '',
+            email: '',
+            phone: '',
+            maskPhone() {
+                const d = this.phone.replace(/\D/g, '').slice(0, 11);
+                let out = '';
+                if (d.length > 0) out = '(' + d.substring(0, 2);
+                if (d.length > 2) {
+                    out += ') ';
+                    if (d.length > 10) {
+                        out += d.substring(2, 7) + '-' + d.substring(7, 11);
+                    } else if (d.length > 6) {
+                        out += d.substring(2, 6) + '-' + d.substring(6, 10);
+                    } else {
+                        out += d.substring(2);
+                    }
+                }
+                this.phone = out;
+            }
+        }">
         <div class="grid md:grid-cols-12 gap-12 items-start">
 
             <div class="md:col-span-7">
@@ -180,8 +201,9 @@
                             Seu Whatsapp
                         </label>
 
-                        <input type="text" name="phone" id="phone" required placeholder="(11) 91234-5678"
-                            x-model="phone" value="{{ old('phone') }}"
+                        <input type="tel" name="phone" id="phone" required placeholder="(11) 91234-5678"
+                            x-model="phone" x-on:input="maskPhone()" inputmode="numeric" maxlength="16"
+                            x-init="phone = $el.value; maskPhone()" value="{{ old('phone') }}"
                             class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 py-2 px-4">
                     </div>
 
