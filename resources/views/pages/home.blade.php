@@ -192,7 +192,7 @@
                 </div>
             </div>
 
-            <div class="grid lg:grid-cols-3 gap-8 mx-auto items-start mt-16">
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto items-start mt-16">
 
                 @foreach($plans as $plan)
                     @if($plan->is_recommended)
