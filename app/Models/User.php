@@ -35,12 +35,17 @@ class User extends Authenticatable implements FilamentUser
     }
 
     /**
-     * Apenas administradores podem acessar o painel do Filament.
-     * Clientes criados via webhook do Asaas NÃO recebem este acesso.
+     * Controle de acesso por painel:
+     * - admin  (/admin)  → apenas administradores.
+     * - client (/painel) → apenas clientes (não administradores).
      */
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->is_admin === true;
+        return match ($panel->getId()) {
+            'admin' => $this->is_admin === true,
+            'client' => $this->is_admin === false,
+            default => false,
+        };
     }
 
     public function subscriptions(): HasMany
