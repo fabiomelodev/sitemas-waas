@@ -114,48 +114,87 @@ new class extends Component {
                 </p>
             </div>
 
-            <div class="mt-10 flex flex-wrap items-center justify-center gap-3" x-data="{ activeCategory: 'all' }">
+            <div class="mt-10 rounded-3xl border border-gray-100 bg-gray-50/60 p-5 md:p-6"
+                x-data="{ activeCategory: 'all', activePlan: 'all' }"
+                x-on:trigger-plan-filter.window="activePlan = String($event.detail.id)">
 
-                <button type="button" wire:click="filterAllCategories()" x-on:click="activeCategory = 'all'"
-                    x-bind:class="activeCategory === 'all' ? 'bg-brand text-white shadow-md shadow-brand/20 hover:bg-brand-dark' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
-                    class="px-6 py-2 rounded-full text-sm font-semibold transition-all cursor-pointer">
-                    Todos
-                </button>
+                <div class="flex flex-col lg:flex-row lg:items-end gap-6 lg:gap-8">
 
-                @foreach($categories as $category)
-                    <button type="button" wire:key="category-{{ $category->id }}"
-                        wire:click="filterCategory({{ $category->id }})"
-                        x-on:click="activeCategory = '{{ $category->id }}'"
-                        x-bind:class="activeCategory === '{{ $category->id }}' ? 'bg-brand text-white shadow-md shadow-brand/20 hover:bg-brand-dark' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
-                        class="px-6 py-2 rounded-full text-sm font-semibold transition-all cursor-pointer">
-                        {{ $category->name }}
-                    </button>
-                @endforeach
+                    {{-- Categorias --}}
+                    <div class="flex-1 min-w-0">
+                        <span class="block text-xs font-bold uppercase tracking-widest text-gray-400 mb-3">
+                            Filtrar por categoria
+                        </span>
+
+                        <div class="flex flex-wrap gap-2">
+                            <button type="button" wire:click="filterAllCategories()" x-on:click="activeCategory = 'all'"
+                                x-bind:class="activeCategory === 'all' ? 'bg-brand text-white border-brand shadow-sm shadow-brand/20' : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'"
+                                class="px-4 py-2 rounded-full text-sm font-semibold border transition-all cursor-pointer">
+                                Todos
+                            </button>
+
+                            @foreach($categories as $category)
+                                <button type="button" wire:key="category-{{ $category->id }}"
+                                    wire:click="filterCategory({{ $category->id }})"
+                                    x-on:click="activeCategory = '{{ $category->id }}'"
+                                    x-bind:class="activeCategory === '{{ $category->id }}' ? 'bg-brand text-white border-brand shadow-sm shadow-brand/20' : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'"
+                                    class="px-4 py-2 rounded-full text-sm font-semibold border transition-all cursor-pointer">
+                                    {{ $category->name }}
+                                </button>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    {{-- Divisor --}}
+                    <div class="hidden lg:block w-px self-stretch bg-gray-200"></div>
+
+                    {{-- Planos (segmented control) --}}
+                    @if(isset($plans) && $plans->isNotEmpty())
+                        <div class="lg:shrink-0">
+                            <span class="block text-xs font-bold uppercase tracking-widest text-gray-400 mb-3">
+                                Plano
+                            </span>
+
+                            <div class="inline-flex items-center rounded-xl bg-gray-100 p-1 max-w-full overflow-x-auto">
+                                <button type="button" wire:click="filterAllPlans()" x-on:click="activePlan = 'all'"
+                                    x-bind:class="activePlan === 'all' ? 'bg-white text-dark-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'"
+                                    class="px-4 py-1.5 rounded-lg text-sm font-semibold whitespace-nowrap transition-all cursor-pointer">
+                                    Todos
+                                </button>
+
+                                @foreach($plans as $plan)
+                                    <button type="button" wire:key="plan-btn-{{ $plan->id }}"
+                                        wire:click="filterPlan({{ $plan->id }})" x-on:click="activePlan = '{{ $plan->id }}'"
+                                        x-bind:class="activePlan === '{{ $plan->id }}' ? 'bg-white text-brand shadow-sm' : 'text-gray-500 hover:text-gray-700'"
+                                        class="px-4 py-1.5 rounded-lg text-sm font-semibold whitespace-nowrap transition-all cursor-pointer">
+                                        {{ $plan->name }}
+                                    </button>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+                </div>
             </div>
 
-            @if(isset($plans))
-                <div x-data="{ activePlan: 'all'}" x-on:trigger-plan-filter.window="activePlan = String($event.detail.id)">
-                    <div
-                        class="overflow-hidden rounded-full border border-gray-100 flex lg:inline-flex justify-center mt-6">
-                        <button class="shadow-md shadow-brand/20 text-xs font-bold cursor-pointer py-2 px-6" type="button"
-                            x-on:click="activePlan = 'all'" wire:click="filterAllPlans()"
-                            x-bind:class="activePlan === 'all' ? 'text-white bg-brand' : 'text-gray-600 hover:bg-gray-100'">
-                            Todos
-                        </button>
+            {{-- Contador de resultados + estado de carregamento --}}
+            <div class="flex items-center justify-center gap-2 mt-6 text-sm text-gray-500 h-5">
+                <span wire:loading.remove wire:target="filterCategory,filterPlan,filterAllCategories,filterAllPlans">
+                    {{ count($templates) }} {{ count($templates) === 1 ? 'modelo encontrado' : 'modelos encontrados' }}
+                </span>
+                <span wire:loading wire:target="filterCategory,filterPlan,filterAllCategories,filterAllPlans"
+                    class="inline-flex items-center gap-2">
+                    <svg class="w-4 h-4 animate-spin text-brand" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                    </svg>
+                    Atualizando…
+                </span>
+            </div>
 
-                        @foreach($plans as $plan)
-                            <button class="border-l border-gray-100 text-xs font-bold cursor-pointer py-2 px-2" type="button"
-                                wire:key="plan-btn-{{ $plan->id }}"
-                                wire:click="filterPlan({{ $plan->id }})" x-on:click="activePlan = '{{  $plan->id }}'"
-                                x-bind:class="activePlan === '{{  $plan->id }}' ? 'text-white bg-brand' : 'text-gray-600 hover:bg-gray-100'">
-                                {{ $plan->name }}
-                            </button>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-6 transition-opacity duration-200"
+                wire:loading.class="opacity-40 pointer-events-none"
+                wire:target="filterCategory,filterPlan,filterAllCategories,filterAllPlans">
 
                 @foreach($templates as $template)
                     <div wire:key="template-{{ $template->id }}"
@@ -215,6 +254,20 @@ new class extends Component {
                     </div>
                 @endforeach
             </div>
+
+            @if(count($templates) === 0)
+                <div class="text-center py-16">
+                    <div class="mx-auto w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
+                        <svg class="w-7 h-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                                d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z" />
+                        </svg>
+                    </div>
+                    <p class="text-dark-900 font-bold">Nenhum modelo encontrado</p>
+                    <p class="text-gray-500 text-sm mt-1">Tente outra categoria ou plano.</p>
+                </div>
+            @endif
         </div>
     </section>
 </div>
