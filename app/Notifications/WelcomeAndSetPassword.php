@@ -45,11 +45,11 @@ class WelcomeAndSetPassword extends Notification implements ShouldQueue
         ]));
 
         return (new MailMessage)
-            ->subject('🚀 Bem-vindo à Sitemas! Seu site está quase pronto')
+            ->subject('🚀 Bem-vindo à Sitemas! Crie sua conta de acesso')
             ->greeting('Olá, '.$notifiable->name.'!')
             ->line('Seu pagamento foi confirmado com sucesso e já reservamos o modelo que você escolheu.')
-            ->line('Para começar a configurar as informações do seu novo site, você precisa definir sua senha de acesso ao nosso painel.')
-            ->action('Definir Senha e Acessar Painel', $url)
+            ->line('Para acompanhar sua assinatura e configurar seu site, crie sua conta definindo uma senha de acesso ao painel.')
+            ->action('Criar minha conta', $url)
             ->line('Este link expirará em 60 minutos por segurança.')
             ->line('Estamos ansiosos para colocar sua empresa online!');
     }
