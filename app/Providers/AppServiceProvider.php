@@ -2,15 +2,6 @@
 
 namespace App\Providers;
 
-use App\Events\PaymentReceived;
-use App\Events\SubscriptionActivated;
-use App\Events\SubscriptionCanceled;
-use App\Events\SubscriptionPaymentOverdue;
-use App\Listeners\SendCancellationNotification;
-use App\Listeners\SendOverdueNotification;
-use App\Listeners\SendPaymentConfirmedNotification;
-use App\Listeners\SendWelcomeNotification;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -25,12 +16,13 @@ class AppServiceProvider extends ServiceProvider
 
     /**
      * Bootstrap any application services.
+     *
+     * Os listeners em app/Listeners são registrados automaticamente pela
+     * auto-descoberta do Laravel (cada um com handle(Event $event) tipado).
+     * Não registrar aqui também, senão as notificações disparam em dobro.
      */
     public function boot(): void
     {
-        Event::listen(SubscriptionActivated::class, SendWelcomeNotification::class);
-        Event::listen(PaymentReceived::class, SendPaymentConfirmedNotification::class);
-        Event::listen(SubscriptionPaymentOverdue::class, SendOverdueNotification::class);
-        Event::listen(SubscriptionCanceled::class, SendCancellationNotification::class);
+        //
     }
 }
