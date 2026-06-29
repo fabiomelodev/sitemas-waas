@@ -6,6 +6,7 @@ use App\Models\SiteConfig;
 use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Password;
 use Tests\TestCase;
 
 class ClientPanelTest extends TestCase
@@ -84,6 +85,22 @@ class ClientPanelTest extends TestCase
 
         $this->actingAs($client)->get('/painel/subscriptions')->assertOk();
         $this->actingAs($client)->get('/painel/orders')->assertOk();
+    }
+
+    public function test_setting_password_logs_the_client_into_the_panel(): void
+    {
+        $client = $this->makeClient('active');
+        $token = Password::createToken($client);
+
+        $response = $this->post('/reset-password', [
+            'token' => $token,
+            'email' => $client->email,
+            'password' => 'nova-senha-123',
+            'password_confirmation' => 'nova-senha-123',
+        ]);
+
+        $response->assertRedirect(route('filament.client.pages.dashboard'));
+        $this->assertAuthenticatedAs($client);
     }
 
     public function test_client_cannot_open_another_clients_site_config(): void

@@ -46,8 +46,4 @@ return [
         'url' => env('ASAAS_URL'),
     ],
 
-    'url' => [
-        'auto_login' => env('APP_AUTOLOGIN_URL')
-    ]
-
 ];

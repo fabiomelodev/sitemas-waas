@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
@@ -35,22 +36,21 @@ class NewPasswordController extends Controller
                     'password' => Hash::make($password),
                     'remember_token' => Str::random(60),
                 ])->save();
-
-                // 1. Gera um token aleatório e salva no usuário (ou numa tabela temporária)
-                $loginToken = Str::random(40);
-                $user->update(['login_token' => $loginToken]); // Adicione essa coluna na migration de users
             }
         );
 
-        if ($status === Password::PASSWORD_RESET) {
-            $user = User::query()->where('email', $request->email)->first();
-
-            // Use str_replace ou apenas monte a string garantindo que não haja /public
-            // $url = "https://app.sitemas.com.br/autologin/{$user->login_token}";
-
-            $url = config('services.url.auto_login')."{$user->login_token}";
-
-            return redirect()->away($url);
+        if ($status !== Password::PASSWORD_RESET) {
+            return back()->withErrors(['email' => __($status)]);
         }
+
+        // Autentica o cliente e o leva direto ao painel (/painel), sem
+        // depender de um app externo de autologin.
+        $user = User::query()->where('email', $request->email)->first();
+
+        Auth::login($user);
+
+        $request->session()->regenerate();
+
+        return redirect()->intended(route('filament.client.pages.dashboard'));
     }
 }
