@@ -44,6 +44,10 @@ return [
         'sandbox_url' => env('ASAAS_SANDBOX_URL'),
         'token' => env('ASAAS_TOKEN'),
         'url' => env('ASAAS_URL'),
+        // O Asaas só aceita callback.successUrl cujo domínio esteja cadastrado
+        // em Minha Conta → Informações. Desligue (false) em ambientes cujo
+        // domínio ainda não foi cadastrado para não bloquear a assinatura.
+        'callback_enabled' => env('ASAAS_CALLBACK_ENABLED', true),
     ],
 
 ];

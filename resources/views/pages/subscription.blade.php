@@ -9,6 +9,7 @@
             name: '',
             email: '',
             phone: '',
+            cpf_cnpj: '',
             maskPhone() {
                 const d = this.phone.replace(/\D/g, '').slice(0, 11);
                 let out = '';
@@ -24,6 +25,25 @@
                     }
                 }
                 this.phone = out;
+            },
+            maskCpfCnpj() {
+                const d = this.cpf_cnpj.replace(/\D/g, '').slice(0, 14);
+                let out = '';
+                if (d.length <= 11) {
+                    for (let i = 0; i < d.length; i++) {
+                        if (i === 3 || i === 6) out += '.';
+                        if (i === 9) out += '-';
+                        out += d[i];
+                    }
+                } else {
+                    for (let i = 0; i < d.length; i++) {
+                        if (i === 2 || i === 5) out += '.';
+                        if (i === 8) out += '/';
+                        if (i === 12) out += '-';
+                        out += d[i];
+                    }
+                }
+                this.cpf_cnpj = out;
             }
         }">
         <div class="grid md:grid-cols-12 gap-12 items-start">
@@ -203,8 +223,21 @@
                             class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 py-2 px-4">
                     </div>
 
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1" for="cpf_cnpj">
+                            CPF ou CNPJ
+                        </label>
+
+                        <input type="text" name="cpf_cnpj" id="cpf_cnpj" required placeholder="000.000.000-00"
+                            x-model="cpf_cnpj" x-on:input="maskCpfCnpj()" inputmode="numeric" maxlength="18"
+                            x-init="cpf_cnpj = $el.value; maskCpfCnpj()" value="{{ old('cpf_cnpj') }}"
+                            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 py-2 px-4">
+
+                        <p class="mt-1 text-[11px] text-gray-400">Obrigatório para emissão da cobrança.</p>
+                    </div>
+
                     <div class="flex flex-col gap-3">
-                        <button type="submit" :disabled="!name || !email || !phone"
+                        <button type="submit" :disabled="!name || !email || !phone || !cpf_cnpj"
                             class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
                             Ir para Pagamento Seguro
                         </button>

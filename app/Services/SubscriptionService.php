@@ -29,7 +29,7 @@ class SubscriptionService
 
         $customerId = $this->ensureAsaasCustomer($user, $data);
 
-        $asaasSubscription = $this->asaas->createSubscription([
+        $payload = [
             'customer' => $customerId,
             'billingType' => 'UNDEFINED',
             'value' => (float) $plan->price,
@@ -37,11 +37,19 @@ class SubscriptionService
             'cycle' => 'MONTHLY',
             'description' => "Plano {$plan->name} - Modelo {$template->name}",
             'externalReference' => "plan:{$plan->id}|template:{$template->id}",
-            'callback' => [
+        ];
+
+        // O Asaas exige que o domínio da successUrl esteja cadastrado na conta.
+        // Só enviamos o callback quando habilitado (evita bloquear a assinatura
+        // em ambientes cujo domínio ainda não foi cadastrado).
+        if (config('services.asaas.callback_enabled')) {
+            $payload['callback'] = [
                 'successUrl' => route('subscription.success'),
                 'autoRedirect' => true,
-            ],
-        ]);
+            ];
+        }
+
+        $asaasSubscription = $this->asaas->createSubscription($payload);
 
         if (! isset($asaasSubscription['id'])) {
             throw new RuntimeException('Não foi possível criar a assinatura no Asaas.');
@@ -86,6 +94,7 @@ class SubscriptionService
         $user->fill([
             'name' => $data['name'],
             'phone' => $data['phone'],
+            'cpf_cnpj' => $data['cpf_cnpj'],
         ]);
 
         // Define uma senha aleatória apenas para usuários novos; nunca
@@ -106,12 +115,12 @@ class SubscriptionService
             return $user->asaas_customer_id;
         }
 
-        // O CPF/CNPJ não é coletado aqui: o checkout hospedado do Asaas o
-        // solicita ao cliente no momento do pagamento.
+        // O Asaas exige CPF/CNPJ no cliente para criar a assinatura/cobrança.
         $customer = $this->asaas->createCustomer([
             'name' => $data['name'],
             'email' => $user->email,
             'phone' => $data['phone'],
+            'cpf_cnpj' => $data['cpf_cnpj'],
         ]);
 
         if (! isset($customer['id'])) {
