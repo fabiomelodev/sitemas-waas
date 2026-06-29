@@ -123,7 +123,8 @@ new class extends Component {
                 </button>
 
                 @foreach($categories as $category)
-                    <button type="button" wire:click="filterCategory({{ $category->id }})"
+                    <button type="button" wire:key="category-{{ $category->id }}"
+                        wire:click="filterCategory({{ $category->id }})"
                         x-on:click="activeCategory = '{{ $category->id }}'"
                         x-bind:class="activeCategory === '{{ $category->id }}' ? 'bg-brand text-white shadow-md shadow-brand/20 hover:bg-brand-dark' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
                         class="px-6 py-2 rounded-full text-sm font-semibold transition-all cursor-pointer">
@@ -144,6 +145,7 @@ new class extends Component {
 
                         @foreach($plans as $plan)
                             <button class="border-l border-gray-100 text-xs font-bold cursor-pointer py-2 px-2" type="button"
+                                wire:key="plan-btn-{{ $plan->id }}"
                                 wire:click="filterPlan({{ $plan->id }})" x-on:click="activePlan = '{{  $plan->id }}'"
                                 x-bind:class="activePlan === '{{  $plan->id }}' ? 'text-white bg-brand' : 'text-gray-600 hover:bg-gray-100'">
                                 {{ $plan->name }}
@@ -156,7 +158,7 @@ new class extends Component {
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
 
                 @foreach($templates as $template)
-                    <div
+                    <div wire:key="template-{{ $template->id }}"
                         class="bg-white border border-gray-100 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
                         <div class="aspect-16/10 bg-gray-100 overflow-hidden relative">
                             @if($template->thumbnail)
