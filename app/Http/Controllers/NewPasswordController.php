@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Notifications\AccessPanel;
+use App\Notifications\WelcomeAndSetPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -60,5 +62,22 @@ class NewPasswordController extends Controller
         $request->session()->regenerate();
 
         return redirect()->intended(route('filament.client.pages.dashboard'));
+    }
+
+    // Reenvia um novo link de acesso (token novo) quando o anterior expirou
+    // ou foi invalidado. Mensagem genérica para não revelar se o e-mail existe.
+    public function resend(Request $request)
+    {
+        $request->validate(['email' => 'required|email']);
+
+        $user = User::query()->where('email', $request->email)->first();
+
+        if ($user) {
+            // Ainda não definiu a senha → novo link de criar conta.
+            // Já definiu → link para acessar o painel (login).
+            $user->notify(is_null($user->password_set_at) ? new WelcomeAndSetPassword : new AccessPanel);
+        }
+
+        return back()->with('status', 'Se houver uma conta com este e-mail, enviamos um novo link de acesso. Verifique sua caixa de entrada e o spam.');
     }
 }

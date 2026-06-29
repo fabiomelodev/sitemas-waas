@@ -34,6 +34,12 @@
         <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
             <div class="bg-white px-4 py-8 shadow-xl border border-gray-100 sm:rounded-2xl sm:px-10">
 
+                @if (session('status'))
+                    <div class="mb-6 rounded-lg bg-green-50 border border-green-100 p-3 text-sm text-green-700">
+                        {{ session('status') }}
+                    </div>
+                @endif
+
                 <form method="POST" action="{{ route('password.update') }}" class="space-y-6">
                     @csrf
 
@@ -89,6 +95,17 @@
                         </button>
                     </div>
                 </form>
+
+                <div class="mt-6 border-t border-gray-100 pt-6 text-center">
+                    <p class="text-xs text-gray-500 mb-2">O link expirou ou não funciona?</p>
+                    <form method="POST" action="{{ route('password.resend') }}">
+                        @csrf
+                        <input type="hidden" name="email" value="{{ $email }}">
+                        <button type="submit" class="text-sm font-semibold text-blue-600 hover:underline">
+                            Reenviar link de acesso
+                        </button>
+                    </form>
+                </div>
 
             </div>
 

@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NewPasswordController;
+use App\Http\Controllers\SubscriptionController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{HomeController, NewPasswordController, SubscriptionController};
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -18,6 +20,10 @@ Route::controller(NewPasswordController::class)->group(function () {
 
     Route::post('/reset-password', 'store')->name('password.update');
 });
+
+Route::post('/reset-password/reenviar', [NewPasswordController::class, 'resend'])
+    ->middleware('throttle:6,1')
+    ->name('password.resend');
 
 // if (app()->environment('local')) {
 

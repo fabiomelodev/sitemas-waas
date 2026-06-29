@@ -5,7 +5,9 @@ namespace Tests\Feature;
 use App\Models\SiteConfig;
 use App\Models\Subscription;
 use App\Models\User;
+use App\Notifications\WelcomeAndSetPassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
 use Tests\TestCase;
 
@@ -102,6 +104,18 @@ class ClientPanelTest extends TestCase
         $response->assertRedirect(route('filament.client.pages.dashboard'));
         $this->assertAuthenticatedAs($client);
         $this->assertNotNull($client->fresh()->password_set_at);
+    }
+
+    public function test_resend_sends_a_fresh_account_link(): void
+    {
+        Notification::fake();
+
+        $client = $this->makeClient('active');
+
+        $this->post('/reset-password/reenviar', ['email' => $client->email])
+            ->assertSessionHas('status');
+
+        Notification::assertSentTo($client, WelcomeAndSetPassword::class);
     }
 
     public function test_invalid_token_shows_error_and_keeps_password_unset(): void
