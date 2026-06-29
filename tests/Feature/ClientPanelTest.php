@@ -87,7 +87,19 @@ class ClientPanelTest extends TestCase
             'expires_at' => now()->addDays(10),
         ]);
 
-        $this->actingAs($client)->get('/painel')->assertOk();
+        $this->actingAs($client)->get('/painel')
+            ->assertOk()
+            ->assertSee('Assinatura cancelada')
+            ->assertSee('dias');
+    }
+
+    public function test_active_subscription_does_not_show_cancellation_notice(): void
+    {
+        $client = $this->makeClient('active');
+
+        $this->actingAs($client)->get('/painel')
+            ->assertOk()
+            ->assertDontSee('Assinatura cancelada');
     }
 
     public function test_canceled_after_paid_period_loses_access(): void
