@@ -10,7 +10,9 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::prefix('assinar')->name('subscription.')->group(function () {
     Route::get('/modelo/{template:slug}', [SubscriptionController::class, 'show'])->name('show');
 
-    Route::post('/checkout/{plan:slug}/{template:slug}', [SubscriptionController::class, 'checkout'])->name('checkout');
+    Route::post('/checkout/{plan:slug}/{template:slug}', [SubscriptionController::class, 'checkout'])
+        ->middleware('throttle:10,1')
+        ->name('checkout');
 
     Route::get('/sucesso-no-pagamento', [SubscriptionController::class, 'success'])->name('success');
 });
@@ -18,7 +20,9 @@ Route::prefix('assinar')->name('subscription.')->group(function () {
 Route::controller(NewPasswordController::class)->group(function () {
     Route::get('/reset-password/{token}', 'create')->name('password.reset');
 
-    Route::post('/reset-password', 'store')->name('password.update');
+    Route::post('/reset-password', 'store')
+        ->middleware('throttle:10,1')
+        ->name('password.update');
 });
 
 Route::post('/reset-password/reenviar', [NewPasswordController::class, 'resend'])
