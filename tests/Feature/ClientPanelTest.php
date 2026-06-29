@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -10,7 +11,7 @@ class ClientPanelTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_client_can_access_client_panel(): void
+    private function makeClient(?string $subscriptionStatus = null): User
     {
         $client = User::create([
             'name' => 'Cliente',
@@ -19,7 +20,35 @@ class ClientPanelTest extends TestCase
             'password' => bcrypt('secret'),
         ]);
 
+        if ($subscriptionStatus) {
+            Subscription::create([
+                'user_id' => $client->id,
+                'status' => $subscriptionStatus,
+            ]);
+        }
+
+        return $client;
+    }
+
+    public function test_client_with_active_subscription_can_access_panel(): void
+    {
+        $client = $this->makeClient('active');
+
         $this->actingAs($client)->get('/painel')->assertOk();
+    }
+
+    public function test_client_without_subscription_cannot_access_panel(): void
+    {
+        $client = $this->makeClient();
+
+        $this->actingAs($client)->get('/painel')->assertForbidden();
+    }
+
+    public function test_client_with_inactive_subscription_cannot_access_panel(): void
+    {
+        $client = $this->makeClient('past_due');
+
+        $this->actingAs($client)->get('/painel')->assertForbidden();
     }
 
     public function test_admin_cannot_access_client_panel(): void

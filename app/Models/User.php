@@ -37,15 +37,20 @@ class User extends Authenticatable implements FilamentUser
     /**
      * Controle de acesso por painel:
      * - admin  (/admin)  → apenas administradores.
-     * - client (/painel) → apenas clientes (não administradores).
+     * - client (/painel) → clientes (não administradores) com assinatura ativa.
      */
     public function canAccessPanel(Panel $panel): bool
     {
         return match ($panel->getId()) {
             'admin' => $this->is_admin === true,
-            'client' => $this->is_admin === false,
+            'client' => $this->is_admin === false && $this->hasActiveSubscription(),
             default => false,
         };
+    }
+
+    public function hasActiveSubscription(): bool
+    {
+        return $this->subscriptions()->where('status', 'active')->exists();
     }
 
     public function subscriptions(): HasMany
