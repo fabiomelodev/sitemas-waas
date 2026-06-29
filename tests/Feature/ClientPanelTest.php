@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Filament\Client\Pages\Profile;
 use App\Models\SiteConfig;
 use App\Models\Subscription;
 use App\Models\User;
@@ -9,8 +10,10 @@ use App\Notifications\SubscriptionCanceledNotification;
 use App\Notifications\WelcomeAndSetPassword;
 use App\Services\PaymentService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
+use Livewire\Livewire;
 use Tests\TestCase;
 
 class ClientPanelTest extends TestCase
@@ -159,6 +162,36 @@ class ClientPanelTest extends TestCase
 
         $this->actingAs($client)->get('/painel/support-tickets')->assertOk();
         $this->actingAs($client)->get('/painel/support-tickets/create')->assertOk();
+    }
+
+    public function test_client_can_access_profile_page(): void
+    {
+        $client = $this->makeClient('active');
+
+        $this->actingAs($client)->get('/painel/profile')->assertOk();
+    }
+
+    public function test_profile_update_saves_and_syncs_to_asaas(): void
+    {
+        Http::fake(['*' => Http::response([], 200)]);
+
+        $client = $this->makeClient('active');
+        $client->update(['asaas_customer_id' => 'cus_p']);
+
+        Livewire::actingAs($client)
+            ->test(Profile::class)
+            ->fillForm([
+                'name' => 'Novo Nome',
+                'phone' => '(11) 90000-0000',
+                'cpf_cnpj' => '529.982.247-25',
+            ])
+            ->call('save')
+            ->assertHasNoFormErrors();
+
+        $this->assertSame('Novo Nome', $client->fresh()->name);
+
+        Http::assertSent(fn ($request) => str_contains($request->url(), '/customers/cus_p')
+            && data_get($request->data(), 'cpfCnpj') === '52998224725');
     }
 
     public function test_cancel_subscription_is_idempotent(): void
