@@ -103,8 +103,8 @@ class PaymentService
             ->where('asaas_subscription_id', $asaasSubscriptionId)
             ->first();
 
-        if (! $subscription) {
-            return;
+        if (! $subscription || $subscription->status === 'canceled') {
+            return; // idempotente: não recancelar nem reenviar e-mail
         }
 
         $subscription->update([

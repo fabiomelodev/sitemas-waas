@@ -4,13 +4,11 @@ namespace App\Filament\Pages;
 
 use App\Settings\GeneralSettings;
 use BackedEnum;
-use Dom\Text;
 use Filament\Forms\Components\TextInput;
 use Filament\Pages\SettingsPage;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
-use General;
 use UnitEnum;
 
 class GeneralManage extends SettingsPage
@@ -37,7 +35,7 @@ class GeneralManage extends SettingsPage
                         TextInput::make('whatsapp'),
                         TextInput::make('instagram'),
                         TextInput::make('facebook'),
-                    ])
+                    ]),
             ]);
     }
 }

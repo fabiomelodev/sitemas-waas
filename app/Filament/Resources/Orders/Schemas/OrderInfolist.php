@@ -32,20 +32,20 @@ class OrderInfolist
                     ->schema([
                         TextEntry::make('amount')
                             ->label('Preço')
-                            ->formatStateUsing(fn(string $state): string => FormatCurrency::getFormatCurrency($state))
+                            ->formatStateUsing(fn (string $state): string => FormatCurrency::getFormatCurrency($state))
                             ->size(TextSize::Large)
                             ->weight(FontWeight::Bold),
                         TextEntry::make('payment_method')
                             ->label('Meio de Pagamento')
                             ->badge()
-                            ->formatStateUsing(fn(string $state): string => match ($state) {
+                            ->formatStateUsing(fn (string $state): string => match ($state) {
                                 'CREDIT_CARD' => 'Crédito',
                                 default => $state
                             }),
                         TextEntry::make('status')
                             ->placeholder('-')
                             ->badge()
-                            ->formatStateUsing(fn(string $state): string => match ($state) {
+                            ->formatStateUsing(fn (string $state): string => match ($state) {
                                 'completed' => 'Concluído',
                                 default => $state
                             }),

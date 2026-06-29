@@ -5,7 +5,11 @@ namespace App\Filament\Client\Resources\Subscriptions;
 use App\Filament\Client\Resources\Subscriptions\Pages\ListSubscriptions;
 use App\Helpers\FormatCurrency;
 use App\Models\Subscription;
+use App\Services\AsaasService;
+use App\Services\PaymentService;
 use BackedEnum;
+use Filament\Actions\Action;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
@@ -69,6 +73,62 @@ class SubscriptionResource extends Resource
                     ->label('Próxima renovação')
                     ->date('d/m/Y')
                     ->placeholder('—'),
+            ])
+            ->recordActions([
+                Action::make('pay')
+                    ->label('Pagar / 2ª via')
+                    ->icon('heroicon-o-banknotes')
+                    ->color('warning')
+                    ->visible(fn (Subscription $record): bool => (bool) $record->asaas_subscription_id
+                        && in_array($record->status, ['pending', 'past_due']))
+                    ->action(function (Subscription $record) {
+                        $url = app(AsaasService::class)->getSubscriptionCheckoutUrl($record->asaas_subscription_id);
+
+                        if (! $url) {
+                            Notification::make()
+                                ->danger()
+                                ->title('Não foi possível obter o link de pagamento agora. Tente novamente em instantes.')
+                                ->send();
+
+                            return null;
+                        }
+
+                        return redirect()->away($url);
+                    }),
+
+                Action::make('cancel')
+                    ->label('Cancelar assinatura')
+                    ->icon('heroicon-o-x-circle')
+                    ->color('danger')
+                    ->visible(fn (Subscription $record): bool => $record->status === 'active')
+                    ->requiresConfirmation()
+                    ->modalHeading('Cancelar assinatura')
+                    ->modalDescription('Tem certeza? Seu site permanecerá no ar até o fim do período já pago.')
+                    ->modalSubmitActionLabel('Sim, cancelar')
+                    ->action(function (Subscription $record) {
+                        if ($record->asaas_subscription_id) {
+                            $cancelled = app(AsaasService::class)->cancelSubscription($record->asaas_subscription_id);
+
+                            if (! $cancelled) {
+                                Notification::make()
+                                    ->danger()
+                                    ->title('Não foi possível cancelar agora. Tente novamente em instantes.')
+                                    ->send();
+
+                                return;
+                            }
+
+                            app(PaymentService::class)->cancelSubscription($record->asaas_subscription_id);
+                        } else {
+                            $record->update(['status' => 'canceled', 'canceled_at' => now()]);
+                        }
+
+                        Notification::make()
+                            ->success()
+                            ->title('Assinatura cancelada')
+                            ->body('Você receberá um e-mail de confirmação.')
+                            ->send();
+                    }),
             ]);
     }
 

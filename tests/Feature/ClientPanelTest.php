@@ -5,7 +5,9 @@ namespace Tests\Feature;
 use App\Models\SiteConfig;
 use App\Models\Subscription;
 use App\Models\User;
+use App\Notifications\SubscriptionCanceledNotification;
 use App\Notifications\WelcomeAndSetPassword;
+use App\Services\PaymentService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
@@ -103,6 +105,30 @@ class ClientPanelTest extends TestCase
 
         $this->actingAs($client)->get('/painel/subscriptions')->assertOk();
         $this->actingAs($client)->get('/painel/orders')->assertOk();
+    }
+
+    public function test_client_can_access_support_pages(): void
+    {
+        $client = $this->makeClient('active');
+
+        $this->actingAs($client)->get('/painel/support-tickets')->assertOk();
+        $this->actingAs($client)->get('/painel/support-tickets/create')->assertOk();
+    }
+
+    public function test_cancel_subscription_is_idempotent(): void
+    {
+        Notification::fake();
+
+        $client = $this->makeClient('active');
+        $subscription = $client->subscriptions()->first();
+        $subscription->update(['asaas_subscription_id' => 'sub_x']);
+
+        $service = app(PaymentService::class);
+        $service->cancelSubscription('sub_x');
+        $service->cancelSubscription('sub_x'); // segunda chamada não deve reprocessar
+
+        $this->assertSame('canceled', $subscription->fresh()->status);
+        Notification::assertSentToTimes($client, SubscriptionCanceledNotification::class, 1);
     }
 
     public function test_setting_password_logs_the_client_into_the_panel(): void

@@ -38,7 +38,7 @@ class FaqForm
                             ->label('Criado Em')
                             ->disabled()
                             ->visibleOn('edit'),
-                    ])
+                    ]),
             ]);
     }
 }

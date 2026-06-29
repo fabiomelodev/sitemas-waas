@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('support_tickets', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('slug');
-            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->string('subject');
+            $table->text('message');
+            $table->string('status')->default('open'); // open | in_progress | closed
+            $table->text('admin_reply')->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('support_tickets');
     }
 };

@@ -3,7 +3,10 @@
 namespace App\Filament\Resources\Users\Tables;
 
 use App\Models\User;
-use Filament\Actions\{Action, BulkActionGroup, DeleteBulkAction, EditAction};
+use Filament\Actions\Action;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -33,7 +36,7 @@ class UsersTable
                     ->label('Chamar no Whats')
                     ->icon('heroicon-o-chat-bubble-left-right')
                     ->color('success')
-                    ->url(fn(User $record): string => "https://wa.me/55" . preg_replace('/[^0-9]/', '', $record->phone) . "?text=" . urlencode("Olá {$record->name}, vi que você assinou o plano da Sitemas! Sou o seu consultor e vou te ajudar com a configuração."))
+                    ->url(fn (User $record): string => 'https://wa.me/55'.preg_replace('/[^0-9]/', '', $record->phone).'?text='.urlencode("Olá {$record->name}, vi que você assinou o plano da Sitemas! Sou o seu consultor e vou te ajudar com a configuração."))
                     ->openUrlInNewTab(),
                 EditAction::make()
                     ->iconButton(),

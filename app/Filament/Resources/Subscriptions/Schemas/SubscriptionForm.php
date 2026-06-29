@@ -41,7 +41,7 @@ class SubscriptionForm
                             ->default('active'),
                         DatePicker::make('expires_at')
                             ->label('Expira Em'),
-                    ])
+                    ]),
             ]);
     }
 }

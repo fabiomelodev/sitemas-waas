@@ -28,7 +28,7 @@ class SubscriptionsTable
                     ->searchable(),
                 TextColumn::make('status')
                     ->badge()
-                    ->formatStateUsing(fn(string $state): string => match ($state) {
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
                         'active' => 'Ativo',
                         'inactive' => 'Inativo',
                         default => $state,
@@ -40,7 +40,7 @@ class SubscriptionsTable
                 TextColumn::make('expires_at')
                     ->label('Expira Em')
                     ->date('d/m/Y')
-                    ->sortable()
+                    ->sortable(),
             ])
             ->filters([
                 //
@@ -49,7 +49,7 @@ class SubscriptionsTable
                 EditAction::make()
                     ->iconButton(),
                 DeleteAction::make()
-                    ->iconButton()
+                    ->iconButton(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

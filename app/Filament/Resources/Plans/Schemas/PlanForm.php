@@ -6,7 +6,6 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -40,7 +39,7 @@ class PlanForm
                                     ->options([1 => 'Ativo', 0 => 'Inativo'])
                                     ->default(1)
                                     ->required(),
-                            ])
+                            ]),
                     ]),
                 Section::make()
                     ->columnSpan(3)
@@ -57,7 +56,7 @@ class PlanForm
                             ->default('active')
                             ->required(),
                         Toggle::make('is_recommended')
-                            ->label('Recomendado')
+                            ->label('Recomendado'),
                     ]),
             ]);
     }

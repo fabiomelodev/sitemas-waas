@@ -41,11 +41,11 @@ class OrderForm
                         Select::make('payment_method')
                             ->label('Meio de Pagamento')
                             ->options([
-                                'CREDIT_CARD' => 'Cartão de Crédito'
+                                'CREDIT_CARD' => 'Cartão de Crédito',
                             ]),
                         Select::make('status')
                             ->options([
-                                'completed' => 'Concluído'
+                                'completed' => 'Concluído',
                             ]),
                         DatePicker::make('paid_at')
                             ->label('Pago Em'),

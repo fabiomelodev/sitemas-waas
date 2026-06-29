@@ -27,7 +27,7 @@ class PlansTable
                     ->sortable(),
                 TextColumn::make('status')
                     ->badge()
-                    ->formatStateUsing(fn(string $state): string => match ($state) {
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
                         'active' => 'Ativo',
                         'inactive' => 'Inativo',
                         default => $state,
