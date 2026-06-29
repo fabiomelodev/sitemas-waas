@@ -40,6 +40,16 @@
                     <input type="hidden" name="token" value="{{ $token }}">
                     <input type="hidden" name="email" value="{{ $email }}">
 
+                    @if ($errors->any())
+                        <div class="rounded-lg bg-red-50 border border-red-100 p-3">
+                            <ul class="text-sm text-red-600 space-y-1 list-disc list-inside">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider">E-mail de
                             Acesso</label>

@@ -41,7 +41,14 @@ class NewPasswordController extends Controller
         );
 
         if ($status !== Password::PASSWORD_RESET) {
-            return back()->withErrors(['email' => __($status)]);
+            $message = match ($status) {
+                Password::INVALID_TOKEN => 'Este link de criação de conta é inválido ou expirou. Solicite um novo e-mail.',
+                Password::INVALID_USER => 'Não encontramos uma conta com este e-mail.',
+                Password::RESET_THROTTLED => 'Você tentou muitas vezes. Aguarde alguns instantes e tente novamente.',
+                default => 'Não foi possível criar sua conta. Tente novamente.',
+            };
+
+            return back()->withErrors(['password' => $message]);
         }
 
         // Autentica o cliente e o leva direto ao painel (/painel), sem

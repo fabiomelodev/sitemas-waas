@@ -104,6 +104,22 @@ class ClientPanelTest extends TestCase
         $this->assertNotNull($client->fresh()->password_set_at);
     }
 
+    public function test_invalid_token_shows_error_and_keeps_password_unset(): void
+    {
+        $client = $this->makeClient('active');
+
+        $response = $this->post('/reset-password', [
+            'token' => 'token-invalido',
+            'email' => $client->email,
+            'password' => 'nova-senha-123',
+            'password_confirmation' => 'nova-senha-123',
+        ]);
+
+        $response->assertSessionHasErrors('password');
+        $this->assertGuest();
+        $this->assertNull($client->fresh()->password_set_at);
+    }
+
     public function test_client_cannot_open_another_clients_site_config(): void
     {
         $clientA = $this->makeClient('active');
