@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -23,47 +22,49 @@ class PlanSeeder extends Seeder
                     [
                         [
                             'name' => '1 Modelo Essencial',
-                            'status' => 1
+                            'status' => 1,
                         ],
 
                         [
                             'name' => 'Hospedagem de Alta Performance Inclusa',
-                            'status' => 1
+                            'status' => 1,
                         ],
 
                         [
                             'name' => 'Suporte via WhatsApp',
-                            'status' => 1
+                            'status' => 1,
                         ],
 
                         [
                             'name' => 'Manutenção Técnica & Atualizações',
-                            'status' => 1
+                            'status' => 1,
                         ],
 
                         [
                             'name' => 'Certificado SSL (Segurança)',
-                            'status' => 1
+                            'status' => 1,
                         ],
 
                         [
                             'name' => '1 Conta de E-mail Profissional',
-                            'status' => 1
+                            'status' => 1,
                         ],
 
                         [
                             'name' => 'Subdomínio Sitemas (ex: seusite.sitemas.com.br)',
-                            'status' => 1
+                            'status' => 1,
                         ],
 
                         [
                             'name' => 'Inclusas (Ajustes de texto/fotos)',
-                            'status' => 1
-                        ]
+                            'status' => 1,
+                        ],
                     ]
                 ),
                 'url' => 'https://google.com',
                 'status' => 'active',
+                'is_recommended' => false,
+                'order' => 1,
             ],
             [
                 'name' => 'Plano Pro',
@@ -74,48 +75,50 @@ class PlanSeeder extends Seeder
                     [
                         [
                             'name' => '1 Modelo Premium',
-                            'status' => 1
+                            'status' => 1,
                         ],
 
                         [
                             'name' => 'Hospedagem VIP',
-                            'status' => 1
+                            'status' => 1,
                         ],
 
                         [
                             'name' => 'Suporte Prioritário via WhatsApp',
-                            'status' => 1
+                            'status' => 1,
                         ],
 
                         [
                             'name' => 'Manutenção Técnica & Atualizações',
-                            'status' => 1
+                            'status' => 1,
                         ],
 
                         [
                             'name' => 'Certificado SSL (Segurança)',
-                            'status' => 1
+                            'status' => 1,
                         ],
 
                         [
                             'name' => 'Até 5 Contas de E-mail Profissionais',
-                            'status' => 1
+                            'status' => 1,
                         ],
 
                         [
                             'name' => 'Configuração de Domínio Próprio (.com.br)',
-                            'status' => 1
+                            'status' => 1,
                         ],
 
                         [
                             'name' => 'Inclusas (Ajustes de texto/fotos)',
-                            'status' => 1
-                        ]
+                            'status' => 1,
+                        ],
                     ]
                 ),
                 'url' => 'https://google.com',
                 'status' => 'active',
-            ]
+                'is_recommended' => true,
+                'order' => 2,
+            ],
         ]);
     }
 }

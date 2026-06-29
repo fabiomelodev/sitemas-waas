@@ -5,8 +5,8 @@ namespace App\Filament\Resources\Templates\Schemas;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
@@ -34,8 +34,8 @@ class TemplateForm
                             ->label('Características')
                             ->schema([
                                 TextInput::make('name')
-                                    ->label('Nome')
-                            ])
+                                    ->label('Nome'),
+                            ]),
                     ]),
                 Section::make()
                     ->columnSpan(3)
@@ -48,10 +48,13 @@ class TemplateForm
                             ->label('Categoria')
                             ->relationship('category', 'name')
                             ->required(),
-                        Select::make('plan_id')
-                            ->label('Plano')
-                            ->relationship('plan', 'name')
-                            ->required(),
+                        Select::make('plans')
+                            ->label('Planos')
+                            ->relationship('plans', 'name')
+                            ->multiple()
+                            ->preload()
+                            ->required()
+                            ->helperText('Um modelo pode ser oferecido em mais de um plano.'),
                         Select::make('status')
                             ->options(['active' => 'Ativo', 'inactive' => 'Inativo'])
                             ->default('active')

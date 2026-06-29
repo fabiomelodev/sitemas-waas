@@ -6,7 +6,6 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -23,11 +22,14 @@ class TemplatesTable
                 TextColumn::make('category.name')
                     ->label('Categoria')
                     ->searchable(),
+                TextColumn::make('plans.name')
+                    ->label('Planos')
+                    ->badge(),
                 TextColumn::make('url')
                     ->searchable(),
                 TextColumn::make('status')
                     ->badge()
-                    ->formatStateUsing(fn(string $state): string => match ($state) {
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
                         'active' => 'Ativo',
                         'inactive' => 'Inativo',
                         default => $state,
@@ -54,7 +56,7 @@ class TemplatesTable
                 EditAction::make()
                     ->iconButton(),
                 DeleteAction::make()
-                    ->iconButton()
+                    ->iconButton(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

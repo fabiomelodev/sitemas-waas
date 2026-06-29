@@ -16,11 +16,11 @@ class SubscriptionController extends Controller
      */
     public function show(Template $template, GeneralSettings $settings)
     {
-        $plan = $template->plan;
+        $plans = $template->plans()->active()->orderBy('order')->get();
 
         return view('pages.subscription', [
             'template' => $template,
-            'plan' => $plan,
+            'plans' => $plans,
             'settings' => $settings,
         ]);
     }

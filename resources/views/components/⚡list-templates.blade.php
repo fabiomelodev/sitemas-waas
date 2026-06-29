@@ -35,7 +35,7 @@ new class extends Component {
 
     public function getPlans()
     {
-        $this->plans = Plan::query()->orderBy('order', 'asc')->active()->with('templates')->whereHas('templates', function ($query) {
+        $this->plans = Plan::query()->orderBy('order', 'asc')->active()->whereHas('templates', function ($query) {
             return $query->active();
         })->get();
     }
@@ -70,11 +70,15 @@ new class extends Component {
 
     public function getFilterTemplates()
     {
-        $this->templates = Template::query()->active()->whereHas('category', function (Builder $query): Builder {
-            return $query->when($this->filterCategoryId, fn(Builder $subQuery, $categoryId): Builder => $subQuery->where('id', $categoryId));
-        })->whereHas('plan', function (Builder $query): Builder {
-            return $query->when($this->filterPlanId, fn(Builder $subQuery, $planId): Builder => $subQuery->where('id', $planId));
-        })->get();
+        $this->templates = Template::query()->active()
+            ->with(['plans' => fn($query) => $query->active()->orderBy('order')])
+            ->whereHas('category', function (Builder $query): Builder {
+                return $query->when($this->filterCategoryId, fn(Builder $subQuery, $categoryId): Builder => $subQuery->where('id', $categoryId));
+            })
+            ->whereHas('plans', function (Builder $query): Builder {
+                return $query->active()->when($this->filterPlanId, fn(Builder $subQuery, $planId): Builder => $subQuery->where('plans.id', $planId));
+            })
+            ->get();
     }
 
     #[On('trigger-plan-filter')]
@@ -168,9 +172,14 @@ new class extends Component {
                         </div>
 
                         <div class="p-6">
-                            <span class="rounded-full shadow-sm text-xs font-bold text-white bg-brand py-1 px-3">
-                                {{  $template->plan->name }}
-                            </span>
+                            <div class="flex flex-wrap gap-1.5">
+                                @foreach($template->plans as $templatePlan)
+                                    <span
+                                        class="rounded-full shadow-sm text-xs font-bold py-1 px-3 {{ $templatePlan->is_recommended ? 'text-white bg-brand' : 'text-brand bg-brand/10' }}">
+                                        {{ $templatePlan->name }}
+                                    </span>
+                                @endforeach
+                            </div>
 
                             <h3 class="text-xl font-bold text-dark-900 tracking-tight mt-2">
                                 {{  $template->name }}

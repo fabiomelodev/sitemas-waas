@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Str;
 
 class Plan extends Model
@@ -13,7 +13,7 @@ class Plan extends Model
 
     protected $casts = [
         'features' => 'array',
-        'is_recommended' => 'boolean'
+        'is_recommended' => 'boolean',
     ];
 
     protected static function boot()
@@ -34,8 +34,8 @@ class Plan extends Model
         return $query->where('status', 'active');
     }
 
-    public function templates(): HasMany
+    public function templates(): BelongsToMany
     {
-        return $this->hasMany(Template::class);
+        return $this->belongsToMany(Template::class);
     }
 }

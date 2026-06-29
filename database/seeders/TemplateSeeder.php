@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Template;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -25,19 +23,19 @@ class TemplateSeeder extends Seeder
                 'features' => json_encode(
                     [
                         [
-                            'name' => 'Estrutura de até 6 páginas'
+                            'name' => 'Estrutura de até 6 páginas',
                         ],
 
                         [
-                            'name' => 'Otimizado para Mobile'
+                            'name' => 'Otimizado para Mobile',
                         ],
 
                         [
-                            'name' => 'Blog integrado'
+                            'name' => 'Blog integrado',
                         ],
 
                         [
-                            'name' => 'Formulários de Contato'
+                            'name' => 'Formulários de Contato',
                         ],
                     ]
                 ),
@@ -57,19 +55,19 @@ class TemplateSeeder extends Seeder
                 'features' => json_encode(
                     [
                         [
-                            'name' => 'Estrutura de até 6 páginas'
+                            'name' => 'Estrutura de até 6 páginas',
                         ],
 
                         [
-                            'name' => 'Otimizado para Mobile'
+                            'name' => 'Otimizado para Mobile',
                         ],
 
                         [
-                            'name' => 'Blog integrado'
+                            'name' => 'Blog integrado',
                         ],
 
                         [
-                            'name' => 'Formulários de Contato'
+                            'name' => 'Formulários de Contato',
                         ],
                     ]
                 ),
@@ -89,19 +87,19 @@ class TemplateSeeder extends Seeder
                 'features' => json_encode(
                     [
                         [
-                            'name' => 'Estrutura de até 6 páginas'
+                            'name' => 'Estrutura de até 6 páginas',
                         ],
 
                         [
-                            'name' => 'Otimizado para Mobile'
+                            'name' => 'Otimizado para Mobile',
                         ],
 
                         [
-                            'name' => 'Blog integrado'
+                            'name' => 'Blog integrado',
                         ],
 
                         [
-                            'name' => 'Formulários de Contato'
+                            'name' => 'Formulários de Contato',
                         ],
                     ]
                 ),
@@ -111,6 +109,14 @@ class TemplateSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+        ]);
+
+        // Vínculo N:N (um modelo pode pertencer a mais de um plano).
+        DB::table('plan_template')->insert([
+            ['plan_id' => 1, 'template_id' => 1],
+            ['plan_id' => 1, 'template_id' => 2],
+            ['plan_id' => 2, 'template_id' => 3],
+            ['plan_id' => 1, 'template_id' => 3], // exemplo: oferecido em dois planos
         ]);
     }
 }
