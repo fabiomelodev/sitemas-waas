@@ -189,6 +189,7 @@ class ClientPanelTest extends TestCase
             ->assertHasNoFormErrors();
 
         $this->assertSame('Novo Nome', $client->fresh()->name);
+        $this->assertSame('529.982.247-25', $client->fresh()->cpf_cnpj);
 
         Http::assertSent(fn ($request) => str_contains($request->url(), '/customers/cus_p')
             && data_get($request->data(), 'cpfCnpj') === '52998224725');

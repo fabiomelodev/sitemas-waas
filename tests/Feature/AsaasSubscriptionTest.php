@@ -100,6 +100,7 @@ class AsaasSubscriptionTest extends TestCase
         $user = User::where('email', 'maria@test.com')->first();
         $this->assertNotNull($user);
         $this->assertSame('cus_123', $user->asaas_customer_id);
+        $this->assertSame('123.456.789-09', $user->cpf_cnpj);
         $this->assertFalse($user->is_admin);
 
         $this->assertDatabaseHas('subscriptions', [
