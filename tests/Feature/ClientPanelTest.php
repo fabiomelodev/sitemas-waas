@@ -53,7 +53,8 @@ class ClientPanelTest extends TestCase
         $this->actingAs($client)->get('/painel')
             ->assertOk()
             ->assertSee('Status do seu site')
-            ->assertSee('Em configuração');
+            ->assertSee('Em configuração')
+            ->assertSee('ss-step', false); // markup estilizado (CSS próprio) presente
     }
 
     public function test_client_without_subscription_cannot_access_panel(): void
