@@ -101,6 +101,7 @@ class ClientPanelTest extends TestCase
 
         $response->assertRedirect(route('filament.client.pages.dashboard'));
         $this->assertAuthenticatedAs($client);
+        $this->assertNotNull($client->fresh()->password_set_at);
     }
 
     public function test_client_cannot_open_another_clients_site_config(): void

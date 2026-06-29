@@ -10,6 +10,7 @@ use App\Models\SiteConfig;
 use App\Models\Subscription;
 use App\Models\Template;
 use App\Models\User;
+use App\Notifications\AccessPanel;
 use App\Notifications\PaymentConfirmed;
 use App\Notifications\WelcomeAndSetPassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -215,6 +216,38 @@ class AsaasSubscriptionTest extends TestCase
 
         Notification::assertSentTo($user, WelcomeAndSetPassword::class);
         Notification::assertSentTo($user, PaymentConfirmed::class);
+    }
+
+    public function test_returning_customer_gets_login_link_instead_of_set_password(): void
+    {
+        Notification::fake();
+
+        $template = $this->makeTemplate();
+
+        // Cliente que já definiu a senha (já acessou o painel antes).
+        $user = User::create([
+            'name' => 'Maria da Silva',
+            'email' => 'maria@test.com',
+            'asaas_customer_id' => 'cus_123',
+            'password' => bcrypt('x'),
+            'password_set_at' => now(),
+        ]);
+
+        Subscription::create([
+            'user_id' => $user->id,
+            'asaas_subscription_id' => 'sub_123',
+            'status' => 'pending',
+            'plan_id' => $template->plan_id,
+            'template_id' => $template->id,
+        ]);
+
+        ProcessAsaasWebhook::dispatch([
+            'event' => 'PAYMENT_CONFIRMED',
+            'payment' => ['id' => 'pay_1', 'value' => 99.90, 'billingType' => 'PIX', 'subscription' => 'sub_123'],
+        ]);
+
+        Notification::assertSentTo($user, AccessPanel::class);
+        Notification::assertNotSentTo($user, WelcomeAndSetPassword::class);
     }
 
     public function test_confirmed_payment_is_idempotent(): void
