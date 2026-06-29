@@ -110,13 +110,5 @@ class TemplateSeeder extends Seeder
                 'updated_at' => now(),
             ],
         ]);
-
-        // Vínculo N:N (um modelo pode pertencer a mais de um plano).
-        DB::table('plan_template')->insert([
-            ['plan_id' => 1, 'template_id' => 1],
-            ['plan_id' => 1, 'template_id' => 2],
-            ['plan_id' => 2, 'template_id' => 3],
-            ['plan_id' => 1, 'template_id' => 3], // exemplo: oferecido em dois planos
-        ]);
     }
 }

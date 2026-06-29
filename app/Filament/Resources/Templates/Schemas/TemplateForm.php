@@ -48,13 +48,10 @@ class TemplateForm
                             ->label('Categoria')
                             ->relationship('category', 'name')
                             ->required(),
-                        Select::make('plans')
-                            ->label('Planos')
-                            ->relationship('plans', 'name')
-                            ->multiple()
-                            ->preload()
-                            ->required()
-                            ->helperText('Um modelo pode ser oferecido em mais de um plano.'),
+                        Select::make('plan_id')
+                            ->label('Plano')
+                            ->relationship('plan', 'name')
+                            ->required(),
                         Select::make('status')
                             ->options(['active' => 'Ativo', 'inactive' => 'Inativo'])
                             ->default('active')

@@ -46,7 +46,7 @@ class AsaasSubscriptionTest extends TestCase
 
         $category = Category::create(['name' => 'Barbearia', 'status' => 'active']);
 
-        $template = Template::create([
+        return Template::create([
             'name' => 'Barber Premium',
             'excerpt' => 'Modelo para barbearias',
             'url' => 'https://demo.test',
@@ -54,13 +54,9 @@ class AsaasSubscriptionTest extends TestCase
             'plan_id' => $plan->id,
             'status' => 'active',
         ]);
-
-        $template->plans()->attach($plan->id);
-
-        return $template;
     }
 
-    public function test_subscription_page_lists_the_template_plans(): void
+    public function test_subscription_page_shows_the_template_plan(): void
     {
         $template = $this->makeTemplate();
 

@@ -22,8 +22,8 @@ class TemplatesTable
                 TextColumn::make('category.name')
                     ->label('Categoria')
                     ->searchable(),
-                TextColumn::make('plans.name')
-                    ->label('Planos')
+                TextColumn::make('plan.name')
+                    ->label('Plano')
                     ->badge(),
                 TextColumn::make('url')
                     ->searchable(),

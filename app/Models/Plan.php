@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class Plan extends Model
@@ -34,8 +34,8 @@ class Plan extends Model
         return $query->where('status', 'active');
     }
 
-    public function templates(): BelongsToMany
+    public function templates(): HasMany
     {
-        return $this->belongsToMany(Template::class);
+        return $this->hasMany(Template::class);
     }
 }

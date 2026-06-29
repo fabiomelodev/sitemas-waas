@@ -3,30 +3,12 @@
     :description="$template->excerpt"
     :image="$template->thumbnail ? \Illuminate\Support\Facades\Storage::url($template->thumbnail) : null">
 
-    @php
-        $plansData = $plans->map(fn ($p) => [
-            'id' => $p->id,
-            'name' => $p->name,
-            'price' => \App\Helpers\FormatCurrency::getFormatCurrency($p->price),
-            'features' => collect($p->features ?? [])->pluck('name')->filter()->values(),
-            'isRecommended' => (bool) $p->is_recommended,
-            'checkoutUrl' => route('subscription.checkout', ['plan' => $p->slug, 'template' => $template->slug]),
-        ])->values();
-
-        $defaultPlan = $plans->firstWhere('is_recommended', true) ?? $plans->first();
-    @endphp
-
     <section class="max-w-5xl mx-auto px-6 py-12 md:py-20"
         x-data="{
             open: false,
             name: '',
             email: '',
             phone: '',
-            plans: {{ \Illuminate\Support\Js::from($plansData) }},
-            selectedId: {{ $defaultPlan?->id ?? 'null' }},
-            get selectedPlan() {
-                return this.plans.find(p => p.id === this.selectedId) || this.plans[0] || null;
-            },
             maskPhone() {
                 const d = this.phone.replace(/\D/g, '').slice(0, 11);
                 let out = '';
@@ -96,72 +78,51 @@
             <div class="md:col-span-5 sticky top-28">
                 <div
                     class="bg-slate-900 rounded-3xl p-8 shadow-xl shadow-blue-900/10 border border-slate-800 text-white">
+                    @if($plan->is_recommended)
+                        <span
+                            class="bg-blue-600 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-4 inline-block">
+                            Plano Recomendado
+                        </span>
+                    @endif
 
-                    {{-- Seletor de plano (quando o modelo tem mais de um) --}}
-                    <template x-if="plans.length > 1">
-                        <div class="mb-8">
-                            <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-3">Escolha seu plano</p>
-                            <div class="grid grid-cols-2 gap-2">
-                                <template x-for="p in plans" :key="p.id">
-                                    <button type="button" @click="selectedId = p.id"
-                                        class="relative text-left rounded-xl border p-3 transition cursor-pointer"
-                                        :class="selectedId === p.id ? 'border-blue-500 bg-blue-600/10' : 'border-slate-700 hover:border-slate-500'">
-                                        <span class="block text-sm font-bold" x-text="p.name"></span>
-                                        <span class="block text-xs text-slate-400" x-text="p.price + '/mês'"></span>
-                                        <span x-show="p.isRecommended"
-                                            class="absolute top-2 right-2 text-[9px] font-bold text-blue-400 uppercase">Popular</span>
-                                    </button>
-                                </template>
-                            </div>
-                        </div>
-                    </template>
+                    <h2 class="text-2xl font-bold mb-2">{{ $plan->name }}</h2>
 
-                    <template x-if="selectedPlan">
-                        <div>
-                            <span x-show="selectedPlan.isRecommended"
-                                class="bg-blue-600 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-4 inline-block">
-                                Plano Recomendado
-                            </span>
+                    <p class="text-slate-400 text-sm mb-6">
+                        Tudo o que você precisa para este modelo profissional.
+                    </p>
 
-                            <h2 class="text-2xl font-bold mb-2" x-text="selectedPlan.name"></h2>
+                    <div class="flex items-baseline gap-1 mb-8">
+                        <span class="text-4xl font-extrabold tracking-tighter">
+                            {{ \App\Helpers\FormatCurrency::getFormatCurrency($plan->price) }}</span>
+                        <span class="text-slate-400 text-sm">/mês</span>
+                    </div>
 
-                            <p class="text-slate-400 text-sm mb-6">
-                                Tudo o que você precisa para este modelo profissional.
-                            </p>
-
-                            <div class="flex items-baseline gap-1 mb-8">
-                                <span class="text-4xl font-extrabold tracking-tighter" x-text="selectedPlan.price"></span>
-                                <span class="text-slate-400 text-sm">/mês</span>
-                            </div>
-
-                            <div class="space-y-4 mb-10">
-                                <template x-for="feature in selectedPlan.features" :key="feature">
-                                    <div class="flex items-start gap-3">
-                                        <svg class="w-5 h-5 text-blue-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24" aria-hidden="true">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                                d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        <span class="text-sm text-slate-200" x-text="feature"></span>
-                                    </div>
-                                </template>
-                            </div>
-
-                            <button @click="open = true"
-                                class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-4 rounded-xl font-bold transition shadow-lg shadow-blue-900/20 cursor-pointer mb-4">
-                                Assinar Agora e Começar
-                            </button>
-
-                            <p class="text-[11px] text-slate-500 text-center flex items-center justify-center gap-1">
-                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                                    <path fill-rule="evenodd"
-                                        d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                                        clip-rule="evenodd"></path>
+                    <div class="space-y-4 mb-10">
+                        @foreach($plan->features as $feature)
+                            <div class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-blue-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                        d="M5 13l4 4L19 7" />
                                 </svg>
-                                Pagamento seguro via Asaas
-                            </p>
-                        </div>
-                    </template>
+                                <span class="text-sm text-slate-200">{{ $feature['name'] }}</span>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <button @click="open = true"
+                        class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-4 rounded-xl font-bold transition shadow-lg shadow-blue-900/20 cursor-pointer mb-4">
+                        Assinar Agora e Começar
+                    </button>
+
+                    <p class="text-[11px] text-slate-500 text-center flex items-center justify-center gap-1">
+                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                            <path fill-rule="evenodd"
+                                d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        Pagamento seguro via Asaas
+                    </p>
                 </div>
 
                 <div class="mt-6 p-6 bg-white border border-slate-200 rounded-3xl flex items-center gap-4">
@@ -201,7 +162,8 @@
                     pagamento seguro.
                 </p>
 
-                <form x-bind:action="selectedPlan?.checkoutUrl" method="POST">
+                <form action="{{ route('subscription.checkout', ['plan' => $plan, 'template' => $template]) }}"
+                    method="POST">
                     @csrf
 
                     @error('message')
@@ -242,7 +204,7 @@
                     </div>
 
                     <div class="flex flex-col gap-3">
-                        <button type="submit" :disabled="!name || !email || !phone || !selectedPlan"
+                        <button type="submit" :disabled="!name || !email || !phone"
                             class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
                             Ir para Pagamento Seguro
                         </button>
