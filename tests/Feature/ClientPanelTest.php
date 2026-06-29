@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\SiteConfig;
 use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -66,5 +67,30 @@ class ClientPanelTest extends TestCase
     public function test_guest_is_redirected_to_client_login(): void
     {
         $this->get('/painel')->assertRedirect('/painel/login');
+    }
+
+    public function test_client_can_open_own_site_config(): void
+    {
+        $client = $this->makeClient('active');
+        $config = SiteConfig::create(['company_name' => 'Minha Empresa', 'user_id' => $client->id]);
+
+        $this->actingAs($client)->get('/painel/site-configs')->assertOk();
+        $this->actingAs($client)->get("/painel/site-configs/{$config->getKey()}/edit")->assertOk();
+    }
+
+    public function test_client_cannot_open_another_clients_site_config(): void
+    {
+        $clientA = $this->makeClient('active');
+
+        $clientB = User::create([
+            'name' => 'Cliente B',
+            'email' => 'cliente-b@test.com',
+            'is_admin' => false,
+            'password' => bcrypt('secret'),
+        ]);
+        Subscription::create(['user_id' => $clientB->id, 'status' => 'active']);
+        $configB = SiteConfig::create(['company_name' => 'Empresa B', 'user_id' => $clientB->id]);
+
+        $this->actingAs($clientA)->get("/painel/site-configs/{$configB->getKey()}/edit")->assertNotFound();
     }
 }
