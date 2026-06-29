@@ -73,6 +73,40 @@ class ClientPanelTest extends TestCase
         $this->actingAs($client)->get('/painel')->assertForbidden();
     }
 
+    public function test_canceled_within_paid_period_keeps_access(): void
+    {
+        $client = User::create([
+            'name' => 'Cancelado Vigente',
+            'email' => 'cancelado-vigente@test.com',
+            'is_admin' => false,
+            'password' => bcrypt('secret'),
+        ]);
+        Subscription::create([
+            'user_id' => $client->id,
+            'status' => 'canceled',
+            'expires_at' => now()->addDays(10),
+        ]);
+
+        $this->actingAs($client)->get('/painel')->assertOk();
+    }
+
+    public function test_canceled_after_paid_period_loses_access(): void
+    {
+        $client = User::create([
+            'name' => 'Cancelado Expirado',
+            'email' => 'cancelado-expirado@test.com',
+            'is_admin' => false,
+            'password' => bcrypt('secret'),
+        ]);
+        Subscription::create([
+            'user_id' => $client->id,
+            'status' => 'canceled',
+            'expires_at' => now()->subDay(),
+        ]);
+
+        $this->actingAs($client)->get('/painel')->assertForbidden();
+    }
+
     public function test_admin_cannot_access_client_panel(): void
     {
         $admin = User::create([

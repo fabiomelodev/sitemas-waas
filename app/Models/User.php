@@ -38,20 +38,35 @@ class User extends Authenticatable implements FilamentUser
     /**
      * Controle de acesso por painel:
      * - admin  (/admin)  → apenas administradores.
-     * - client (/painel) → clientes (não administradores) com assinatura ativa.
+     * - client (/painel) → clientes (não administradores) dentro do período pago.
      */
     public function canAccessPanel(Panel $panel): bool
     {
         return match ($panel->getId()) {
             'admin' => $this->is_admin === true,
-            'client' => $this->is_admin === false && $this->hasActiveSubscription(),
+            'client' => $this->is_admin === false && $this->hasPanelAccess(),
             default => false,
         };
     }
 
-    public function hasActiveSubscription(): bool
+    /**
+     * Cliente acessa o painel enquanto estiver dentro do período pago:
+     * - assinatura ativa, OU
+     * - cancelada/em atraso, mas com expires_at ainda no futuro.
+     * (assinatura "pending", nunca paga, não dá acesso)
+     */
+    public function hasPanelAccess(): bool
     {
-        return $this->subscriptions()->where('status', 'active')->exists();
+        return $this->subscriptions()
+            ->where(function ($query) {
+                $query->where('status', 'active')
+                    ->orWhere(function ($withinPaidPeriod) {
+                        $withinPaidPeriod->whereIn('status', ['canceled', 'past_due'])
+                            ->whereNotNull('expires_at')
+                            ->where('expires_at', '>=', now());
+                    });
+            })
+            ->exists();
     }
 
     public function subscriptions(): HasMany
