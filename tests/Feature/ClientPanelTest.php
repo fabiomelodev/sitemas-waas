@@ -78,6 +78,14 @@ class ClientPanelTest extends TestCase
         $this->actingAs($client)->get("/painel/site-configs/{$config->getKey()}/edit")->assertOk();
     }
 
+    public function test_client_can_view_subscription_and_orders_pages(): void
+    {
+        $client = $this->makeClient('active');
+
+        $this->actingAs($client)->get('/painel/subscriptions')->assertOk();
+        $this->actingAs($client)->get('/painel/orders')->assertOk();
+    }
+
     public function test_client_cannot_open_another_clients_site_config(): void
     {
         $clientA = $this->makeClient('active');

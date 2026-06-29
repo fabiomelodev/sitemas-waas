@@ -31,6 +31,8 @@ class SiteConfigResource extends Resource
 
     protected static ?string $pluralLabel = 'Meu Site';
 
+    protected static ?int $navigationSort = 1;
+
     /**
      * Garante que o cliente só enxerga e edita o próprio site (escopo por
      * usuário aplicado tanto na listagem quanto na resolução do registro).
