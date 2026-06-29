@@ -12,19 +12,22 @@ class SiteStatus extends Widget
 
     protected static bool $isLazy = false;
 
+    protected int|string|array $columnSpan = 'full';
+
     protected string $view = 'filament.client.widgets.site-status';
 
-    protected int|string|array $columnSpan = 'full';
+    public static function canView(): bool
+    {
+        return SiteConfig::query()->where('user_id', Auth::id())->exists();
+    }
 
     protected function getViewData(): array
     {
-        $siteConfig = SiteConfig::query()
-            ->where('user_id', Auth::id())
-            ->latest()
-            ->first();
-
         return [
-            'currentStage' => $siteConfig?->stage ?? 'received',
+            'sites' => SiteConfig::query()
+                ->where('user_id', Auth::id())
+                ->latest()
+                ->get(),
             'stages' => SiteConfig::STAGES,
         ];
     }

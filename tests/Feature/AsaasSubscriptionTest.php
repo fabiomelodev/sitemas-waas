@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Notifications\AccessPanel;
 use App\Notifications\PaymentConfirmed;
 use App\Notifications\WelcomeAndSetPassword;
+use App\Services\SubscriptionService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Http;
@@ -113,6 +114,30 @@ class AsaasSubscriptionTest extends TestCase
             'email' => 'maria@test.com',
             'plan_id' => $template->plan_id,
         ]);
+    }
+
+    public function test_same_user_can_have_multiple_subscriptions(): void
+    {
+        Http::fake([
+            '*/customers/*' => Http::response(['id' => 'cus_1', 'cpfCnpj' => '12345678909']),
+            '*/customers' => Http::response(['id' => 'cus_1']),
+            '*/subscriptions/*/payments' => Http::response(['data' => [['invoiceUrl' => 'https://asaas.test/c/abc']]]),
+            '*/subscriptions' => Http::sequence()
+                ->push(['id' => 'sub_1'])
+                ->push(['id' => 'sub_2']),
+        ]);
+
+        $template = $this->makeTemplate();
+        $service = app(SubscriptionService::class);
+        $data = ['name' => 'Multi', 'email' => 'multi@test.com', 'phone' => '(11) 91234-5678', 'cpf_cnpj' => '529.982.247-25'];
+
+        $service->startSubscription($data, $template->plan, $template);
+        $service->startSubscription($data, $template->plan, $template);
+
+        $userId = User::where('email', 'multi@test.com')->value('id');
+        $this->assertSame(2, Subscription::where('user_id', $userId)->count());
+        $this->assertDatabaseHas('subscriptions', ['user_id' => $userId, 'asaas_subscription_id' => 'sub_1']);
+        $this->assertDatabaseHas('subscriptions', ['user_id' => $userId, 'asaas_subscription_id' => 'sub_2']);
     }
 
     public function test_checkout_syncs_cpf_into_an_existing_asaas_customer(): void

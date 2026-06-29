@@ -1,11 +1,7 @@
 <x-filament-widgets::widget>
-    @php
-        $isCanceled = $status === 'canceled';
-        $daysLabel = $days >= 1 ? "por mais {$days} " . ($days === 1 ? 'dia' : 'dias') : 'por menos de 1 dia';
-    @endphp
-
     <style>
         .sn-alert { display: flex; gap: .75rem; align-items: flex-start; border-radius: .75rem; padding: 1rem 1.25rem; border: 1px solid; }
+        .sn-alert + .sn-alert { margin-top: .75rem; }
         .sn-alert--canceled { background: #fffbeb; border-color: #fde68a; }
         .sn-alert--overdue { background: #fef2f2; border-color: #fecaca; }
         .sn-icon { flex: 0 0 auto; width: 1.5rem; height: 1.5rem; }
@@ -24,25 +20,32 @@
         .dark .sn-alert--overdue .sn-title, .dark .sn-alert--overdue .sn-text { color: #fca5a5; }
     </style>
 
-    <div class="sn-alert {{ $isCanceled ? 'sn-alert--canceled' : 'sn-alert--overdue' }}">
-        <svg class="sn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
-        </svg>
-        <div>
-            @if ($isCanceled)
-                <p class="sn-title">Assinatura cancelada</p>
-                <p class="sn-text">
-                    Você ainda tem acesso ao painel <strong>{{ $daysLabel }}</strong>, até <strong>{{ $expiresAt }}</strong>.
-                    Após essa data, o acesso e o seu site serão encerrados.
-                </p>
-            @else
-                <p class="sn-title">Pagamento em atraso</p>
-                <p class="sn-text">
-                    Regularize para manter seu site no ar. Seu acesso continua <strong>{{ $daysLabel }}</strong>,
-                    até <strong>{{ $expiresAt }}</strong>.
-                </p>
-            @endif
+    @foreach ($notices as $notice)
+        @php
+            $isCanceled = $notice['status'] === 'canceled';
+            $days = $notice['days'];
+            $daysLabel = $days >= 1 ? "por mais {$days} " . ($days === 1 ? 'dia' : 'dias') : 'por menos de 1 dia';
+        @endphp
+        <div class="sn-alert {{ $isCanceled ? 'sn-alert--canceled' : 'sn-alert--overdue' }}">
+            <svg class="sn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+            </svg>
+            <div>
+                @if ($isCanceled)
+                    <p class="sn-title">Assinatura cancelada @if ($notice['name']) <span style="font-weight:500">— {{ $notice['name'] }}</span> @endif</p>
+                    <p class="sn-text">
+                        Você ainda tem acesso <strong>{{ $daysLabel }}</strong>, até <strong>{{ $notice['expiresAt'] }}</strong>.
+                        Após essa data, o acesso e o site serão encerrados.
+                    </p>
+                @else
+                    <p class="sn-title">Pagamento em atraso @if ($notice['name']) <span style="font-weight:500">— {{ $notice['name'] }}</span> @endif</p>
+                    <p class="sn-text">
+                        Regularize para manter seu site no ar. Seu acesso continua <strong>{{ $daysLabel }}</strong>,
+                        até <strong>{{ $notice['expiresAt'] }}</strong>.
+                    </p>
+                @endif
+            </div>
         </div>
-    </div>
+    @endforeach
 </x-filament-widgets::widget>

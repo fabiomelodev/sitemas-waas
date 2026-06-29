@@ -55,11 +55,14 @@ class SubscriptionService
             throw new RuntimeException('Não foi possível criar a assinatura no Asaas.');
         }
 
+        // Cada compra gera uma assinatura própria (um cliente pode ter vários
+        // sites). A chave é o asaas_subscription_id (único por checkout), então
+        // nunca sobrescrevemos uma assinatura anterior.
         DB::transaction(function () use ($user, $plan, $template, $asaasSubscription) {
             Subscription::updateOrCreate(
-                ['user_id' => $user->id],
+                ['asaas_subscription_id' => $asaasSubscription['id']],
                 [
-                    'asaas_subscription_id' => $asaasSubscription['id'],
+                    'user_id' => $user->id,
                     'status' => 'pending',
                     'plan_id' => $plan->id,
                     'template_id' => $template->id,

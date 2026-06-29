@@ -2,10 +2,12 @@
 
 namespace App\Filament\Client\Widgets;
 
+use App\Helpers\FormatCurrency;
 use App\Models\SiteConfig;
 use App\Models\Subscription;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class AccountOverview extends StatsOverviewWidget
@@ -16,51 +18,45 @@ class AccountOverview extends StatsOverviewWidget
     {
         $userId = Auth::id();
 
-        $subscription = Subscription::query()
+        $activeCount = Subscription::query()
             ->where('user_id', $userId)
-            ->with('plan')
-            ->latest()
-            ->first();
+            ->where('status', 'active')
+            ->count();
 
-        $siteConfig = SiteConfig::query()
+        $sitesCount = SiteConfig::query()->where('user_id', $userId)->count();
+
+        $monthlyTotal = Subscription::query()
+            ->where('subscriptions.user_id', $userId)
+            ->where('subscriptions.status', 'active')
+            ->join('plans', 'plans.id', '=', 'subscriptions.plan_id')
+            ->sum('plans.price');
+
+        $nextRenewal = Subscription::query()
             ->where('user_id', $userId)
-            ->latest()
-            ->first();
-
-        $statusLabels = [
-            'active' => 'Ativa',
-            'pending' => 'Pendente',
-            'past_due' => 'Em atraso',
-            'canceled' => 'Cancelada',
-        ];
-
-        $statusColors = [
-            'active' => 'success',
-            'pending' => 'warning',
-            'past_due' => 'danger',
-            'canceled' => 'danger',
-        ];
+            ->where('status', 'active')
+            ->whereNotNull('expires_at')
+            ->min('expires_at');
 
         return [
-            Stat::make('Plano', $subscription?->plan?->name ?? '—')
-                ->description('Seu plano atual')
-                ->descriptionIcon('heroicon-m-credit-card')
+            Stat::make('Assinaturas ativas', $activeCount)
+                ->description('Planos em vigência')
+                ->descriptionIcon('heroicon-m-check-badge')
+                ->color('success'),
+
+            Stat::make('Seus sites', $sitesCount)
+                ->description('Sites na sua conta')
+                ->descriptionIcon('heroicon-m-globe-alt')
                 ->color('primary'),
 
-            Stat::make('Assinatura', $statusLabels[$subscription?->status] ?? '—')
-                ->description('Situação da assinatura')
-                ->descriptionIcon('heroicon-m-check-badge')
-                ->color($statusColors[$subscription?->status] ?? 'gray'),
-
-            Stat::make('Próxima renovação', $subscription?->expires_at?->format('d/m/Y') ?? '—')
-                ->description('Vencimento da assinatura')
-                ->descriptionIcon('heroicon-m-calendar-days')
+            Stat::make('Total mensal', FormatCurrency::getFormatCurrency($monthlyTotal))
+                ->description('Soma das assinaturas ativas')
+                ->descriptionIcon('heroicon-m-banknotes')
                 ->color('gray'),
 
-            Stat::make('Seu site', $siteConfig?->stageLabel() ?? 'Recebido')
-                ->description('Status de produção')
-                ->descriptionIcon('heroicon-m-globe-alt')
-                ->color($siteConfig?->stage === 'live' ? 'success' : 'info'),
+            Stat::make('Próxima renovação', $nextRenewal ? Carbon::parse($nextRenewal)->format('d/m/Y') : '—')
+                ->description('Vencimento mais próximo')
+                ->descriptionIcon('heroicon-m-calendar-days')
+                ->color('gray'),
         ];
     }
 }

@@ -4,6 +4,7 @@ namespace App\Filament\Client\Widgets;
 
 use App\Models\Subscription;
 use Filament\Widgets\Widget;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
 class SubscriptionNotice extends Widget
@@ -16,36 +17,35 @@ class SubscriptionNotice extends Widget
 
     protected string $view = 'filament.client.widgets.subscription-notice';
 
-    protected static function currentSubscription(): ?Subscription
+    /**
+     * Assinaturas canceladas/em atraso mas ainda dentro do período pago.
+     */
+    protected static function attentionQuery(): Builder
     {
         return Subscription::query()
             ->where('user_id', Auth::id())
-            ->latest()
-            ->first();
+            ->whereIn('status', ['canceled', 'past_due'])
+            ->whereNotNull('expires_at')
+            ->where('expires_at', '>=', now());
     }
 
-    /**
-     * Só exibe quando a assinatura está cancelada/em atraso mas o acesso ainda
-     * é válido (dentro do período pago).
-     */
     public static function canView(): bool
     {
-        $subscription = self::currentSubscription();
-
-        return $subscription
-            && $subscription->expires_at
-            && in_array($subscription->status, ['canceled', 'past_due'])
-            && $subscription->expires_at->isFuture();
+        return self::attentionQuery()->exists();
     }
 
     protected function getViewData(): array
     {
-        $subscription = self::currentSubscription();
+        $notices = self::attentionQuery()
+            ->with(['plan', 'template'])
+            ->get()
+            ->map(fn (Subscription $subscription): array => [
+                'status' => $subscription->status,
+                'days' => (int) ceil(now()->floatDiffInDays($subscription->expires_at)),
+                'expiresAt' => $subscription->expires_at->format('d/m/Y'),
+                'name' => $subscription->template?->name ?? $subscription->plan?->name,
+            ]);
 
-        return [
-            'status' => $subscription?->status,
-            'days' => $subscription?->expires_at ? (int) ceil(now()->floatDiffInDays($subscription->expires_at)) : 0,
-            'expiresAt' => $subscription?->expires_at?->format('d/m/Y'),
-        ];
+        return ['notices' => $notices];
     }
 }
