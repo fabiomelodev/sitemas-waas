@@ -57,10 +57,12 @@ class PaymentService
                 'paid_at' => now(),
             ]);
 
+            // Nome inicial = nome do modelo (ajuda a distinguir os sites quando
+            // o cliente tem mais de um). O cliente edita depois para o nome real.
             SiteConfig::updateOrCreate(
                 ['subscription_id' => $subscription->id],
                 [
-                    'company_name' => $subscription->user?->name,
+                    'company_name' => $subscription->template?->name ?? $subscription->user?->name,
                     'status' => 0,
                     'user_id' => $subscription->user_id,
                 ]

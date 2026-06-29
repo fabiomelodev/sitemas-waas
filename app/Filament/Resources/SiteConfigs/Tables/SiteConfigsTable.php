@@ -25,6 +25,9 @@ class SiteConfigsTable
                 TextColumn::make('domain')
                     ->label('Domínio')
                     ->searchable(),
+                TextColumn::make('subscription.template.name')
+                    ->label('Modelo')
+                    ->badge(),
                 TextColumn::make('subscription.plan.name')
                     ->label('Assinatura / Plano')
                     ->sortable(),

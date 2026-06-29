@@ -127,6 +127,10 @@ class SiteConfigResource extends Resource
                 TextColumn::make('company_name')
                     ->label('Empresa')
                     ->searchable(),
+                TextColumn::make('subscription.template.name')
+                    ->label('Modelo')
+                    ->badge()
+                    ->placeholder('—'),
                 TextColumn::make('domain')
                     ->label('Domínio')
                     ->placeholder('—'),
