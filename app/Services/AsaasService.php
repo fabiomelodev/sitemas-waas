@@ -35,16 +35,7 @@ class AsaasService
      */
     public function createCustomer(array $data): ?array
     {
-        // Só enviamos os campos informados; o CPF/CNPJ é opcional e, quando
-        // ausente, o Asaas o solicita ao cliente na página de pagamento.
-        $payload = array_filter([
-            'name' => $data['name'],
-            'email' => $data['email'] ?? null,
-            'mobilePhone' => $this->onlyDigits($data['phone'] ?? null),
-            'cpfCnpj' => $this->onlyDigits($data['cpf_cnpj'] ?? null),
-        ], fn ($value) => $value !== null && $value !== '');
-
-        $response = $this->client()->post('/customers', $payload);
+        $response = $this->client()->post('/customers', $this->customerPayload($data));
 
         if ($response->failed()) {
             Log::error('Asaas: falha ao criar cliente', ['body' => $response->json()]);
@@ -53,6 +44,41 @@ class AsaasService
         }
 
         return $response->json();
+    }
+
+    /**
+     * Atualiza um cliente existente no Asaas (POST /customers/{id}).
+     * Usado para sincronizar dados — sobretudo o CPF/CNPJ, que pode estar
+     * ausente em clientes criados em tentativas antigas.
+     *
+     * @return array<string, mixed>|null
+     */
+    public function updateCustomer(string $customerId, array $data): ?array
+    {
+        $response = $this->client()->post("/customers/{$customerId}", $this->customerPayload($data));
+
+        if ($response->failed()) {
+            Log::error('Asaas: falha ao atualizar cliente', ['id' => $customerId, 'body' => $response->json()]);
+
+            return null;
+        }
+
+        return $response->json();
+    }
+
+    /**
+     * Monta o payload de cliente, enviando apenas os campos preenchidos.
+     *
+     * @return array<string, mixed>
+     */
+    protected function customerPayload(array $data): array
+    {
+        return array_filter([
+            'name' => $data['name'] ?? null,
+            'email' => $data['email'] ?? null,
+            'mobilePhone' => $this->onlyDigits($data['phone'] ?? null),
+            'cpfCnpj' => $this->onlyDigits($data['cpf_cnpj'] ?? null),
+        ], fn ($value) => $value !== null && $value !== '');
     }
 
     /**

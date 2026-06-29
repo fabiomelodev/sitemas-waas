@@ -114,6 +114,37 @@ class AsaasSubscriptionTest extends TestCase
         ]);
     }
 
+    public function test_checkout_syncs_cpf_into_an_existing_asaas_customer(): void
+    {
+        Http::fake([
+            '*/customers/*' => Http::response(['id' => 'cus_existing', 'cpfCnpj' => '12345678909']),
+            '*/subscriptions/*/payments' => Http::response(['data' => [['id' => 'pay_1', 'invoiceUrl' => 'https://asaas.test/c/abc']]]),
+            '*/subscriptions' => Http::response(['id' => 'sub_123']),
+        ]);
+
+        $template = $this->makeTemplate();
+
+        // Usuário de uma tentativa anterior, com cliente Asaas SEM CPF.
+        User::create([
+            'name' => 'Maria',
+            'email' => 'maria@test.com',
+            'asaas_customer_id' => 'cus_existing',
+            'is_admin' => false,
+            'password' => bcrypt('x'),
+        ]);
+
+        $this->post(route('subscription.checkout', ['plan' => $template->plan, 'template' => $template]), [
+            'name' => 'Maria da Silva',
+            'email' => 'maria@test.com',
+            'phone' => '(11) 91234-5678',
+            'cpf_cnpj' => '123.456.789-09',
+        ])->assertRedirect('https://asaas.test/c/abc');
+
+        // Atualizou o cliente existente com o CPF, em vez de reusar sem CPF.
+        Http::assertSent(fn ($request) => str_contains($request->url(), '/customers/cus_existing')
+            && data_get($request->data(), 'cpfCnpj') === '12345678909');
+    }
+
     public function test_webhook_rejects_invalid_token(): void
     {
         Bus::fake();

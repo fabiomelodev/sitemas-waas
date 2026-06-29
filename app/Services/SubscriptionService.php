@@ -111,17 +111,23 @@ class SubscriptionService
 
     private function ensureAsaasCustomer(User $user, array $data): string
     {
-        if ($user->asaas_customer_id) {
-            return $user->asaas_customer_id;
-        }
-
         // O Asaas exige CPF/CNPJ no cliente para criar a assinatura/cobrança.
-        $customer = $this->asaas->createCustomer([
+        $payload = [
             'name' => $data['name'],
             'email' => $user->email,
             'phone' => $data['phone'],
             'cpf_cnpj' => $data['cpf_cnpj'],
-        ]);
+        ];
+
+        // Cliente já existe no Asaas: sincroniza os dados (garante o CPF/CNPJ,
+        // que pode estar ausente de uma tentativa anterior) antes de cobrar.
+        if ($user->asaas_customer_id) {
+            $this->asaas->updateCustomer($user->asaas_customer_id, $payload);
+
+            return $user->asaas_customer_id;
+        }
+
+        $customer = $this->asaas->createCustomer($payload);
 
         if (! isset($customer['id'])) {
             throw new RuntimeException('Não foi possível criar o cliente no Asaas.');
