@@ -118,7 +118,7 @@ new class extends Component {
                 x-data="{ activeCategory: 'all', activePlan: 'all' }"
                 x-on:trigger-plan-filter.window="activePlan = String($event.detail.id)">
 
-                <div class="flex flex-col lg:flex-row lg:items-end gap-6 lg:gap-8">
+                <div class="flex flex-col lg:flex-row lg:items-start gap-6 lg:gap-8">
 
                     {{-- Categorias --}}
                     <div class="flex-1 min-w-0">
