@@ -26,10 +26,10 @@ class ListSiteConfigs extends ListRecords
                 ->label('Todos'),
             'active' => Tab::make()
                 ->label('Finalizados')
-                ->modifyQueryUsing(fn(Builder $query) => $query->isFinished()),
+                ->modifyQueryUsing(fn (Builder $query) => $query->isFinished()),
             'inactive' => Tab::make()
                 ->label('Não Finalizados')
-                ->modifyQueryUsing(fn(Builder $query) => $query->isNotFinished()),
+                ->modifyQueryUsing(fn (Builder $query) => $query->isNotFinished()),
         ];
     }
 }

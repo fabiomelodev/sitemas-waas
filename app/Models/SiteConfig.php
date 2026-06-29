@@ -13,7 +13,23 @@ class SiteConfig extends Model
     protected $casts = [
         'status' => 'boolean',
         'is_finished' => 'boolean',
+        'photos' => 'array',
     ];
+
+    /**
+     * Etapas do site no pipeline de produção, em ordem.
+     */
+    public const STAGES = [
+        'received' => 'Recebido',
+        'in_progress' => 'Em configuração',
+        'review' => 'Em ajustes',
+        'live' => 'No ar',
+    ];
+
+    public function stageLabel(): string
+    {
+        return self::STAGES[$this->stage] ?? 'Recebido';
+    }
 
     public function scopeIsFinished(Builder $query): Builder
     {

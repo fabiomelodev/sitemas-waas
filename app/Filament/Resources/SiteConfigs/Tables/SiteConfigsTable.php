@@ -29,7 +29,7 @@ class SiteConfigsTable
                     ->label('Assinatura / Plano')
                     ->sortable(),
                 IconColumn::make('status')
-                    ->boolean()
+                    ->boolean(),
             ])
             ->filters([
                 SelectFilter::make('status')

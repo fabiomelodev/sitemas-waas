@@ -7,7 +7,9 @@ use App\Filament\Client\Resources\SiteConfigs\Pages\ListSiteConfigs;
 use App\Models\SiteConfig;
 use BackedEnum;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
@@ -83,6 +85,37 @@ class SiteConfigResource extends Resource
                             ->image()
                             ->disk('public')
                             ->visibility('public'),
+                        ColorPicker::make('primary_color')
+                            ->label('Cor principal'),
+                    ]),
+                Section::make('Conteúdo do site (briefing)')
+                    ->description('Quanto mais completo, mais rápido seu site fica pronto.')
+                    ->columnSpan(12)
+                    ->columns(2)
+                    ->schema([
+                        Textarea::make('about')
+                            ->label('Sobre o seu negócio')
+                            ->rows(4)
+                            ->columnSpanFull(),
+                        Textarea::make('services')
+                            ->label('Produtos / serviços')
+                            ->helperText('Liste os serviços ou produtos que devem aparecer no site.')
+                            ->rows(4)
+                            ->columnSpanFull(),
+                        TextInput::make('business_hours')
+                            ->label('Horário de atendimento')
+                            ->placeholder('Seg a Sex, 9h às 18h'),
+                        TextInput::make('address')
+                            ->label('Endereço'),
+                        FileUpload::make('photos')
+                            ->label('Fotos')
+                            ->helperText('Fotos do seu trabalho, equipe ou produtos.')
+                            ->image()
+                            ->multiple()
+                            ->reorderable()
+                            ->disk('public')
+                            ->visibility('public')
+                            ->columnSpanFull(),
                     ]),
             ]);
     }

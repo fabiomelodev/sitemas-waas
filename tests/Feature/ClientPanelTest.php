@@ -41,6 +41,21 @@ class ClientPanelTest extends TestCase
         $this->actingAs($client)->get('/painel')->assertOk();
     }
 
+    public function test_dashboard_shows_site_status_widget(): void
+    {
+        $client = $this->makeClient('active');
+        SiteConfig::create([
+            'company_name' => 'Empresa X',
+            'user_id' => $client->id,
+            'stage' => 'in_progress',
+        ]);
+
+        $this->actingAs($client)->get('/painel')
+            ->assertOk()
+            ->assertSee('Status do seu site')
+            ->assertSee('Em configuração');
+    }
+
     public function test_client_without_subscription_cannot_access_panel(): void
     {
         $client = $this->makeClient();

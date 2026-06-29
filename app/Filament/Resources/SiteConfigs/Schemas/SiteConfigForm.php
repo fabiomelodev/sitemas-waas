@@ -2,8 +2,10 @@
 
 namespace App\Filament\Resources\SiteConfigs\Schemas;
 
+use App\Models\SiteConfig;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
@@ -43,6 +45,11 @@ class SiteConfigForm
                             ->relationship('user', 'name')
                             ->disabled()
                             ->required(),
+                        Select::make('stage')
+                            ->label('Estágio do site')
+                            ->options(SiteConfig::STAGES)
+                            ->default('received')
+                            ->required(),
                         Toggle::make('is_finished')
                             ->label('Finalizado')
                             ->inline(false)
@@ -50,6 +57,16 @@ class SiteConfigForm
                         Toggle::make('status')
                             ->inline(false)
                             ->required(),
+                    ]),
+                Section::make('Briefing enviado pelo cliente')
+                    ->columnSpan(12)
+                    ->columns(2)
+                    ->collapsed()
+                    ->schema([
+                        Textarea::make('about')->label('Sobre o negócio')->rows(3)->columnSpanFull(),
+                        Textarea::make('services')->label('Produtos / serviços')->rows(3)->columnSpanFull(),
+                        TextInput::make('business_hours')->label('Horário de atendimento'),
+                        TextInput::make('address')->label('Endereço'),
                     ]),
             ]);
     }
