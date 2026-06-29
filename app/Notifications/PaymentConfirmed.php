@@ -30,6 +30,8 @@ class PaymentConfirmed extends Notification implements ShouldQueue
             ->greeting('Olá, '.$notifiable->name.'!')
             ->line('Recebemos a confirmação do seu pagamento de '.FormatCurrency::getFormatCurrency($this->order->amount).'.')
             ->line('Sua assinatura está ativa e seu site já entrou na fila de configuração.')
+            ->action('Acessar meu painel', route('filament.client.pages.dashboard'))
+            ->line('No painel você acompanha sua assinatura ativa e suas faturas.')
             ->line('Obrigado por confiar na Sitemas!');
     }
 
