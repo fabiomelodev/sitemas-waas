@@ -36,9 +36,8 @@ return [
     ],
 
     'asaas' => [
-        // 'api_key' => env('ASAAS_API_KEY'),
-        // 'webhook_token' => env('ASAAS_WEBHOOK_TOKEN'),
         'env' => env('ASAAS_ENV', 'production'),
+        'webhook_token' => env('ASAAS_WEBHOOK_TOKEN'),
         'sandbox_webhook_token' => env('ASAAS_SANDBOX_WEBHOOK_TOKEN'),
         'sandbox_token' => env('ASAAS_SANDBOX_TOKEN'),
         'sandbox_url' => env('ASAAS_SANDBOX_URL'),
