@@ -194,6 +194,23 @@ class AsaasSubscriptionTest extends TestCase
         Bus::assertDispatched(ProcessAsaasWebhook::class);
     }
 
+    public function test_valid_webhook_in_production_dispatches_job(): void
+    {
+        // Em produção o token validado vem de services.asaas.webhook_token.
+        config([
+            'services.asaas.env' => 'production',
+            'services.asaas.webhook_token' => 'prod-webhook-token',
+        ]);
+
+        Bus::fake();
+
+        $this->postJson(route('asaas.webhook'), ['event' => 'PAYMENT_CONFIRMED', 'payment' => ['id' => 'pay_1']], [
+            'asaas-access-token' => 'prod-webhook-token',
+        ])->assertOk();
+
+        Bus::assertDispatched(ProcessAsaasWebhook::class);
+    }
+
     public function test_confirmed_payment_activates_subscription_and_notifies(): void
     {
         Notification::fake();

@@ -33,7 +33,7 @@
                         </summary>
 
                         <p class="mt-4 leading-relaxed text-gray-600 text-sm">
-                            {{ $faq->description }}
+                            {!! $faq->description !!}
                         </p>
                     </details>
                 @endforeach
