@@ -35,7 +35,9 @@ class SiteConfigForm
                     ->schema([
                         FileUpload::make('brand')
                             ->label('Logo')
-                            ->image(),
+                            ->image()
+                            ->disk('public')
+                            ->visibility('public'),
                         Select::make('subscription_id')
                             ->label('Asaas Assinatura ID')
                             ->relationship('subscription', 'asaas_subscription_id')
@@ -67,6 +69,15 @@ class SiteConfigForm
                         Textarea::make('services')->label('Produtos / serviços')->rows(3)->columnSpanFull(),
                         TextInput::make('business_hours')->label('Horário de atendimento'),
                         TextInput::make('address')->label('Endereço'),
+                        FileUpload::make('photos')
+                            ->label('Fotos')
+                            ->helperText('Fotos enviadas pelo cliente (trabalho, equipe ou produtos).')
+                            ->image()
+                            ->multiple()
+                            ->reorderable()
+                            ->disk('public')
+                            ->visibility('public')
+                            ->columnSpanFull(),
                     ]),
             ]);
     }
