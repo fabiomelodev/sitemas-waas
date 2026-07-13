@@ -35,6 +35,8 @@ class GeneralManage extends SettingsPage
                         TextInput::make('whatsapp'),
                         TextInput::make('instagram'),
                         TextInput::make('facebook'),
+                        TextInput::make('cnpj')
+                            ->label('CNPJ')
                     ]),
             ]);
     }

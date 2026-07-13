@@ -156,9 +156,16 @@
             </div>
 
             <div class="pt-8 border-t border-gray-50 text-center">
+                @if($settings->cnpj)
+                    <p class="text-xs text-gray-400 mb-1">
+                        CNPJ: {{  $settings->cnpj }}
+                    </p>
+                @endif
+
                 <p class="text-xs text-gray-400">
                     &copy; {{ date('Y') }} Sitemas — Todos os direitos reservados.
                 </p>
+
                 <p class="text-xs text-gray-400 mt-1">
                     Desenvolvido por <span class="font-semibold text-gray-500">Single Temas</span>
                 </p>
