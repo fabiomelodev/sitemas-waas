@@ -1,58 +1,101 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="300" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# WaaS — Website as a Service
 
-## About Laravel
+Plataforma que vende **sites por assinatura mensal**: o cliente escolhe um modelo (template) e um plano, paga via **Asaas** (Pix, Boleto ou Cartão) e acompanha a produção do seu site em um painel próprio, enquanto a equipe interna gerencia tudo em um painel administrativo.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Stack
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Laravel 13** (PHP ^8.3)
+- **Filament v5** — dois painéis administrativos
+- **Livewire 4** + **Alpine.js**
+- **Tailwind CSS 4** + **Vite**
+- **Asaas** — gateway de pagamentos (assinaturas recorrentes, Pix/Boleto/Cartão)
+- **Resend** — envio de e-mails transacionais
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Como funciona
 
-## Learning Laravel
+### Domínio
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+| Modelo | Descrição |
+|---|---|
+| `Plan` | Plano de assinatura (preço, ciclo, recursos, se é "recomendado") |
+| `Template` | Modelo de site vinculado a um plano e categoria |
+| `Category` | Categoria dos templates |
+| `Lead` | Captura de quem iniciou o checkout mas não finalizou (recuperação de carrinho) |
+| `User` | Cliente ou administrador (`is_admin`), com CPF/CNPJ e `asaas_customer_id` |
+| `Subscription` | Assinatura de um usuário para um plano + template (`pending`, `active`, `past_due`, `canceled`) |
+| `Order` | Cobrança paga, vinculada a uma assinatura (idempotente por `asaas_payment_id`) |
+| `SiteConfig` | Configuração/briefing do site do cliente, com pipeline de produção (`STAGES`: Recebido → Em configuração → Em ajustes → No ar) |
+| `SupportTicket` | Chamados de suporte abertos pelo cliente |
+| `Faq` | Perguntas frequentes exibidas no site institucional |
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Fluxo de assinatura e pagamento
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+1. Cliente acessa `/assinar/modelo/{template}`, preenche dados e envia o checkout (`SubscriptionController`).
+2. `SubscriptionService` cria/atualiza o cliente no Asaas, cria uma assinatura recorrente (`AsaasService`) e persiste uma `Subscription` local com status `pending`.
+3. Cliente é redirecionado à página de pagamento hospedada do Asaas.
+4. O Asaas confirma o pagamento via webhook (`POST /webhooks/asaas`), validado com `hash_equals` contra `ASAAS_WEBHOOK_TOKEN`.
+5. O evento é processado assincronamente pela fila (`ProcessAsaasWebhook`, com retries) e tratado por `PaymentService`:
+   - `PAYMENT_RECEIVED` / `PAYMENT_CONFIRMED` → ativa a assinatura, cria o `Order` e o `SiteConfig` inicial, dispara eventos de domínio (`SubscriptionActivated`, `PaymentReceived`) que acionam as notificações (boas-vindas, confirmação de pagamento).
+   - `PAYMENT_OVERDUE` → marca a assinatura como `past_due`.
+   - `PAYMENT_REFUNDED` → marca o pedido como `refunded`.
+   - `SUBSCRIPTION_DELETED` → cancela a assinatura local.
 
-## Agentic Development
+Todo o processamento é **idempotente**: pagamentos já registrados (`asaas_payment_id`) e assinaturas já canceladas não são reprocessados.
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### Acesso ao painel do cliente
+
+O cliente mantém acesso ao painel (`/painel`) enquanto estiver dentro do período pago: assinatura `active`, ou `canceled`/`past_due` com `expires_at` ainda no futuro (`User::hasPanelAccess()`).
+
+## Painéis Filament
+
+- **Admin** (`/admin`) — apenas usuários com `is_admin = true`. Gerencia Plans, Templates, Categories, Orders, Subscriptions, Users, FAQs, SupportTickets e SiteConfigs (incluindo upload de fotos do site do cliente), com widgets de receita e estatísticas de assinaturas.
+- **Client** (`/painel`) — clientes (`is_admin = false`) com acesso válido. Perfil (com sincronização de dados no Asaas), assinaturas, pedidos, configuração do site e abertura de tickets de suporte.
+
+## Configuração local
 
 ```bash
-composer require laravel/boost --dev
+composer install
+npm install
 
-php artisan boost:install
+cp .env.example .env
+php artisan key:generate
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Variáveis relevantes no `.env`:
 
-## Contributing
+- `ADMIN_EMAILS` — e-mails (separados por vírgula) que recebem `is_admin = true` na migration correspondente.
+- `ASAAS_ENV` — `sandbox` ou `production`.
+- `ASAAS_SANDBOX_TOKEN` / `ASAAS_TOKEN` — chaves de API do Asaas.
+- `ASAAS_SANDBOX_WEBHOOK_TOKEN` / `ASAAS_WEBHOOK_TOKEN` — token enviado no header `asaas-access-token` para validar o webhook.
+- `ASAAS_CALLBACK_ENABLED` — habilita o redirecionamento pós-pagamento (`callback.successUrl`); exige domínio cadastrado na conta Asaas. Deixe `false` em ambientes cujo domínio ainda não foi cadastrado.
+- `RESEND_API_KEY` — envio de e-mails transacionais.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+php artisan migrate --seed
+```
 
-## Code of Conduct
+## Rodando o projeto
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+composer run dev
+```
 
-## Security Vulnerabilities
+Sobe em paralelo: servidor Laravel, worker da fila (`queue:listen`), logs (`pail`) e Vite. Acesse:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- Site público: `http://localhost:8000`
+- Painel admin: `http://localhost:8000/admin`
+- Painel do cliente: `http://localhost:8000/painel`
 
-## License
+## Testes
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+composer test
+```
+
+Cobre os painéis admin/cliente e o fluxo de assinatura via Asaas (`tests/Feature/AsaasSubscriptionTest.php`).
+
+## Webhook do Asaas em desenvolvimento
+
+Para testar webhooks localmente, exponha a aplicação (ex.: `ngrok`) e cadastre a URL `https://SEU_DOMINIO/webhooks/asaas` no painel do Asaas (ambiente sandbox), com o mesmo token configurado em `ASAAS_SANDBOX_WEBHOOK_TOKEN`.

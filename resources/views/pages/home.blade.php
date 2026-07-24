@@ -1,15 +1,14 @@
-<x-layout.base
-    title="Sitemas — Sites profissionais por assinatura | Hospedagem, manutenção e suporte"
+<x-layout.base title="Sitemas — Sites profissionais por assinatura | Hospedagem, manutenção e suporte"
     description="Escolha um modelo premium, assine um plano e nós cuidamos de tudo: hospedagem, manutenção e suporte. Sem fidelidade, com ativação gratuita e pagamento seguro.">
 
     <!-- hero -->
     <section class="relative bg-gray-50 py-24 md:py-32 overflow-hidden">
 
         <div class="max-w-7xl mx-auto px-6 relative z-10 text-center">
-            <span
+            {{-- <span
                 class="inline-flex items-center rounded-full bg-brand/10 px-4 py-1.5 text-xs font-semibold text-brand ring-1 ring-inset ring-brand/20 mb-6">
                 Website as a Service (WaaS)
-            </span>
+            </span> --}}
 
             <h1
                 class="text-3xl sm:text-5xl md:text-7xl font-extrabold text-dark-900 tracking-tighter leading-none max-w-4xl mx-auto">
@@ -70,8 +69,7 @@
 
                 @foreach($trustItems as $item)
                     <div class="flex items-center gap-3">
-                        <div
-                            class="shrink-0 w-9 h-9 rounded-full bg-brand/10 text-brand flex items-center justify-center">
+                        <div class="shrink-0 w-9 h-9 rounded-full bg-brand/10 text-brand flex items-center justify-center">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                     d="M5 13l4 4L19 7" />
@@ -157,50 +155,6 @@
                         @endforeach
                     </ul>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="planos" class="py-24 bg-gray-50">
-
-        <div class="max-w-7xl mx-auto px-6">
-
-            <div class="text-center mb-16">
-
-                <h2 class="text-4xl font-extrabold text-dark-900 tracking-tight">
-                    Planos Simples e Transparentes
-                </h2>
-
-                <p class="max-w-xl lg:text-lg text-gray-600 mt-4 mx-auto">
-                    Tudo o que você precisa para manter sua presença
-                    online ativa, sem custos surpresas.
-                </p>
-            </div>
-
-            <div class="flex justify-center mb-8">
-                <div
-                    class="inline-flex items-center gap-2 bg-green-100 border border-green-200 px-4 py-2 rounded-full shadow-sm">
-                    <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-
-                    <span class="text-green-800 text-xs font-bold uppercase tracking-wider">
-                        Aproveite: R$ 0,00 de taxa de ativação
-                    </span>
-                </div>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto items-start mt-16">
-
-                @foreach($plans as $plan)
-                    @if($plan->is_recommended)
-                        <x-plan-item-recommended :plan="$plan" />
-                    @else
-                        <x-plan-item :plan="$plan" />
-                    @endif
-                @endforeach
             </div>
         </div>
     </section>
@@ -302,6 +256,102 @@
         </div>
     </section>
 
+    <!-- prova social: nichos + vitrine de modelos -->
+    <section class="py-24 bg-gray-50 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+
+                <!-- nichos -->
+                <div>
+                    <span class="text-sm font-bold text-brand uppercase tracking-widest">Encontre o modelo ideal para
+                        sua empresa</span>
+                    <h2 class="text-4xl font-extrabold text-dark-900 tracking-tight mt-3 mb-4">
+                        Modelos desenvolvidos pensando em pequenas e médias empresas.
+                    </h2>
+                    <p class="text-gray-600 lg:text-lg mb-10">
+                        Escolha um modelo desenvolvido para o seu segmento e personalize com a identidade da sua
+                        empresa. Em poucos dias seu novo site estará no ar.
+                    </p>
+
+                    <ul class="space-y-3">
+                        @foreach($niches as $niche)
+                            <li
+                                class="flex items-center justify-between gap-4 bg-white border border-gray-100 rounded-2xl px-5 py-4 shadow-sm">
+                                <div class="flex items-center gap-3">
+                                    <span
+                                        class="shrink-0 w-9 h-9 rounded-full bg-brand/10 text-brand flex items-center justify-center">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                        </svg>
+                                    </span>
+                                    <span class="font-bold text-dark-900">{{ $niche->name }}</span>
+                                </div>
+
+                                <span class="text-xs font-bold text-gray-500 bg-gray-100 rounded-full px-3 py-1">
+                                    {{ $niche->templates_count }}
+                                    {{ $niche->templates_count === 1 ? 'opção' : 'opções' }}
+                                </span>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+
+                <!-- carrossel de modelos -->
+                <div>
+                    <div class="swiper templates-showcase-swiper" x-data x-init="new Swiper($el, {
+                        modules: [SwiperAutoplay],
+                        slidesPerView: 1.5,
+                        spaceBetween: 24,
+                        loop: true,
+                        autoplay: { delay: 3500, disableOnInteraction: false },
+                    })">
+                        <div class="swiper-wrapper">
+                            @foreach($showcaseTemplates as $template)
+                                <div class="swiper-slide h-auto">
+                                    <div class="relative h-full min-h-[420px] rounded-3xl overflow-hidden shadow-xl group">
+                                        @if($template->thumbnail)
+                                            <img src="{{ Storage::url($template->thumbnail) }}"
+                                                alt="Modelo {{ $template->name }}"
+                                                class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                        @else
+                                            <div
+                                                class="absolute inset-0 w-full h-full bg-gradient-to-br from-dark-900 to-brand flex items-center justify-center">
+                                                <p class="text-3xl font-bold text-white/80">Sitemas</p>
+                                            </div>
+                                        @endif
+
+                                        <div
+                                            class="absolute inset-0 bg-gradient-to-t from-dark-900/90 via-dark-900/10 to-transparent">
+                                        </div>
+
+                                        @if($template->category?->name)
+                                            <span
+                                                class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm text-dark-900 text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+                                                {{ $template->category->name }}
+                                            </span>
+                                        @endif
+
+                                        <div class="absolute inset-x-0 bottom-0 p-6">
+                                            <h3 class="text-xl font-bold text-white tracking-tight mb-4">
+                                                {{ $template->name }}
+                                            </h3>
+
+                                            <a href="{{ route('subscription.show', $template->slug) }}"
+                                                class="inline-flex w-full justify-center bg-white text-dark-900 px-4 py-3 rounded-xl text-sm font-bold hover:bg-brand hover:text-white transition">
+                                                Assinar este Modelo
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="py-12 bg-white">
         <div class="max-w-7xl mx-auto px-6">
             <div
@@ -371,6 +421,104 @@
                         <h4 class="font-bold text-dark-900 text-sm">Lançamento</h4>
                         <p class="text-xs text-gray-500 mt-1">Seu site no ar em até 24h úteis.</p>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="planos" class="py-24 bg-gray-50">
+
+        <div class="max-w-7xl mx-auto px-6">
+
+            <div class="text-center mb-16">
+
+                <h2 class="text-4xl font-extrabold text-dark-900 tracking-tight">
+                    Planos Simples e Transparentes
+                </h2>
+
+                <p class="max-w-xl lg:text-lg text-gray-600 mt-4 mx-auto">
+                    Tudo o que você precisa para manter sua presença
+                    online ativa, sem custos surpresas.
+                </p>
+            </div>
+
+            <div class="flex justify-center mb-8">
+                <div
+                    class="inline-flex items-center gap-2 bg-green-100 border border-green-200 px-4 py-2 rounded-full shadow-sm">
+                    <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+
+                    <span class="text-green-800 text-xs font-bold uppercase tracking-wider">
+                        Aproveite: R$ 0,00 de taxa de ativação
+                    </span>
+                </div>
+            </div>
+
+            <div class="max-w-5xl mx-auto grid lg:grid-cols-2 gap-16 items-center mt-16">
+
+                <!-- coluna de confiança -->
+                <div>
+                    <span class="text-sm font-bold text-brand uppercase tracking-widest">Por que assinar agora</span>
+                    <h3 class="text-2xl md:text-3xl font-extrabold text-dark-900 tracking-tight mt-3 mb-8">
+                        Você está a um passo do seu site no ar
+                    </h3>
+
+                    @php
+                        $reassurance = [
+                            [
+                                'title' => 'Ativação 100% gratuita',
+                                'subtitle' => 'Sem taxa de adesão: você paga só a mensalidade do plano.',
+                            ],
+                            [
+                                'title' => 'Sem fidelidade',
+                                'subtitle' => 'Cancele quando quiser, sem multa ou burocracia.',
+                            ],
+                            [
+                                'title' => 'Pagamento seguro via Asaas',
+                                'subtitle' => 'Pix, boleto ou cartão, processados com toda segurança.',
+                            ],
+                            [
+                                'title' => 'Suporte humano',
+                                'subtitle' => 'Fale direto com nossa equipe pelo WhatsApp sempre que precisar.',
+                            ],
+                        ];
+                    @endphp
+
+                    <ul class="space-y-6">
+                        @foreach($reassurance as $item)
+                            <li class="flex items-start gap-4">
+                                <span
+                                    class="shrink-0 w-9 h-9 rounded-full bg-brand/10 text-brand flex items-center justify-center">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </span>
+                                <div>
+                                    <p class="font-bold text-dark-900">{{ $item['title'] }}</p>
+                                    <p class="text-sm text-gray-600 mt-0.5">{{ $item['subtitle'] }}</p>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+
+                    <p class="text-sm text-gray-500 mt-8 pl-[52px]">
+                        Seu site pode estar no ar em poucos dias após a assinatura.
+                    </p>
+                </div>
+
+                <!-- card do plano -->
+                <div class="w-full max-w-md mx-auto">
+                    @foreach($plans as $plan)
+                        @if($plan->is_recommended)
+                            <x-plan-item-recommended :plan="$plan" />
+                        @else
+                            <x-plan-item :plan="$plan" />
+                        @endif
+                    @endforeach
                 </div>
             </div>
         </div>
